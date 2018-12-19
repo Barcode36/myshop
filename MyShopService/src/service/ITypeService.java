@@ -6,6 +6,7 @@
 package service;
 
 import entites.TypeCompte;
+import java.util.List;
 
 /**
  *
@@ -21,5 +22,5 @@ public interface ITypeService {
 
     public TypeCompte findById(TypeCompte typeCompte);
 
-    
+    public List<TypeCompte> typeCmopteList();
 }

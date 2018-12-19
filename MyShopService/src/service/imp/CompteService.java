@@ -6,6 +6,7 @@
 package service.imp;
 
 import entites.Compte;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
@@ -19,15 +20,15 @@ import service.ICompteService;
  * @author Christ
  */
 public class CompteService implements ICompteService {
-    
+
     public final EntityManagerFactory emf;
     public final CompteJpaController compteJpaController;
-    
+
     public CompteService() {
         this.emf = Persistence.createEntityManagerFactory("MyShopServicePU");
         this.compteJpaController = new CompteJpaController(emf);
     }
-    
+
     @Override
     public void ajouter(Compte compte) {
         try {
@@ -36,7 +37,7 @@ public class CompteService implements ICompteService {
             Logger.getLogger(CompteService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public void modifier(Compte compte) {
         try {
@@ -45,7 +46,7 @@ public class CompteService implements ICompteService {
             Logger.getLogger(CompteService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public void supprimer(Compte compte) {
         try {
@@ -54,10 +55,15 @@ public class CompteService implements ICompteService {
             Logger.getLogger(CompteService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public Compte findById(Compte compte) {
         return compteJpaController.findCompte(compte.getIdComp());
     }
-    
+
+    @Override
+    public List<Compte> compteList() {
+        return compteJpaController.findCompteEntities();
+    }
+
 }
