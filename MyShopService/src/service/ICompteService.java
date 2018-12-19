@@ -6,6 +6,7 @@
 package service;
 
 import entites.Compte;
+import java.util.List;
 
 /**
  *
@@ -20,4 +21,6 @@ public interface ICompteService {
     public void supprimer(Compte compte);
 
     public Compte findById(Compte compte);
+
+    public List<Compte> compteList();
 }

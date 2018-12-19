@@ -6,6 +6,7 @@
 package service.imp;
 
 import entites.TypeCompte;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
@@ -58,6 +59,11 @@ public class TypeService implements ITypeService {
     @Override
     public TypeCompte findById(TypeCompte typeCompte) {
         return typeJpaController.findTypeCompte(typeCompte.getIdTyp());
+    }
+
+    @Override
+    public List<TypeCompte> typeCmopteList() {
+        return typeJpaController.findTypeCompteEntities();
     }
 
 }

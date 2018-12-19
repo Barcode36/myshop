@@ -8,6 +8,8 @@ package entites;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -29,8 +31,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Produit.findByQteIniProd", query = "SELECT p FROM Produit p WHERE p.qteIniProd = :qteIniProd")})
 public class Produit implements Serializable {
 
+    @Column(name = "codeProd")
+    private String codeProd;
+
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idProd")
     private Integer idProd;
     @Column(name = "libProd")
@@ -103,5 +109,13 @@ public class Produit implements Serializable {
     public String toString() {
         return "entites.Produit[ idProd=" + idProd + " ]";
     }
-    
+
+    public String getCodeProd() {
+        return codeProd;
+    }
+
+    public void setCodeProd(String codeProd) {
+        this.codeProd = codeProd;
+    }
+
 }

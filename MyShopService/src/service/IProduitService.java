@@ -6,12 +6,14 @@
 package service;
 
 import entites.Produit;
+import java.util.List;
 
 /**
  *
  * @author Christ
  */
 public interface IProduitService {
+
     public void ajouter(Produit produit);
 
     public void modifier(Produit produit);
@@ -19,4 +21,6 @@ public interface IProduitService {
     public void supprimer(Produit produit);
 
     public Produit findById(Produit produit);
+
+    public List<Produit> produitList();
 }

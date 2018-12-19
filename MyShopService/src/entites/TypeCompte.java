@@ -8,6 +8,8 @@ package entites;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -29,6 +31,7 @@ public class TypeCompte implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idTyp")
     private Integer idTyp;
     @Column(name = "libTyp")
@@ -81,5 +84,5 @@ public class TypeCompte implements Serializable {
     public String toString() {
         return "entites.TypeCompte[ idTyp=" + idTyp + " ]";
     }
-    
+
 }

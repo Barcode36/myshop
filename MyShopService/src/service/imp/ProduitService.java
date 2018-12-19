@@ -6,6 +6,7 @@
 package service.imp;
 
 import entites.Produit;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
@@ -19,15 +20,15 @@ import service.IProduitService;
  * @author Christ
  */
 public class ProduitService implements IProduitService {
-    
+
     public final EntityManagerFactory emf;
     public final ProduitJpaController produitJpaController;
-    
+
     public ProduitService() {
         this.emf = Persistence.createEntityManagerFactory("MyShopServicePU");
         this.produitJpaController = new ProduitJpaController(emf);
     }
-    
+
     @Override
     public void ajouter(Produit produit) {
         try {
@@ -36,7 +37,7 @@ public class ProduitService implements IProduitService {
             Logger.getLogger(ProduitService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public void modifier(Produit produit) {
         try {
@@ -45,7 +46,7 @@ public class ProduitService implements IProduitService {
             Logger.getLogger(ProduitService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public void supprimer(Produit produit) {
         try {
@@ -54,10 +55,15 @@ public class ProduitService implements IProduitService {
             Logger.getLogger(ProduitService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @Override
     public Produit findById(Produit produit) {
         return produitJpaController.findProduit(produit.getIdProd());
     }
-    
+
+    @Override
+    public List<Produit> produitList() {
+        return produitJpaController.findProduitEntities();
+    }
+
 }

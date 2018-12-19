@@ -8,6 +8,8 @@ package entites;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -30,8 +32,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Compte.findByMdpComp", query = "SELECT c FROM Compte c WHERE c.mdpComp = :mdpComp")})
 public class Compte implements Serializable {
 
+    @Column(name = "etatComp")
+    private String etatComp;
+
+    @Column(name = "idTypComp")
+    private Integer idTypComp;
+
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idComp")
     private Integer idComp;
     @Column(name = "nomComp")
@@ -113,6 +122,22 @@ public class Compte implements Serializable {
     @Override
     public String toString() {
         return "entites.Compte[ idComp=" + idComp + " ]";
+    }
+
+    public Integer getIdTypComp() {
+        return idTypComp;
+    }
+
+    public void setIdTypComp(Integer idTypComp) {
+        this.idTypComp = idTypComp;
+    }
+
+    public String getEtatComp() {
+        return etatComp;
+    }
+
+    public void setEtatComp(String etatComp) {
+        this.etatComp = etatComp;
     }
     
 }
