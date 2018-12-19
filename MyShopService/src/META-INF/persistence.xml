@@ -9,7 +9,7 @@
     <class>entites.Compte</class>
     <class>entites.TypeCompte</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:G:\Java Projet\Travail\Myshop\test.sqlite"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:/Users/abiguime/Documents/dev/devspace/netbeans/myshop/MyShopService/test.sqlite "/>
       <property name="javax.persistence.jdbc.user" value=""/>
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
       <property name="javax.persistence.jdbc.password" value=""/>

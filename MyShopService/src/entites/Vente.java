@@ -24,45 +24,66 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vente.findAll", query = "SELECT v FROM Vente v")
-    , @NamedQuery(name = "Vente.findByIdComp", query = "SELECT v FROM Vente v WHERE v.idComp = :idComp")
-    , @NamedQuery(name = "Vente.findByIdProd", query = "SELECT v FROM Vente v WHERE v.idProd = :idProd")
-    , @NamedQuery(name = "Vente.findByIdClt", query = "SELECT v FROM Vente v WHERE v.idClt = :idClt")
-    , @NamedQuery(name = "Vente.findByDateVen", query = "SELECT v FROM Vente v WHERE v.dateVen = :dateVen")
+    , @NamedQuery(name = "Vente.findByIdComp", query = "SELECT v FROM Vente v WHERE v.ventePK.idComp = :idComp")
+    , @NamedQuery(name = "Vente.findByIdProd", query = "SELECT v FROM Vente v WHERE v.ventePK.idProd = :idProd")
+    , @NamedQuery(name = "Vente.findByIdClt", query = "SELECT v FROM Vente v WHERE v.ventePK.idClt = :idClt")
+    , @NamedQuery(name = "Vente.findByDateVen", query = "SELECT v FROM Vente v WHERE v.ventePK.dateVen = :dateVen")
     , @NamedQuery(name = "Vente.findByQteVen", query = "SELECT v FROM Vente v WHERE v.qteVen = :qteVen")})
 public class Vente implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+//    @Column(name = "idComp")
+//    private Integer idComp;
+//    @Column(name = "idProd")
+//    private Integer idProd;
+//    @Column(name = "idClt")
+//    private Integer idClt;
+//    @Id
+//    @Column(name = "dateVen")
+//    private String dateVen;
     @EmbeddedId
     protected VentePK ventePK;
-    @Column(name = "dateVen")
-    private String dateVen;
     @Column(name = "qteVen")
     private Integer qteVen;
 
     public Vente() {
     }
 
-    public Vente(String dateVen) {
-        this.dateVen = dateVen;
-    }
-
-    public VentePK getVentePK() {
-        return ventePK;
-    }
-
-    public void setVentePK(VentePK ventePK) {
-        this.ventePK = ventePK;
-    }
-
-    public String getDateVen() {
-        return dateVen;
-    }
-
-    public void setDateVen(String dateVen) {
-        this.dateVen = dateVen;
-    }
-
+//    public Vente(String dateVen) {
+//        this.dateVen = dateVen;
+//    }
+//
+//    public Integer getIdComp() {
+//        return idComp;
+//    }
+//
+//    public void setIdComp(Integer idComp) {
+//        this.idComp = idComp;
+//    }
+//
+//    public Integer getIdProd() {
+//        return idProd;
+//    }
+//
+//    public void setIdProd(Integer idProd) {
+//        this.idProd = idProd;
+//    }
+//
+//    public Integer getIdClt() {
+//        return idClt;
+//    }
+//
+//    public void setIdClt(Integer idClt) {
+//        this.idClt = idClt;
+//    }
+//
+//    public String getDateVen() {
+//        return dateVen;
+//    }
+//
+//    public void setDateVen(String dateVen) {
+//        this.dateVen = dateVen;
+//    }
     public Integer getQteVen() {
         return qteVen;
     }
@@ -71,29 +92,12 @@ public class Vente implements Serializable {
         this.qteVen = qteVen;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (dateVen != null ? dateVen.hashCode() : 0);
-        return hash;
+    public VentePK getVentePK() {
+        return ventePK;
     }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Vente)) {
-            return false;
-        }
-        Vente other = (Vente) object;
-        if ((this.dateVen == null && other.dateVen != null) || (this.dateVen != null && !this.dateVen.equals(other.dateVen))) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "entites.Vente[ dateVen=" + dateVen + " ]";
+    public void setVentePK(VentePK ventePK) {
+        this.ventePK = ventePK;
     }
 
 }

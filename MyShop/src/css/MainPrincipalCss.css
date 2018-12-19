@@ -1,0 +1,18 @@
+.menu-item .label{
+    -fx-text-fill: dimgrey;
+
+}
+.menu-item{
+    -fx-background-color: cornsilk;
+}
+.menu-item:hover{
+    -fx-background-color: azure;
+}
+.jfx-button {
+    -jfx-button-type: FLAT;
+    -fx-background-color: FF8C00;
+    -fx-text-fill: whitesmoke;
+    -fx-background-radius: 5em;
+    -fx-font: bold italic 20pt "Arial";
+    -fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );
+}
