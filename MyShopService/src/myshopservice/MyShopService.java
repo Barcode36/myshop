@@ -6,8 +6,11 @@
 package myshopservice;
 
 import entites.Client;
+import entites.Compte;
 import service.IClientService;
+import service.ICompteService;
 import service.imp.ClientService;
+import service.imp.CompteService;
 
 /**
  *
@@ -22,13 +25,20 @@ public class MyShopService {
         // TODO code application logic here
         Client client = new Client();
         IClientService clientService = new ClientService();
-        client.setNomClt("sdfghjkdfgh");
-        clientService.ajouter(client);
-        Client c  = new Client(1);
-       Client c1 =  clientService.findById(c);
-       c1.setNomClt("omomomomom");
-       clientService.modifier(c1);
-        
+        ICompteService compteService = new CompteService();
+        Compte compte = new Compte();
+        compte.setMdpComp("Df");
+        compte.setNomComp("df");
+        compte.setPrenomComp("dgfdfp");
+        compte.setPseudoComp("okk");
+        compteService.ajouter(compte);
+//        client.setNomClt("sdfghjkdfgh");
+//        clientService.ajouter(client);
+////        Client c = new Client(1);
+//        Client c1 = clientService.findById(c);
+//        c1.setNomClt("omomomomom");
+//        clientService.modifier(c1);
+
     }
-    
+
 }
