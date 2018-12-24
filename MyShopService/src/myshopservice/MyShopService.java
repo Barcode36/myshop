@@ -34,8 +34,10 @@ public class MyShopService {
         ICompteService compteService = new CompteService();
         ITypeService typeService = new TypeService();
         TypeCompte t = new TypeCompte();
+        t.setIdTyp(0);
         t.setLibTyp("caissier");
         TypeCompte typeCompte = new TypeCompte();
+         typeCompte.setIdTyp(17);
         typeCompte.setLibTyp("Comptable");
         typeService.ajouter(typeCompte);
         typeService.ajouter(t);
