@@ -6,6 +6,7 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXDrawer;
 import entites.Compte;
 import entites.Produit;
@@ -26,10 +27,14 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -38,6 +43,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import modele.CompteR;
 import modele.ProduitR;
 import modele.TypeCompteR;
@@ -47,6 +53,9 @@ import service.ITypeService;
 import service.imp.CompteService;
 import service.imp.ProduitService;
 import service.imp.TypeService;
+import tray.animations.AnimationType;
+import tray.notification.NotificationType;
+import tray.notification.TrayNotification;
 
 /**
  * FXML Controller class
@@ -85,7 +94,14 @@ public class MainPrincipalController implements Initializable {
     private TableColumn<ProduitR, String> prixProdCol;
 // fin declaration
 
-    //Declaration des composants lies à Compte
+//declaration des composants de la fenetre de connexion a la caisse
+    @FXML
+    private TextField txtPseudoCennect;
+    @FXML
+    private PasswordField txtPassConnect;
+//fin declaration
+
+//Declaration des composants lies à Compte
     @FXML
     private JFXButton tbnSaveComp;
     @FXML
@@ -107,7 +123,11 @@ public class MainPrincipalController implements Initializable {
     @FXML
     private JFXButton btnComp;
     @FXML
+    private JFXButton btnCaisse;
+    @FXML
     private GridPane gridCompte;
+    @FXML
+    private GridPane gridConnect;
     @FXML
     private TextField txtNomComp;
     @FXML
@@ -120,6 +140,7 @@ public class MainPrincipalController implements Initializable {
 
 //Declaration des observables listes
     ObservableList<ProduitR> produitList = FXCollections.observableArrayList();
+    ObservableList<ProduitR> produitListVent = FXCollections.observableArrayList();
     ObservableList<CompteR> compteList = FXCollections.observableArrayList();
     ObservableList<TypeCompteR> typeCompteList = FXCollections.observableArrayList();
 
@@ -134,16 +155,45 @@ public class MainPrincipalController implements Initializable {
     Produit produitModif = new Produit();
     Compte compteModif = new Compte();
 //fin declaration
-    //recuperation des listes de chaque composant
 
+//Declaration de d'autre variable
+    private Compte compteActif = new Compte();
+    private Produit produitVente = new Produit();
+//fin declaration
+    //recuperation des listes de chaque composant
+    @FXML
+    private GridPane gridCaisse;
+    @FXML
+    private TextField txtCodeProdCaisse;
+    @FXML
+    private TextField txtNomProdCaisse;
+    @FXML
+    private TextField txtQteProdCaisse;
+    @FXML
+    private TextField txtPrixUnitCaisse;
+    @FXML
+    private TextField txtQteComCaisse;
+    @FXML
+    private TableView<ProduitR> produitCaisseTable;
+    @FXML
+    private TableColumn<ProduitR, String> libProdColCaisse;
+    @FXML
+    private TableColumn<ProduitR, Integer> qteColCaisse;
+    @FXML
+    private TableColumn<ProduitR, String> prixColCaisse;
+    @FXML
+    private TableColumn<ProduitR, JFXCheckBox> actionColCaisse;
+    @FXML
+    private TableColumn<ProduitR, String> totalColCaisse;
+    
     public List<Produit> listProduit() {
         return produitService.produitList();
     }
-
+    
     public List<Compte> listCompte() {
         return compteService.compteList();
     }
-
+    
     public List<TypeCompte> listTypeCompte() {
         return typeService.typeCmopteList();
     }
@@ -160,7 +210,7 @@ public class MainPrincipalController implements Initializable {
         qteProdCol.setCellValueFactory(cellData -> cellData.getValue().getQteIniProd().asObject());
         produitTable.setItems(produitList);
     }
-
+    
     public void loadCompteGrid() {
         compteList.clear();
         for (Compte compte : listCompte()) {
@@ -176,7 +226,7 @@ public class MainPrincipalController implements Initializable {
         etatCompCol.setCellValueFactory(cellData -> cellData.getValue().getEtatComp());
         CompteTable.setItems(compteList);
     }
-
+    
     public void loadTypeCompteCombo() {
         typeCompteList.clear();
         for (TypeCompte typeCompte : listTypeCompte()) {
@@ -194,8 +244,9 @@ public class MainPrincipalController implements Initializable {
         loadInventairegrid();
         loadCompteGrid();
         loadTypeCompteCombo();
+        
     }
-
+    
     @FXML
     private void selectForm(ActionEvent event) {
         if (event.getSource() == btnInventaire) {
@@ -209,9 +260,15 @@ public class MainPrincipalController implements Initializable {
             gridCompte.setVisible(true);
             grid.setVisible(false);
             gridInventaire.setVisible(false);
+        } else if (event.getSource() == btnCaisse) {
+            gridConnect.toFront();
+            gridConnect.setVisible(true);
+            grid.setVisible(false);
+            gridInventaire.setVisible(false);
+            gridCompte.setVisible(false);
         }
     }
-
+    
     private void saveUpProduit(String saveUp) {
         if (saveUp.equals("Ajouter")) {
             Produit produit = new Produit();
@@ -228,7 +285,7 @@ public class MainPrincipalController implements Initializable {
             produitService.modifier(produitModif);
         }
     }
-
+    
     private void saveUpCompte(String saveUp) {
         if (saveUp.equals("Ajouter")) {
             Compte compte = new Compte();
@@ -245,7 +302,7 @@ public class MainPrincipalController implements Initializable {
             compteService.modifier(compteModif);
         }
     }
-
+    
     private void getProduitInformationFromTable(ProduitR produitR) {
         Produit p = new Produit(produitR.getIdProd().getValue());
         produitModif = produitService.findById(p);
@@ -254,7 +311,7 @@ public class MainPrincipalController implements Initializable {
         txtPrixProd.setText(produitModif.getPrixUniProd());
         txtQteProd.setText(String.valueOf(produitModif.getQteIniProd()));
     }
-
+    
     private void getCompteInformationFromTable(CompteR compteR) {
         Compte c = new Compte(compteR.getIdComp().getValue());
         compteModif = compteService.findById(c);
@@ -263,7 +320,7 @@ public class MainPrincipalController implements Initializable {
         txtPseudoComp.setText(compteModif.getPseudoComp());
         txtPassword.setText(compteModif.getMdpComp());
     }
-
+    
     @FXML
     private void closeInventaire(MouseEvent event) {
         grid.toFront();
@@ -271,5 +328,78 @@ public class MainPrincipalController implements Initializable {
         gridInventaire.toBack();
         gridInventaire.setVisible(false);
     }
-
+    
+    @FXML
+    private void connexionButton(ActionEvent event) {
+        Compte c = new Compte();
+        c.setPseudoComp(txtPseudoCennect.getText());
+        c.setMdpComp(txtPassConnect.getText());
+        try {
+            compteActif = compteService.Connexion(c);
+            gridCaisse.toFront();
+            gridCaisse.setVisible(true);
+            grid.setVisible(false);
+            gridConnect.setVisible(false);
+            gridConnect.toBack();
+            gridCompte.setVisible(false);
+            gridInventaire.setVisible(false);
+        } catch (Exception e) {
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Pseudo ou Mot de passe incorrect", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1.5));
+        }
+    }
+    
+    @FXML
+    private void essai(KeyEvent event) {
+        System.out.println(txtPseudoCennect.getText());
+    }
+    
+    @FXML
+    private void saveProduit(ActionEvent event) {
+        saveUpProduit(tbnSaveProd.getText());
+        loadInventairegrid();
+    }
+    
+    @FXML
+    private void recuperationProduitInfo(KeyEvent event) {
+        Produit p = new Produit();
+        p.setCodeProd(txtCodeProdCaisse.getText());
+        try {
+            produitVente = produitService.findByCode(p);
+            txtNomProdCaisse.setText(produitVente.getLibProd());
+            txtQteProdCaisse.setText(String.valueOf(produitVente.getQteIniProd()));
+            txtPrixUnitCaisse.setText(String.valueOf(produitVente.getPrixUniProd()));
+        } catch (Exception e) {
+        }
+        
+    }
+    
+    @FXML
+    private void valideProduit(ActionEvent event) {
+        produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, Integer.parseInt(txtQteComCaisse.getText())));
+        
+        libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
+        prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
+        qteColCaisse.setCellValueFactory(cellData -> cellData.getValue().getQteProdCom().asObject());
+        actionColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXCheckBox>("suppression"));
+        totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
+        produitCaisseTable.setItems(produitListVent);
+    }
+    
+    @FXML
+    private void SupprimerProdVent(ActionEvent event) {
+        ProduitR pr = produitCaisseTable.getSelectionModel().getSelectedItem();
+        if (pr == null) {
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Selectionnez un produit à supprimer", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(2));
+            return;
+        }
+        produitListVent.remove(pr);
+        produitCaisseTable.setItems(produitListVent);
+    }
+    
 }

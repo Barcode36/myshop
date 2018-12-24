@@ -22,5 +22,7 @@ public interface ICompteService {
 
     public Compte findById(Compte compte);
 
+    public Compte Connexion(Compte compte);
+
     public List<Compte> compteList();
 }

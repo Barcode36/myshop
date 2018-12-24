@@ -2,7 +2,9 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -17,6 +19,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
@@ -61,7 +64,7 @@
             <Insets top="5.0" />
          </padding>
       </MenuBar>
-      <GridPane fx:id="gridInventaire" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+      <GridPane fx:id="gridInventaire" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -104,7 +107,7 @@
                               <Glow />
                            </effect>
                         </TextField>
-                        <JFXButton fx:id="tbnSaveProd" alignment="CENTER" buttonType="RAISED" prefHeight="45.0" prefWidth="82.0" style="-fx-background-radius: 3em; -fx-background-color: F8F8FF;" text="Ajouter" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <JFXButton fx:id="tbnSaveProd" alignment="CENTER" buttonType="RAISED" onAction="#saveProduit" prefHeight="45.0" prefWidth="82.0" style="-fx-background-radius: 3em; -fx-background-color: F8F8FF;" text="Ajouter" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <effect>
                               <InnerShadow />
                            </effect>
@@ -136,28 +139,7 @@
             </Label>
          </children>
       </GridPane>
-      <GridPane fx:id="grid" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="277.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <JFXButton alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnInventaire" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="157.0" prefWidth="280.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Inventaire" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
-               
-            </JFXButton>
-            <JFXButton alignment="CENTER" contentDisplay="CENTER" prefHeight="160.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Bilan" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton alignment="CENTER" contentDisplay="CENTER" prefHeight="140.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Reglage" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton alignment="CENTER" contentDisplay="CENTER" prefHeight="127.0" prefWidth="268.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Aide" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnComp" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="127.0" prefWidth="259.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Compte" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-         </children>
-      </GridPane>
-      <GridPane fx:id="gridCompte" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+      <GridPane fx:id="gridCompte" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
@@ -229,6 +211,127 @@
                   <Font name="Times New Roman Bold" size="21.0" />
                </font>
             </Label>
+         </children>
+      </GridPane>
+      <GridPane fx:id="gridConnect" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" visible="false" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="253.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="422.0" minWidth="10.0" prefWidth="350.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="225.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="240.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="229.0" minHeight="7.0" prefHeight="177.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <GridPane prefHeight="278.0" prefWidth="422.0" GridPane.columnIndex="1">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="86.0" minHeight="10.0" prefHeight="86.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="94.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="112.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="124.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="124.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextField fx:id="txtPseudoCennect" onKeyTyped="#essai" promptText="Pseudo" style="-fx-background-radius: 3em;" GridPane.rowIndex="1" />
+                  <PasswordField fx:id="txtPassConnect" promptText="Mot de passe" style="-fx-background-radius: 3em;" GridPane.rowIndex="2" />
+                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.rowIndex="3">
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#connexionButton" text="Se Connecter" />
+                        <Button mnemonicParsing="false" onMouseClicked="#closeInventaire" text="Annuler" />
+                     </children>
+                     <padding>
+                        <Insets left="80.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </GridPane>
+         </children>
+      </GridPane>
+      <GridPane fx:id="gridCaisse" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" visible="false" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="810.0" minWidth="10.0" prefWidth="810.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="157.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="308.0" minHeight="7.0" prefHeight="219.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="308.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="399.0" minWidth="10.0" prefWidth="234.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="573.0" minWidth="10.0" prefWidth="231.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="573.0" minWidth="10.0" prefWidth="352.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <TextField fx:id="txtCodeProdCaisse" onKeyTyped="#recuperationProduitInfo" promptText="code du produit" />
+                  <TextField fx:id="txtNomProdCaisse" promptText="Nom du produit" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtQteProdCaisse" promptText="Quatité disponible" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtPrixUnitCaisse" promptText="prix du produit" GridPane.rowIndex="3" />
+                  <TextField fx:id="txtQteComCaisse" promptText="Quantité commandée" GridPane.columnIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#valideProduit" prefHeight="25.0" prefWidth="144.0" text="Valider" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <TableView fx:id="produitCaisseTable" editable="true" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+              <columns>
+                <TableColumn fx:id="libProdColCaisse" prefWidth="75.0" text="Produit" />
+                <TableColumn fx:id="qteColCaisse" prefWidth="75.0" text="Quantié commandée " />
+                  <TableColumn fx:id="prixColCaisse" prefWidth="75.0" text="Prix unitaire" />
+                  <TableColumn fx:id="totalColCaisse" prefWidth="75.0" text="Total" />
+                  <TableColumn fx:id="actionColCaisse" prefWidth="75.0" text="A retirer" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#SupprimerProdVent" text="Supprimer" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="135.0" text="Vendre" />
+               </children>
+               <GridPane.margin>
+                  <Insets left="300.0" />
+               </GridPane.margin>
+            </HBox>
+         </children>
+      </GridPane>
+      <GridPane fx:id="grid" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="427.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="277.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <JFXButton fx:id="btnCaisse" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" onAction="#selectForm" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton fx:id="btnInventaire" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="157.0" prefWidth="280.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Inventaire" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               
+            </JFXButton>
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" prefHeight="160.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Bilan" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" prefHeight="140.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Reglage" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton alignment="CENTER" contentDisplay="CENTER" prefHeight="127.0" prefWidth="268.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Aide" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton fx:id="btnComp" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="127.0" prefWidth="259.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Compte" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
          </children>
       </GridPane>
    </children>

@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Compte.findByNomComp", query = "SELECT c FROM Compte c WHERE c.nomComp = :nomComp")
     , @NamedQuery(name = "Compte.findByPrenomComp", query = "SELECT c FROM Compte c WHERE c.prenomComp = :prenomComp")
     , @NamedQuery(name = "Compte.findByPseudoComp", query = "SELECT c FROM Compte c WHERE c.pseudoComp = :pseudoComp")
+    , @NamedQuery(name = "Compte.findByPseudoCompAndMdpComp", query = "SELECT c FROM Compte c WHERE c.pseudoComp = :pseudoComp AND c.mdpComp = :mdpComp")
     , @NamedQuery(name = "Compte.findByMdpComp", query = "SELECT c FROM Compte c WHERE c.mdpComp = :mdpComp")})
 public class Compte implements Serializable {
 
@@ -139,5 +140,5 @@ public class Compte implements Serializable {
     public void setEtatComp(String etatComp) {
         this.etatComp = etatComp;
     }
-    
+
 }

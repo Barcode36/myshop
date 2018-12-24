@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Produit.findAll", query = "SELECT p FROM Produit p")
     , @NamedQuery(name = "Produit.findByIdProd", query = "SELECT p FROM Produit p WHERE p.idProd = :idProd")
+    , @NamedQuery(name = "Produit.findByCodeProd", query = "SELECT p FROM Produit p WHERE p.codeProd = :codeProd")
     , @NamedQuery(name = "Produit.findByLibProd", query = "SELECT p FROM Produit p WHERE p.libProd = :libProd")
     , @NamedQuery(name = "Produit.findByPrixUniProd", query = "SELECT p FROM Produit p WHERE p.prixUniProd = :prixUniProd")
     , @NamedQuery(name = "Produit.findByQteIniProd", query = "SELECT p FROM Produit p WHERE p.qteIniProd = :qteIniProd")})

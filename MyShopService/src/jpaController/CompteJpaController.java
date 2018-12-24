@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpaController.exceptions.NonexistentEntityException;
@@ -140,5 +141,12 @@ public class CompteJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public Compte ConnexionReussi(Compte compte) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Compte> query = (TypedQuery<Compte>) em.createNamedQuery("Compte.findByPseudoCompAndMdpComp");
+        query.setParameter("pseudoComp", compte.getPseudoComp());
+        query.setParameter("mdpComp", compte.getMdpComp());
+        return query.getSingleResult();
+    }
 }
