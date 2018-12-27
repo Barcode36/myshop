@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpaController.exceptions.NonexistentEntityException;
@@ -144,5 +145,12 @@ public class VenteJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Vente> venteParCaissier(Vente vente) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByIdComp");
+        query.setParameter("idComp", vente.getVentePK().getIdComp());
+        return query.getResultList();
+    }
+
 }

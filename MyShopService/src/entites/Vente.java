@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Vente.findByIdComp", query = "SELECT v FROM Vente v WHERE v.ventePK.idComp = :idComp")
     , @NamedQuery(name = "Vente.findByIdProd", query = "SELECT v FROM Vente v WHERE v.ventePK.idProd = :idProd")
     , @NamedQuery(name = "Vente.findByIdClt", query = "SELECT v FROM Vente v WHERE v.ventePK.idClt = :idClt")
+    , @NamedQuery(name = "Vente.findByMoisEnCours", query = "SELECT v FROM Vente v WHERE FUNCTION('MONTH',v.ventePK.dateVen)= :mois AND FUNCTION('YEAR',v.ventePK.dateVen) = :year")
     , @NamedQuery(name = "Vente.findByDateVen", query = "SELECT v FROM Vente v WHERE v.ventePK.dateVen = :dateVen")
     , @NamedQuery(name = "Vente.findByQteVen", query = "SELECT v FROM Vente v WHERE v.qteVen = :qteVen")})
 public class Vente implements Serializable {

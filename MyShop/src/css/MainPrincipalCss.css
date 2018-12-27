@@ -28,3 +28,6 @@
     -fx-cell-size: 2.0em; /* 24 */
     -fx-text-fill: -fx-text-inner-color;
 }
+.table-row-cell {
+    -fx-cell-size: 50px;
+}

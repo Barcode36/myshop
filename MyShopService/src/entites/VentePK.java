@@ -6,6 +6,7 @@
 package entites;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -26,7 +27,7 @@ public class VentePK implements Serializable {
     private Integer idClt;
 
     @Column(name = "dateVen")
-    private String dateVen;
+    private Date dateVen;
 
     @Override
     public int hashCode() {
@@ -89,11 +90,11 @@ public class VentePK implements Serializable {
         this.idClt = idClt;
     }
 
-    public String getDateVen() {
+    public Date getDateVen() {
         return dateVen;
     }
 
-    public void setDateVen(String dateVen) {
+    public void setDateVen(Date dateVen) {
         this.dateVen = dateVen;
     }
 
