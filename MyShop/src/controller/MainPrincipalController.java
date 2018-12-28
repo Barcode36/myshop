@@ -673,6 +673,7 @@ public class MainPrincipalController implements Initializable {
     private void importInventaire(ActionEvent event) {
         stage = (Stage) anchorPane.getScene().getWindow();
         file = fileChooser.showOpenDialog(stage);
+        Produit produit = new Produit();
         if (file != null) {
             try {
                 FileInputStream fis = new FileInputStream(file);
@@ -687,13 +688,16 @@ public class MainPrincipalController implements Initializable {
                     p.setPrixUniProd(row.getCell(2).getStringCellValue());
                     p.setQteIniProd((int) row.getCell(3).getNumericCellValue());
                     try {
-                        produitService.findByCode(p);
+                       produit =  produitService.findByCode(p);
+                       produit.setQteIniProd(produit.getQteIniProd() + p.getQteIniProd());
+                       produitService.modifier(produit);
                     } catch (Exception e) {
                         produitService.ajouter(p);
                     }
                 }
                 wb.close();
                 fis.close();
+                loadInventairegrid();
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(MainPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
