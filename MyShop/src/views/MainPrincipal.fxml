@@ -16,9 +16,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.effect.Glow?>
 <?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -362,27 +365,6 @@
             </Label>
          </children>
       </GridPane>
-      <GridPane fx:id="gridReglage" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="292.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <Pane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <Label layoutX="828.0" layoutY="2.0" onMouseClicked="#closeInventaire" text="X">
-                     <font>
-                        <Font name="Lucida Bright Demibold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="204.0" layoutY="27.0" mnemonicParsing="false" onAction="#exportInventaire" prefHeight="70.0" prefWidth="231.0" text="Exporter Inventaire" />
-               </children>
-            </Pane>
-         </children>
-      </GridPane>
       <GridPane fx:id="gridBilan" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="5.0" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -428,9 +410,12 @@
             </TableView>
             <HBox prefHeight="100.0" prefWidth="535.0" spacing="20.0" GridPane.columnSpan="2">
                <children>
-                  <RadioButton mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" text="Mois en cours" />
+                  <RadioButton mnemonicParsing="false" prefHeight="38.0" prefWidth="120.0" text="Mois en cours">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="periode" />
+                     </toggleGroup></RadioButton>
                   <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="151.0" text="Mois en cours" />
-                  <Label onMouseClicked="#closeInventaire" text="X">
+                  <Label fx:id="lblCLose" onMouseClicked="#closeInventaire" text="X">
                      <font>
                         <Font name="Lucida Bright Demibold" size="20.0" />
                      </font>
@@ -442,17 +427,72 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <children>
-                  <RadioButton mnemonicParsing="false" prefHeight="32.0" prefWidth="120.0" text="Mois" />
+                  <RadioButton mnemonicParsing="false" prefHeight="32.0" prefWidth="120.0" text="Mois" toggleGroup="$periode" />
                   <ComboBox fx:id="moisCombo" prefHeight="47.0" prefWidth="187.0" promptText="Choisir un mois" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <children>
-                  <RadioButton mnemonicParsing="false" prefHeight="32.0" prefWidth="120.0" text="Entre deux dates" />
+                  <RadioButton mnemonicParsing="false" prefHeight="32.0" prefWidth="120.0" text="Entre deux dates" toggleGroup="$periode" />
                   <JFXDatePicker prefHeight="30.0" prefWidth="171.0" />
                   <JFXDatePicker prefHeight="36.0" prefWidth="171.0" />
                </children>
             </HBox>
+         </children>
+      </GridPane>
+      <GridPane fx:id="gridReglage" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="292.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Pane fx:id="anchorPane" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Label fx:id="lblCLose1" layoutX="828.0" layoutY="2.0" onMouseClicked="#closeInventaire" text="X">
+                     <font>
+                        <Font name="Lucida Bright Demibold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="204.0" layoutY="27.0" mnemonicParsing="false" onAction="#exportInventaire" prefHeight="70.0" prefWidth="231.0" text="Exporter Inventaire" />
+                  <Button layoutX="457.0" layoutY="27.0" mnemonicParsing="false" onAction="#importInventaire" prefHeight="70.0" prefWidth="231.0" text="Inporter Inventaire" />
+               </children>
+            </Pane>
+         </children>
+      </GridPane>
+      <GridPane fx:id="gridAPropos" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="530.0" minHeight="10.0" prefHeight="530.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Pane fx:id="anchorPane1" prefHeight="208.0" prefWidth="849.0">
+               <children>
+                  <Label fx:id="lblCLose" layoutX="828.0" layoutY="2.0" onMouseClicked="#closeInventaire" text="X">
+                     <font>
+                        <Font name="Lucida Bright Demibold" size="20.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="59.0" layoutY="251.0" prefHeight="210.0" prefWidth="732.0" style="-fx-alignment: center;" text="MyShop est une solution de Gestion de produits et de gestion de caisse pour un magasin." textAlignment="JUSTIFY" wrapText="true">
+                     <font>
+                        <Font name="Times New Roman" size="54.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="imgShop" fitHeight="210.0" fitWidth="655.0" layoutX="61.0" layoutY="27.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../img/magasin-bio-natureo-06.jpg" />
+                     </image>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </ImageView>
+               </children>
+            </Pane>
          </children>
       </GridPane>
       <GridPane fx:id="grid" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
@@ -462,18 +502,19 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
         </columnConstraints>
         <rowConstraints>
+          <RowConstraints />
           <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <JFXButton fx:id="btnCaisse" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" onAction="#selectForm" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnInventaire" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="157.0" prefWidth="280.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Inventaire" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+            <JFXButton fx:id="btnCaisse" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" onAction="#selectForm" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton fx:id="btnInventaire" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="157.0" prefWidth="280.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Inventaire" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
                
             </JFXButton>
-            <JFXButton fx:id="btnBilan" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="160.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Bilan" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnReglage" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="140.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Reglage" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton alignment="CENTER" contentDisplay="CENTER" prefHeight="127.0" prefWidth="268.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Aide" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton fx:id="btnBilan" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="160.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Bilan" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton fx:id="btnReglage" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="140.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Reglage" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
             <JFXButton fx:id="btnComp" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="127.0" prefWidth="259.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Compte" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+            <JFXButton fx:id="btnPropos" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="127.0" prefWidth="268.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="A Propos" GridPane.columnIndex="2" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </children>

@@ -13,12 +13,16 @@ import entites.Produit;
 import entites.TypeCompte;
 import entites.Vente;
 import entites.VentePK;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -36,7 +40,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -48,11 +54,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import modele.CompteR;
 import modele.ProduitR;
 import modele.TypeCompteR;
 import modele.VenteR;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -74,6 +83,10 @@ import tray.notification.TrayNotification;
  * @author Christ
  */
 public class MainPrincipalController implements Initializable {
+
+    private Stage stage;
+    private FileChooser fileChooser;
+    private File file;
 
 //declaration des composants de la partie inventaire
     @FXML
@@ -147,7 +160,51 @@ public class MainPrincipalController implements Initializable {
     @FXML
     private ComboBox<TypeCompteR> typeCompteCombo;
     //fin declaration
+    //declaration des ventes
+    @FXML
+    private TableColumn<VenteR, String> caissierColVente;
+    @FXML
+    private TableColumn<VenteR, Integer> totCaissierColVente;
+    @FXML
+    private TableView<VenteR> CaissierVenteTable;
+    @FXML
+    private TableColumn<ProduitR, String> ProduitCaissier;
+    @FXML
+    private TableColumn<ProduitR, Integer> QteCaissierCol;
+    @FXML
+    private TableColumn<ProduitR, String> PuCaissierCol;
+    @FXML
+    private TableColumn<ProduitR, String> totDetCaissierCol;
+    @FXML
+    private TableView<ProduitR> tableDetailCaissier;
+    @FXML
+    private GridPane gridCaisse;
+    @FXML
+    private TextField txtCodeProdCaisse;
+    @FXML
+    private TextField txtNomProdCaisse;
+    @FXML
+    private TextField txtQteProdCaisse;
+    @FXML
+    private TextField txtPrixUnitCaisse;
+    @FXML
+    private TextField txtQteComCaisse;
 
+    //fin declaration
+    //declaration des composants de la grid  caisses
+    @FXML
+    private TableView<ProduitR> produitCaisseTable;
+    @FXML
+    private TableColumn<ProduitR, String> libProdColCaisse;
+    @FXML
+    private TableColumn<ProduitR, Integer> qteColCaisse;
+    @FXML
+    private TableColumn<ProduitR, String> prixColCaisse;
+    @FXML
+    private TableColumn<ProduitR, JFXCheckBox> actionColCaisse;
+    @FXML
+    private TableColumn<ProduitR, String> totalColCaisse;
+    //fin declaration
 //Declaration des observables listes
     ObservableList<ProduitR> produitList = FXCollections.observableArrayList();
     ObservableList<ProduitR> produitListVent = FXCollections.observableArrayList();
@@ -173,30 +230,7 @@ public class MainPrincipalController implements Initializable {
     private Produit produitVente = new Produit();
 //fin declaration
     //recuperation des listes de chaque composant
-    @FXML
-    private GridPane gridCaisse;
-    @FXML
-    private TextField txtCodeProdCaisse;
-    @FXML
-    private TextField txtNomProdCaisse;
-    @FXML
-    private TextField txtQteProdCaisse;
-    @FXML
-    private TextField txtPrixUnitCaisse;
-    @FXML
-    private TextField txtQteComCaisse;
-    @FXML
-    private TableView<ProduitR> produitCaisseTable;
-    @FXML
-    private TableColumn<ProduitR, String> libProdColCaisse;
-    @FXML
-    private TableColumn<ProduitR, Integer> qteColCaisse;
-    @FXML
-    private TableColumn<ProduitR, String> prixColCaisse;
-    @FXML
-    private TableColumn<ProduitR, JFXCheckBox> actionColCaisse;
-    @FXML
-    private TableColumn<ProduitR, String> totalColCaisse;
+
     @FXML
     private JFXDrawer drawer;
     @FXML
@@ -212,21 +246,21 @@ public class MainPrincipalController implements Initializable {
     @FXML
     private JFXButton btnReglage;
     @FXML
-    private TableColumn<VenteR, String> caissierColVente;
+    private Pane anchorPane;
     @FXML
-    private TableColumn<VenteR, Integer> totCaissierColVente;
+    private ToggleGroup periode;
     @FXML
-    private TableView<VenteR> CaissierVenteTable;
+    private GridPane gridAPropos;
     @FXML
-    private TableColumn<ProduitR, String> ProduitCaissier;
+    private Pane anchorPane1;
     @FXML
-    private TableColumn<ProduitR, Integer> QteCaissierCol;
+    private JFXButton btnPropos;
     @FXML
-    private TableColumn<ProduitR, String> PuCaissierCol;
+    private Label lblCLose;
     @FXML
-    private TableColumn<ProduitR, String> totDetCaissierCol;
+    private ImageView imgShop;
     @FXML
-    private TableView<ProduitR> tableDetailCaissier;
+    private Label lblCLose1;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
@@ -326,12 +360,25 @@ public class MainPrincipalController implements Initializable {
         loadTypeCompteCombo();
         showClavier();
         loadVenteCaissier();
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All files", "*.*"),
+                new FileChooser.ExtensionFilter("Excel files", "*.xlsx"));
         txtPseudoCennect.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
             if (txtPseudoCennect.getText().equals(null)) {
                 autoComplete();
             }
-
         });
+        Timer t = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println();
+                lblCLose.setLayoutX(produitTable.getWidth() + 1);
+
+                imgShop.setFitWidth(produitTable.getWidth() - 100);
+            }
+        };
+        t.schedule(timerTask, 2000l);
     }
 
     @FXML
@@ -342,26 +389,38 @@ public class MainPrincipalController implements Initializable {
             grid.toBack();
             grid.setVisible(false);
             gridCompte.setVisible(false);
+            gridAPropos.setVisible(false);
         } else if (event.getSource() == btnComp) {
             gridCompte.toFront();
             gridCompte.setVisible(true);
             grid.setVisible(false);
             gridInventaire.setVisible(false);
+            gridAPropos.setVisible(false);
         } else if (event.getSource() == btnCaisse) {
             gridConnect.toFront();
             gridConnect.setVisible(true);
             grid.setVisible(false);
             gridInventaire.setVisible(false);
             gridCompte.setVisible(false);
+            gridAPropos.setVisible(false);
         } else if (event.getSource() == btnBilan) {
             gridBilan.toFront();
             gridBilan.setVisible(true);
             grid.setVisible(false);
             gridInventaire.setVisible(false);
             gridCompte.setVisible(false);
+            gridAPropos.setVisible(false);
         } else if (event.getSource() == btnReglage) {
             gridReglage.toFront();
             gridReglage.setVisible(true);
+            grid.setVisible(false);
+            gridInventaire.setVisible(false);
+            gridCompte.setVisible(false);
+            gridAPropos.setVisible(false);
+        } else if (event.getSource() == btnPropos) {
+            gridAPropos.toFront();
+            gridAPropos.setVisible(true);
+            gridReglage.setVisible(false);
             grid.setVisible(false);
             gridInventaire.setVisible(false);
             gridCompte.setVisible(false);
@@ -588,7 +647,9 @@ public class MainPrincipalController implements Initializable {
             index++;
         }
         try {
-            FileOutputStream fos = new FileOutputStream("Inventaire.xlsx");
+            stage = (Stage) anchorPane.getScene().getWindow();
+            file = fileChooser.showSaveDialog(stage);
+            FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + ".xlsx");
             wb.write(fos);
             fos.close();
         } catch (FileNotFoundException ex) {
@@ -596,12 +657,53 @@ public class MainPrincipalController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(MainPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        TrayNotification notification = new TrayNotification();
+        notification.setAnimationType(AnimationType.POPUP);
+        notification.setTray("MyShop", "Exportation terminée", NotificationType.SUCCESS);
+        notification.showAndDismiss(Duration.seconds(1.5));
     }
 
     @FXML
     private void getCaissier(MouseEvent event) {
         VenteR venteR = CaissierVenteTable.getSelectionModel().getSelectedItem();
         loadVenteCaissierDetail(venteR);
+    }
+
+    @FXML
+    private void importInventaire(ActionEvent event) {
+        stage = (Stage) anchorPane.getScene().getWindow();
+        file = fileChooser.showOpenDialog(stage);
+        if (file != null) {
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                XSSFWorkbook wb = new XSSFWorkbook(fis);
+                XSSFSheet sheet = wb.getSheetAt(0);
+                Row row;
+                for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                    row = sheet.getRow(i);
+                    Produit p = new Produit();
+                    p.setCodeProd(row.getCell(0).getStringCellValue());
+                    p.setLibProd(row.getCell(1).getStringCellValue());
+                    p.setPrixUniProd(row.getCell(2).getStringCellValue());
+                    p.setQteIniProd((int) row.getCell(3).getNumericCellValue());
+                    try {
+                        produitService.findByCode(p);
+                    } catch (Exception e) {
+                        produitService.ajouter(p);
+                    }
+                }
+                wb.close();
+                fis.close();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MainPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(MainPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Importation terminée", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1.5));
+        }
     }
 
 }

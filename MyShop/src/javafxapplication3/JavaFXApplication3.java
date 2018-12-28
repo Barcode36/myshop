@@ -6,6 +6,8 @@
 package javafxapplication3;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,7 +29,6 @@ public class JavaFXApplication3 extends Application {
 
 //    private double xOffset = 0;
 //    private double yOffset = 0;
-
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/views/MainPrincipal.fxml"));
@@ -54,6 +55,8 @@ public class JavaFXApplication3 extends Application {
         primaryStage.setTitle("MyShop");
         primaryStage.setMaximized(true);
         primaryStage.show();
+        
+        System.out.println(primaryStage.isFullScreen());;
     }
 
     /**

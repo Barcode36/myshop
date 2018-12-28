@@ -70,8 +70,8 @@ public class MyShopService {
         Vente vente = new Vente();
         VentePK ventePK = new VentePK();
         ventePK.setIdClt(0);
-        ventePK.setIdComp(31);
-        ventePK.setIdProd(35);
+        ventePK.setIdComp(compte.getIdComp());
+        ventePK.setIdProd(produit.getIdProd());
         ventePK.setDateVen(new java.sql.Date(new Date().getTime()));
         long l = new Date().getTime();
         System.out.println(new Date(l));
