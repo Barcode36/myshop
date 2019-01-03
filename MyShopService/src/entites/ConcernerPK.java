@@ -8,11 +8,13 @@ package entites;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 
 /**
  *
  * @author Christ
  */
+@Embeddable
 public class ConcernerPK implements Serializable {
 
     @Column(name = "numLiv")
