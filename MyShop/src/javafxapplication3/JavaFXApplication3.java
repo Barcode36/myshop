@@ -5,6 +5,8 @@
  */
 package javafxapplication3;
 
+import entites.Compte;
+import entites.TypeCompte;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +22,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import service.ICompteService;
+import service.ITypeService;
+import service.imp.CompteService;
+import service.imp.TypeService;
 
 /**
  *
@@ -55,7 +61,22 @@ public class JavaFXApplication3 extends Application {
         primaryStage.setTitle("MyShop");
         primaryStage.setMaximized(true);
         primaryStage.show();
-        
+        ITypeService typeService = new TypeService();
+        ICompteService compteService = new CompteService();
+        TypeCompte t = new TypeCompte();
+        t.setLibTyp("caissier");
+        TypeCompte typeCompte = new TypeCompte();
+        typeCompte.setLibTyp("Comptable");
+        typeService.ajouter(typeCompte);
+        typeService.ajouter(t);
+        Compte compte = new Compte();
+        compte.setMdpComp("1234");
+        compte.setNomComp("Eben");
+        compte.setPrenomComp("bien");
+        compte.setPseudoComp("non");
+        compte.setEtatComp("actif");
+        compte.setIdTypComp(typeCompte.getIdTyp());
+        compteService.ajouter(compte);
         System.out.println(primaryStage.isFullScreen());;
     }
 

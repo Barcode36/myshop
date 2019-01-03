@@ -32,6 +32,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Produit.findByQteIniProd", query = "SELECT p FROM Produit p WHERE p.qteIniProd = :qteIniProd")})
 public class Produit implements Serializable {
 
+    @Column(name = "qteIniProd")
+    private Integer qteIniProd;
+
     @Column(name = "codeProd")
     private String codeProd;
 
@@ -44,8 +47,6 @@ public class Produit implements Serializable {
     private String libProd;
     @Column(name = "prixUniProd")
     private String prixUniProd;
-    @Column(name = "qteIniProd")
-    private Integer qteIniProd;
 
     public Produit() {
     }
@@ -78,13 +79,6 @@ public class Produit implements Serializable {
         this.prixUniProd = prixUniProd;
     }
 
-    public Integer getQteIniProd() {
-        return qteIniProd;
-    }
-
-    public void setQteIniProd(Integer qteIniProd) {
-        this.qteIniProd = qteIniProd;
-    }
 
     @Override
     public int hashCode() {
@@ -117,6 +111,14 @@ public class Produit implements Serializable {
 
     public void setCodeProd(String codeProd) {
         this.codeProd = codeProd;
+    }
+
+    public Integer getQteIniProd() {
+        return qteIniProd;
+    }
+
+    public void setQteIniProd(Integer qteIniProd) {
+        this.qteIniProd = qteIniProd;
     }
 
 }

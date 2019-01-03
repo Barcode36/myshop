@@ -20,9 +20,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Christ
  */
 @Entity
-@Table(name = "vente")
-@XmlRootElement
+@Table(name = "vente")@XmlRootElement
 @NamedQueries({
+
     @NamedQuery(name = "Vente.findAll", query = "SELECT v FROM Vente v")
     , @NamedQuery(name = "Vente.findByIdComp", query = "SELECT v FROM Vente v WHERE v.ventePK.idComp = :idComp")
     , @NamedQuery(name = "Vente.findByIdProd", query = "SELECT v FROM Vente v WHERE v.ventePK.idProd = :idProd")

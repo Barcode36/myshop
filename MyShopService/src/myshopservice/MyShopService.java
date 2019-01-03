@@ -63,7 +63,7 @@ public class MyShopService {
         produit.setCodeProd("6921734952417");
         produit.setLibProd("pile");
         produit.setPrixUniProd("9877");
-        produit.setQteIniProd(10);
+        //produit.setQteIniProd(10);
         produitService.ajouter(produit);
 
         IVenteService venteService = new VenteService();
