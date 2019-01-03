@@ -20,7 +20,7 @@ import service.ILivraison;
  *
  * @author Christ
  */
-public class LivraisonService implements ILivraison{
+public class LivraisonService implements ILivraison {
 
     public final EntityManagerFactory emf;
     public final LivraisonJpaController livraisonJpaController;
@@ -29,9 +29,7 @@ public class LivraisonService implements ILivraison{
         this.emf = Persistence.createEntityManagerFactory("MyShopServicePU");;
         this.livraisonJpaController = new LivraisonJpaController(emf);
     }
-    
-    
-    
+
     @Override
     public List<Livraison> listParFour(Fournisseur fournisseur) {
         return livraisonJpaController.findByidFour(fournisseur);
@@ -53,7 +51,7 @@ public class LivraisonService implements ILivraison{
         } catch (Exception ex) {
             Logger.getLogger(LivraisonService.class.getName()).log(Level.SEVERE, null, ex);
         }
-;
+        
     }
 
     @Override
@@ -64,5 +62,5 @@ public class LivraisonService implements ILivraison{
             Logger.getLogger(LivraisonService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

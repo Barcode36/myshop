@@ -454,7 +454,15 @@ public class MainPrincipalController implements Initializable {
             compte.setPrenomComp(txtPrenomComp.getText());
             compte.setPseudoComp(txtPseudoComp.getText());
             compte.setEtatComp("actif");
-            compte.setIdTypComp(typeCompteCombo.getSelectionModel().getSelectedItem().getIdTyp().getValue());
+            if (typeCompteCombo.getValue() == null) {
+                TypeCompte typeCompte = new TypeCompte();
+                typeCompte.setLibTyp(typeCompteCombo.getEditor().getText());
+                typeService.ajouter(typeCompte);
+                compte.setIdTypComp(typeCompte.getIdTyp());
+            } else {
+                compte.setIdTypComp(typeCompteCombo.getSelectionModel().getSelectedItem().getIdTyp().getValue());
+                
+            }
             compteService.ajouter(compte);
         } else {
             compteModif.setMdpComp(txtPassword.getText());
@@ -506,6 +514,7 @@ public class MainPrincipalController implements Initializable {
             gridCompte.setVisible(false);
             gridInventaire.setVisible(false);
         } catch (Exception e) {
+            //e.printStackTrace();
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
             notification.setTray("MyShop", "Pseudo ou Mot de passe incorrect", NotificationType.ERROR);
