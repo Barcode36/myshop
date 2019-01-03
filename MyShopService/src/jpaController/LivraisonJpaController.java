@@ -5,6 +5,7 @@
  */
 package jpaController;
 
+import entites.Fournisseur;
 import entites.Livraison;
 import java.io.Serializable;
 import java.util.List;
@@ -12,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpaController.exceptions.NonexistentEntityException;
@@ -140,5 +142,12 @@ public class LivraisonJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Livraison> findByidFour(Fournisseur fournisseur) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Livraison> query = (TypedQuery<Livraison>) em.createNamedQuery("Livraison.findByNumFour");
+        query.setParameter("numFour", fournisseur.getIdFour());
+        return query.getResultList();
+    }
+
 }

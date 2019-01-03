@@ -5,10 +5,21 @@
  */
 package service;
 
+import entites.Fournisseur;
+import entites.Livraison;
+import java.util.List;
+
 /**
  *
  * @author Christ
  */
 public interface ILivraison {
-    
+
+    public List<Livraison> listParFour(Fournisseur fournisseur);
+
+    public void ajouterLiv(Livraison livraison);
+
+    public void modifierLiv(Livraison livraison);
+
+    public void supprimerLiv(Livraison livraison);
 }

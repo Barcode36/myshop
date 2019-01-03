@@ -6,6 +6,7 @@
 package service;
 
 import entites.Concerner;
+import entites.ConcernerPK;
 import entites.Livraison;
 import java.util.List;
 
@@ -16,4 +17,8 @@ import java.util.List;
 public interface IConcerner {
 
     public List<Concerner> findByIdLiv(Livraison livraison);
+
+    public void supprimerCon(ConcernerPK concernerPK);
+
+    public void ajouterCon(Concerner concerner);
 }
