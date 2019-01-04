@@ -83,7 +83,7 @@ import tray.notification.TrayNotification;
  * @author Christ
  */
 public class MainPrincipalController implements Initializable {
-    
+
     private Stage stage;
     private FileChooser fileChooser;
     private File file;
@@ -261,19 +261,21 @@ public class MainPrincipalController implements Initializable {
     private ImageView imgShop;
     @FXML
     private Label lblCLose1;
-    
+    @FXML
+    private JFXButton btnCaisse1;
+
     public List<Produit> listProduit() {
         return produitService.produitList();
     }
-    
+
     public List<Compte> listCompte() {
         return compteService.compteList();
     }
-    
+
     public List<TypeCompte> listTypeCompte() {
         return typeService.typeCmopteList();
     }
-    
+
     public List<Vente> listVente() {
         return venteService.ventes();
     }
@@ -290,7 +292,7 @@ public class MainPrincipalController implements Initializable {
         qteProdCol.setCellValueFactory(cellData -> cellData.getValue().getQteIniProd().asObject());
         produitTable.setItems(produitList);
     }
-    
+
     public void loadCompteGrid() {
         compteList.clear();
         for (Compte compte : listCompte()) {
@@ -307,7 +309,7 @@ public class MainPrincipalController implements Initializable {
         etatCompCol.setCellValueFactory(cellData -> cellData.getValue().getEtatComp());
         CompteTable.setItems(compteList);
     }
-    
+
     public void loadVenteCaissier() {
         venteList.clear();
         for (Vente vente : listVente()) {
@@ -321,7 +323,7 @@ public class MainPrincipalController implements Initializable {
         totCaissierColVente.setCellValueFactory(cellData -> cellData.getValue().getTotalCaissier().asObject());
         CaissierVenteTable.setItems(venteList);
     }
-    
+
     public void loadVenteCaissierDetail(VenteR venteR) {
         produitListVentCaissier.clear();
         VentePK ventePK = new VentePK();
@@ -340,7 +342,7 @@ public class MainPrincipalController implements Initializable {
         ProduitCaissier.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
         tableDetailCaissier.setItems(produitListVentCaissier);
     }
-    
+
     public void loadTypeCompteCombo() {
         typeCompteList.clear();
         List<TypeCompte> list = typeService.typeCmopteList();
@@ -376,13 +378,13 @@ public class MainPrincipalController implements Initializable {
             public void run() {
                 System.out.println();
                 lblCLose.setLayoutX(produitTable.getWidth() + 1);
-                
+
                 imgShop.setFitWidth(produitTable.getWidth() - 100);
             }
         };
         t.schedule(timerTask, 2000l);
     }
-    
+
     @FXML
     private void selectForm(ActionEvent event) {
         if (event.getSource() == btnInventaire) {
@@ -428,7 +430,7 @@ public class MainPrincipalController implements Initializable {
             gridCompte.setVisible(false);
         }
     }
-    
+
     private void saveUpProduit(String saveUp) {
         if (saveUp.equals("Ajouter")) {
             Produit produit = new Produit();
@@ -443,9 +445,10 @@ public class MainPrincipalController implements Initializable {
             produitModif.setPrixUniProd(txtPrixProd.getText());
             produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
             produitService.modifier(produitModif);
+            tbnSaveProd.setText("Ajouter");
         }
     }
-    
+
     private void saveUpCompte(String saveUp) {
         if (saveUp.equals("Ajouter")) {
             Compte compte = new Compte();
@@ -457,11 +460,17 @@ public class MainPrincipalController implements Initializable {
             if (typeCompteCombo.getValue() == null) {
                 TypeCompte typeCompte = new TypeCompte();
                 typeCompte.setLibTyp(typeCompteCombo.getEditor().getText());
-                typeService.ajouter(typeCompte);
-                compte.setIdTypComp(typeCompte.getIdTyp());
+                try {
+                    TypeCompte typeCompteBase = typeService.findByLib(typeCompte);
+                    if (typeCompte.getLibTyp().equals(typeCompteBase.getLibTyp())) {
+                        compte.setIdTypComp(typeCompteBase.getIdTyp());
+                    }
+                } catch (Exception e) {
+                    typeService.ajouter(typeCompte);
+                    compte.setIdTypComp(typeCompte.getIdTyp());
+                }
             } else {
                 compte.setIdTypComp(typeCompteCombo.getSelectionModel().getSelectedItem().getIdTyp().getValue());
-                
             }
             compteService.ajouter(compte);
         } else {
@@ -470,9 +479,10 @@ public class MainPrincipalController implements Initializable {
             compteModif.setPrenomComp(txtPrenomComp.getText());
             compteModif.setPseudoComp(txtPseudoComp.getText());
             compteService.modifier(compteModif);
+            tbnSaveComp.setText("Ajouter");
         }
     }
-    
+
     private void getProduitInformationFromTable(ProduitR produitR) {
         Produit p = new Produit(produitR.getIdProd().getValue());
         produitModif = produitService.findById(p);
@@ -481,7 +491,7 @@ public class MainPrincipalController implements Initializable {
         txtPrixProd.setText(produitModif.getPrixUniProd());
         txtQteProd.setText(String.valueOf(produitModif.getQteIniProd()));
     }
-    
+
     private void getCompteInformationFromTable(CompteR compteR) {
         Compte c = new Compte(compteR.getIdComp().getValue());
         compteModif = compteService.findById(c);
@@ -490,7 +500,7 @@ public class MainPrincipalController implements Initializable {
         txtPseudoComp.setText(compteModif.getPseudoComp());
         txtPassword.setText(compteModif.getMdpComp());
     }
-    
+
     @FXML
     private void closeInventaire(MouseEvent event) {
         grid.toFront();
@@ -498,7 +508,7 @@ public class MainPrincipalController implements Initializable {
         gridInventaire.toBack();
         gridInventaire.setVisible(false);
     }
-    
+
     @FXML
     private void connexionButton(ActionEvent event) {
         Compte c = new Compte();
@@ -506,13 +516,25 @@ public class MainPrincipalController implements Initializable {
         c.setMdpComp(txtPassConnect.getText());
         try {
             compteActif = compteService.Connexion(c);
-            gridCaisse.toFront();
-            gridCaisse.setVisible(true);
-            grid.setVisible(false);
-            gridConnect.setVisible(false);
-            gridConnect.toBack();
-            gridCompte.setVisible(false);
-            gridInventaire.setVisible(false);
+            TypeCompte compte = new TypeCompte(compteActif.getIdTypComp());
+            TypeCompte typeCompte = typeService.findById(compte);
+            if (typeCompte.getLibTyp().equals("Caissier")) {
+                gridCaisse.toFront();
+                gridCaisse.setVisible(true);
+//                grid.setVisible(false);
+                gridConnect.setVisible(false);
+                gridConnect.toBack();
+                gridCompte.setVisible(false);
+                gridInventaire.setVisible(false);
+            } else if (typeCompte.getLibTyp().equals("Administateur")) {
+                grid.toFront();
+                grid.setVisible(true);
+                gridConnect.setVisible(false);
+                gridConnect.toBack();
+                gridCompte.setVisible(false);
+                gridInventaire.setVisible(false);
+            }
+
         } catch (Exception e) {
             //e.printStackTrace();
             TrayNotification notification = new TrayNotification();
@@ -521,18 +543,40 @@ public class MainPrincipalController implements Initializable {
             notification.showAndDismiss(Duration.seconds(1.5));
         }
     }
-    
+
     @FXML
     private void essai(KeyEvent event) {
 //        System.out.println(combpPseudoCennect.getSelectionModel().getSelectedItem().getPseudoComp().getValue());
     }
-    
+
     @FXML
     private void saveProduit(ActionEvent event) {
         saveUpProduit(tbnSaveProd.getText());
         loadInventairegrid();
+        clearProduitText();
     }
-    
+
+    @FXML
+    private void saveCompte(ActionEvent event) {
+        saveUpCompte(tbnSaveComp.getText());
+        loadCompteGrid();
+        clearCompteTxt();
+    }
+
+    @FXML
+    private void deleteProduit(ActionEvent event) {
+        produitService.supprimer(produitModif);
+        loadInventairegrid();
+        clearProduitText();
+    }
+
+    @FXML
+    private void deleteCompte(ActionEvent event) {
+        compteService.supprimer(compteModif);
+        loadCompteGrid();
+        clearCompteTxt();
+    }
+
     @FXML
     private void recuperationProduitInfo(KeyEvent event) {
         Produit p = new Produit();
@@ -544,13 +588,13 @@ public class MainPrincipalController implements Initializable {
             txtPrixUnitCaisse.setText(String.valueOf(produitVente.getPrixUniProd()));
         } catch (Exception e) {
         }
-        
+
     }
-    
+
     @FXML
     private void valideProduit(ActionEvent event) {
         produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, Integer.parseInt(txtQteComCaisse.getText())));
-        
+
         libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
         prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
         qteColCaisse.setCellValueFactory(cellData -> cellData.getValue().getQteProdCom().asObject());
@@ -558,7 +602,7 @@ public class MainPrincipalController implements Initializable {
         totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
         produitCaisseTable.setItems(produitListVent);
     }
-    
+
     @FXML
     private void SupprimerProdVent(ActionEvent event) {
         ProduitR pr = produitCaisseTable.getSelectionModel().getSelectedItem();
@@ -572,7 +616,48 @@ public class MainPrincipalController implements Initializable {
         produitListVent.remove(pr);
         produitCaisseTable.setItems(produitListVent);
     }
-    
+
+    @FXML
+    private void getProduitFromTable(MouseEvent event) {
+        ProduitR pr = produitTable.getSelectionModel().getSelectedItem();
+//        if (pr == null) {
+//            TrayNotification notification = new TrayNotification();
+//            notification.setAnimationType(AnimationType.POPUP);
+//            notification.setTray("MyShop", "Selectionnez un produit à supprimer", NotificationType.ERROR);
+//            notification.showAndDismiss(Duration.seconds(2));
+//            return;
+//        }
+        Produit p = new Produit(pr.getIdProd().getValue());
+        produitModif = produitService.findById(p);
+        txtCode.setText(produitModif.getCodeProd());
+        txtLibProd.setText(produitModif.getLibProd());
+        txtPrixProd.setText(String.valueOf(produitModif.getPrixUniProd()));
+        txtQteProd.setText(String.valueOf(produitModif.getQteIniProd()));
+        tbnSaveProd.setText("Modifier");
+    }
+
+    @FXML
+    private void getCompteFromTable(MouseEvent event) {
+        CompteR cr = CompteTable.getSelectionModel().getSelectedItem();
+        Compte c = new Compte(cr.getIdComp().getValue());
+        compteModif = compteService.findById(c);
+        TypeCompte tc = new TypeCompte(compteModif.getIdTypComp());
+        TypeCompte typeCompte = typeService.findById(tc);
+        typeCompteCombo.setValue(new TypeCompteR(typeCompte));
+        txtNomComp.setText(compteModif.getNomComp());
+        txtPrenomComp.setText(compteModif.getPrenomComp());
+        txtPseudoComp.setText(compteModif.getPseudoComp());
+        txtPassword.setText(compteModif.getMdpComp());
+        tbnSaveComp.setText("Modifier");
+    }
+
+    private void clearProduitText() {
+        txtCode.clear();
+        txtLibProd.clear();
+        txtPrixProd.clear();
+        txtQteProd.clear();
+    }
+
     private void showClavier() {
         try {
             Pane vBox = FXMLLoader.load(getClass().getResource("/views/clavier.fxml"));
@@ -613,7 +698,7 @@ public class MainPrincipalController implements Initializable {
                                 txtPassConnect.setText(txtPassConnect.getText() + "0");
                                 break;
                         }
-                        
+
                     });
                 }
             }
@@ -625,16 +710,16 @@ public class MainPrincipalController implements Initializable {
                     drawer.open();
                 }
             });
-            
+
         } catch (IOException ex) {
             Logger.getLogger(MainPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void autoComplete() {
-        
+
     }
-    
+
     @FXML
     private void exportInventaire(ActionEvent event) {
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -649,7 +734,7 @@ public class MainPrincipalController implements Initializable {
         sheet.setColumnWidth(1, 256 * 25);
         sheet.setColumnWidth(2, 256 * 25);
         sheet.setColumnWidth(3, 256 * 25);
-        
+
         int index = 1;
         for (Produit produit : listProduit()) {
             XSSFRow row = sheet.createRow(index);
@@ -675,13 +760,13 @@ public class MainPrincipalController implements Initializable {
         notification.setTray("MyShop", "Exportation terminée", NotificationType.SUCCESS);
         notification.showAndDismiss(Duration.seconds(1.5));
     }
-    
+
     @FXML
     private void getCaissier(MouseEvent event) {
         VenteR venteR = CaissierVenteTable.getSelectionModel().getSelectedItem();
         loadVenteCaissierDetail(venteR);
     }
-    
+
     @FXML
     private void importInventaire(ActionEvent event) {
         stage = (Stage) anchorPane.getScene().getWindow();
@@ -722,20 +807,14 @@ public class MainPrincipalController implements Initializable {
             notification.showAndDismiss(Duration.seconds(1.5));
         }
     }
-    
+
     private void clearCompteTxt() {
         txtNomComp.clear();
         txtPrenomComp.clear();
         txtPseudoComp.clear();
         txtPassword.clear();
         typeCompteCombo.setValue(null);
+        typeCompteCombo.getEditor().clear();
     }
-    
-    @FXML
-    private void btnSaveCompte(ActionEvent event) {
-        saveUpCompte("Ajouter");
-        loadCompteGrid();
-        clearCompteTxt();
-    }
-    
+
 }

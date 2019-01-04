@@ -66,4 +66,9 @@ public class TypeService implements ITypeService {
         return typeJpaController.findTypeCompteEntities();
     }
 
+    @Override
+    public TypeCompte findByLib(TypeCompte typeCompte) {
+        return typeJpaController.findByLibType(typeCompte);
+    }
+
 }

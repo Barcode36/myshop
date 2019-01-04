@@ -25,6 +25,7 @@ public class CompteR {
     private SimpleStringProperty etatComp;
     
     public CompteR(Compte compte, TypeCompte typeCompte) {
+        this.idComp = new SimpleIntegerProperty(compte.getIdComp());
         this.nomComp = new SimpleStringProperty(compte.getNomComp());
         this.prenomComp = new SimpleStringProperty(compte.getPrenomComp());
         this.pseudoComp = new SimpleStringProperty(compte.getPseudoComp());
