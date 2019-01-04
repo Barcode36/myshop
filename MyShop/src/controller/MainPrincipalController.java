@@ -401,8 +401,8 @@ public class MainPrincipalController implements Initializable {
             gridInventaire.setVisible(false);
             gridAPropos.setVisible(false);
         } else if (event.getSource() == btnCaisse) {
-            gridConnect.toFront();
-            gridConnect.setVisible(true);
+            gridCaisse.toFront();
+            gridCaisse.setVisible(true);
             grid.setVisible(false);
             gridInventaire.setVisible(false);
             gridCompte.setVisible(false);
