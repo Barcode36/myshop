@@ -88,7 +88,7 @@ import tray.notification.TrayNotification;
  * @author Christ
  */
 public class MainPrincipalController implements Initializable {
-
+    
     private Stage stage;
     private FileChooser fileChooser;
     private File file;
@@ -274,25 +274,25 @@ public class MainPrincipalController implements Initializable {
     private JFXDatePicker datePiker1;
     @FXML
     private JFXDatePicker datePiker2;
-
+    
     private void mois() {
         listMois.addAll("Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre",
                 "Novembre", "Decembre");
         moisCombo.setItems(listMois);
     }
-
+    
     public List<Produit> listProduit() {
         return produitService.produitList();
     }
-
+    
     public List<Compte> listCompte() {
         return compteService.compteList();
     }
-
+    
     public List<TypeCompte> listTypeCompte() {
         return typeService.typeCmopteList();
     }
-
+    
     public List<Vente> listVente() {
         return venteService.ventes();
     }
@@ -309,7 +309,7 @@ public class MainPrincipalController implements Initializable {
         qteProdCol.setCellValueFactory(cellData -> cellData.getValue().getQteIniProd().asObject());
         produitTable.setItems(produitList);
     }
-
+    
     public void loadCompteGrid() {
         compteList.clear();
         for (Compte compte : listCompte()) {
@@ -326,7 +326,7 @@ public class MainPrincipalController implements Initializable {
         etatCompCol.setCellValueFactory(cellData -> cellData.getValue().getEtatComp());
         CompteTable.setItems(compteList);
     }
-
+    
     public void loadVenteCaissier(List<Vente> list) {
         venteList.clear();
         for (Vente vente : list) {
@@ -340,7 +340,7 @@ public class MainPrincipalController implements Initializable {
         totCaissierColVente.setCellValueFactory(cellData -> cellData.getValue().getTotalCaissier().asObject());
         CaissierVenteTable.setItems(venteList);
     }
-
+    
     public void loadVenteCaissierDetail(VenteR venteR) {
         produitListVentCaissier.clear();
         VentePK ventePK = new VentePK();
@@ -359,7 +359,7 @@ public class MainPrincipalController implements Initializable {
         ProduitCaissier.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
         tableDetailCaissier.setItems(produitListVentCaissier);
     }
-
+    
     public void loadTypeCompteCombo() {
         typeCompteList.clear();
         List<TypeCompte> list = typeService.typeCmopteList();
@@ -406,13 +406,13 @@ public class MainPrincipalController implements Initializable {
             public void run() {
                 System.out.println();
                 lblCLose.setLayoutX(produitTable.getWidth() + 1);
-
+                
                 imgShop.setFitWidth(produitTable.getWidth() - 100);
             }
         };
         t.schedule(timerTask, 2000l);
     }
-
+    
     @FXML
     private void selectForm(ActionEvent event) {
         if (event.getSource() == btnInventaire) {
@@ -458,7 +458,7 @@ public class MainPrincipalController implements Initializable {
             gridCompte.setVisible(false);
         }
     }
-
+    
     private void saveUpProduit(String saveUp) {
         if (saveUp.equals("Ajouter")) {
             Produit produit = new Produit();
@@ -476,7 +476,7 @@ public class MainPrincipalController implements Initializable {
             tbnSaveProd.setText("Ajouter");
         }
     }
-
+    
     private void saveUpCompte(String saveUp) {
         if (saveUp.equals("Ajouter")) {
             Compte compte = new Compte();
@@ -510,7 +510,7 @@ public class MainPrincipalController implements Initializable {
             tbnSaveComp.setText("Ajouter");
         }
     }
-
+    
     private void getProduitInformationFromTable(ProduitR produitR) {
         Produit p = new Produit(produitR.getIdProd().getValue());
         produitModif = produitService.findById(p);
@@ -519,7 +519,7 @@ public class MainPrincipalController implements Initializable {
         txtPrixProd.setText(produitModif.getPrixUniProd());
         txtQteProd.setText(String.valueOf(produitModif.getQteIniProd()));
     }
-
+    
     private void getCompteInformationFromTable(CompteR compteR) {
         Compte c = new Compte(compteR.getIdComp().getValue());
         compteModif = compteService.findById(c);
@@ -528,7 +528,7 @@ public class MainPrincipalController implements Initializable {
         txtPseudoComp.setText(compteModif.getPseudoComp());
         txtPassword.setText(compteModif.getMdpComp());
     }
-
+    
     @FXML
     private void closeInventaire(MouseEvent event) {
         grid.toFront();
@@ -536,7 +536,7 @@ public class MainPrincipalController implements Initializable {
         gridInventaire.toBack();
         gridInventaire.setVisible(false);
     }
-
+    
     @FXML
     private void connexionButton(ActionEvent event) {
         Compte c = new Compte();
@@ -562,7 +562,7 @@ public class MainPrincipalController implements Initializable {
                 gridCompte.setVisible(false);
                 gridInventaire.setVisible(false);
             }
-
+            
         } catch (Exception e) {
             //e.printStackTrace();
             TrayNotification notification = new TrayNotification();
@@ -571,40 +571,40 @@ public class MainPrincipalController implements Initializable {
             notification.showAndDismiss(Duration.seconds(1.5));
         }
     }
-
+    
     @FXML
     private void essai(KeyEvent event) {
 //        System.out.println(combpPseudoCennect.getSelectionModel().getSelectedItem().getPseudoComp().getValue());
     }
-
+    
     @FXML
     private void saveProduit(ActionEvent event) {
         saveUpProduit(tbnSaveProd.getText());
         loadInventairegrid();
         clearProduitText();
     }
-
+    
     @FXML
     private void saveCompte(ActionEvent event) {
         saveUpCompte(tbnSaveComp.getText());
         loadCompteGrid();
         clearCompteTxt();
     }
-
+    
     @FXML
     private void deleteProduit(ActionEvent event) {
         produitService.supprimer(produitModif);
         loadInventairegrid();
         clearProduitText();
     }
-
+    
     @FXML
     private void deleteCompte(ActionEvent event) {
         compteService.supprimer(compteModif);
         loadCompteGrid();
         clearCompteTxt();
     }
-
+    
     @FXML
     private void recuperationProduitInfo(KeyEvent event) {
         Produit p = new Produit();
@@ -614,9 +614,9 @@ public class MainPrincipalController implements Initializable {
             txtNomProdCaisse.setText(produitVente.getLibProd());
             txtQteProdCaisse.setText(String.valueOf(produitVente.getQteIniProd()));
             txtPrixUnitCaisse.setText(String.valueOf(produitVente.getPrixUniProd()));
-
+            
             produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
-
+            
             libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
             prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
             qteColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXTextField>("qteCom"));
@@ -626,10 +626,10 @@ public class MainPrincipalController implements Initializable {
         } catch (Exception e) {
         }
     }
-
+    
     private void valideProduit(ActionEvent event) {
         produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, Integer.parseInt(txtQteComCaisse.getText())));
-
+        
         libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
         prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
         qteColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXTextField>("qteCom"));
@@ -637,7 +637,7 @@ public class MainPrincipalController implements Initializable {
         totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
         produitCaisseTable.setItems(produitListVent);
     }
-
+    
     @FXML
     private void SupprimerProdVent(ActionEvent event) {
         ProduitR pr = produitCaisseTable.getSelectionModel().getSelectedItem();
@@ -651,7 +651,7 @@ public class MainPrincipalController implements Initializable {
         produitListVent.remove(pr);
         produitCaisseTable.setItems(produitListVent);
     }
-
+    
     @FXML
     private void getProduitFromTable(MouseEvent event) {
         ProduitR pr = produitTable.getSelectionModel().getSelectedItem();
@@ -670,7 +670,7 @@ public class MainPrincipalController implements Initializable {
         txtQteProd.setText(String.valueOf(produitModif.getQteIniProd()));
         tbnSaveProd.setText("Modifier");
     }
-
+    
     @FXML
     private void getCompteFromTable(MouseEvent event) {
         CompteR cr = CompteTable.getSelectionModel().getSelectedItem();
@@ -685,14 +685,14 @@ public class MainPrincipalController implements Initializable {
         txtPassword.setText(compteModif.getMdpComp());
         tbnSaveComp.setText("Modifier");
     }
-
+    
     private void clearProduitText() {
         txtCode.clear();
         txtLibProd.clear();
         txtPrixProd.clear();
         txtQteProd.clear();
     }
-
+    
     private void showClavier() {
         try {
             Pane vBox = FXMLLoader.load(getClass().getResource("/views/clavier.fxml"));
@@ -733,7 +733,7 @@ public class MainPrincipalController implements Initializable {
                                 txtPassConnect.setText(txtPassConnect.getText() + "0");
                                 break;
                         }
-
+                        
                     });
                 }
             }
@@ -745,16 +745,16 @@ public class MainPrincipalController implements Initializable {
                     drawer.open();
                 }
             });
-
+            
         } catch (IOException ex) {
             Logger.getLogger(MainPrincipalController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void autoComplete() {
-
+        
     }
-
+    
     @FXML
     private void exportInventaire(ActionEvent event) {
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -769,7 +769,7 @@ public class MainPrincipalController implements Initializable {
         sheet.setColumnWidth(1, 256 * 25);
         sheet.setColumnWidth(2, 256 * 25);
         sheet.setColumnWidth(3, 256 * 25);
-
+        
         int index = 1;
         for (Produit produit : listProduit()) {
             XSSFRow row = sheet.createRow(index);
@@ -795,13 +795,13 @@ public class MainPrincipalController implements Initializable {
         notification.setTray("MyShop", "Exportation terminée", NotificationType.SUCCESS);
         notification.showAndDismiss(Duration.seconds(1.5));
     }
-
+    
     @FXML
     private void getCaissier(MouseEvent event) {
         VenteR venteR = CaissierVenteTable.getSelectionModel().getSelectedItem();
         loadVenteCaissierDetail(venteR);
     }
-
+    
     @FXML
     private void importInventaire(ActionEvent event) {
         stage = (Stage) anchorPane.getScene().getWindow();
@@ -842,7 +842,7 @@ public class MainPrincipalController implements Initializable {
             notification.showAndDismiss(Duration.seconds(1.5));
         }
     }
-
+    
     private void clearCompteTxt() {
         txtNomComp.clear();
         txtPrenomComp.clear();
@@ -851,7 +851,7 @@ public class MainPrincipalController implements Initializable {
         typeCompteCombo.setValue(null);
         typeCompteCombo.getEditor().clear();
     }
-
+    
     @FXML
     private void saveVente(ActionEvent event) {
         for (ProduitR pr : produitListVent) {
@@ -870,9 +870,9 @@ public class MainPrincipalController implements Initializable {
         notification.setAnimationType(AnimationType.POPUP);
         notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
         notification.showAndDismiss(Duration.seconds(1.5));
-
+        
     }
-
+    
     @FXML
     private void bilanParMois(ActionEvent event) {
         Date date = new Date();
@@ -912,7 +912,7 @@ public class MainPrincipalController implements Initializable {
         List<Vente> list = venteService.ventesParMois(String.valueOf(dateh.getYear() + "-" + mois));
         loadVenteCaissier(list);
     }
-
+    
     @FXML
     private void CaisseParMois(ActionEvent event) {
         String idMois = "";
@@ -954,7 +954,7 @@ public class MainPrincipalController implements Initializable {
             case "Decembre":
                 idMois = "12";
                 break;
-
+            
             default:
                 break;
         }
@@ -963,17 +963,109 @@ public class MainPrincipalController implements Initializable {
         List<Vente> list = venteService.ventesParMois(String.valueOf(dateh.getYear() + "-" + idMois));
         loadVenteCaissier(list);
     }
-
+    
     @FXML
     private void caisseEntreDate(ActionEvent event) {
         LocalDate d1 = datePiker1.getValue();
-        String d = d1.getYear() + "-0" + d1.getMonthValue() + "-0" + d1.getDayOfMonth();
+        String idMoisDp1 = "";
+        String idMoisDp2 = "";
+        String jr1 = "";
+        String jr2 = "";
+        switch (datePiker1.getValue().getMonthValue()) {
+            case 10:
+                idMoisDp1 = String.valueOf(datePiker1.getValue().getMonthValue());
+                break;
+            case 11:
+                break;
+            case 12:
+                break;
+            default:
+                idMoisDp1 = "0" + datePiker1.getValue().getMonthValue();
+        }
+        switch (datePiker2.getValue().getMonthValue()) {
+            case 10:
+                idMoisDp2 = String.valueOf(datePiker2.getValue().getMonthValue());
+                break;
+            case 11:
+                idMoisDp2 = String.valueOf(datePiker2.getValue().getMonthValue());
+                break;
+            case 12:
+                idMoisDp2 = String.valueOf(datePiker2.getValue().getMonthValue());
+                break;
+            default:
+                idMoisDp2 = "0" + datePiker2.getValue().getMonthValue();
+        }
+        switch (datePiker1.getValue().getDayOfMonth()) {
+            case 1:
+                jr1 = "01";
+                break;
+            case 2:
+                jr1 = "02";
+                break;
+            case 3:
+                jr1 = "03";
+                break;
+            case 4:
+                jr1 = "04";
+                break;
+            case 5:
+                jr1 = "05";
+                break;
+            case 6:
+                jr1 = "06";
+                break;
+            case 7:
+                jr1 = "07";
+                break;
+            case 8:
+                jr1 = "08";
+                break;
+            case 9:
+                jr1 = "09";
+                break;
+            default:
+                jr1 = String.valueOf(datePiker1.getValue().getDayOfMonth());
+            
+        }
+        switch (datePiker2.getValue().getDayOfMonth()) {
+            case 1:
+                jr2 = "01";
+                break;
+            case 2:
+                jr2 = "02";
+                break;
+            case 3:
+                jr2 = "03";
+                break;
+            case 4:
+                jr2 = "04";
+                break;
+            case 5:
+                jr2 = "05";
+                break;
+            case 6:
+                jr2 = "06";
+                break;
+            case 7:
+                jr2 = "07";
+                break;
+            case 8:
+                jr2 = "08";
+                break;
+            case 9:
+                jr2 = "09";
+                break;
+            default:
+                jr2 = String.valueOf(datePiker2.getValue().getDayOfMonth());
+            
+        }
+        String d = d1.getYear() + "-" + idMoisDp1 + "-" + jr1;
         LocalDate d2 = datePiker2.getValue();
-        String dl = d2.getYear() + "-0" + d2.getMonthValue() + "-0" + d2.getDayOfMonth();
+        String dl = d2.getYear() + "-" + idMoisDp2 + "-" + jr2;
         System.out.println(d);
         System.out.println(dl);
         List<Vente> list = venteService.ventesEntreDeuxDate(d, dl);
         loadVenteCaissier(list);
     }
-
+    
 }
