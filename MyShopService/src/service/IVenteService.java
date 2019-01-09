@@ -13,9 +13,15 @@ import java.util.List;
  * @author Christ
  */
 public interface IVenteService {
+
     public void ajouter(Vente vente);
+
     public List<Vente> ventes();
+
     public List<Vente> ventesParCaissier(Vente vente);
-    
-    
+
+    public List<Vente> ventesParMois(String mois);
+
+    public List<Vente> ventesEntreDeuxDate(String d1, String d2);
+
 }

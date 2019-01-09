@@ -16,8 +16,13 @@ import entites.VentePK;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import service.IClientService;
@@ -70,24 +75,33 @@ public class MyShopService {
 //        produit.setPrixUniProd("9877");
 //        //produit.setQteIniProd(10);
 //        produitService.ajouter(produit);
-//
+//        LocalDateTime ldt = LocalDateTime.now();
+//        System.out.println();
 //        IVenteService venteService = new VenteService();
 //        Vente vente = new Vente();
 //        VentePK ventePK = new VentePK();
 //        ventePK.setIdClt(0);
-//        ventePK.setIdComp(compte.getIdComp());
+//        ventePK.setIdComp(3);
 //        ventePK.setIdProd(produit.getIdProd());
-//        ventePK.setDateVen(new java.sql.Date(new Date().getTime()));
-//        long l = new Date().getTime();
-//        System.out.println(new Date(l));
+//
+//        ventePK.setDateVen(new Date());
+//
 //        vente.setVentePK(ventePK);
 //        vente.setQteVen(2);
 //        venteService.ajouter(vente);
-IConcerner concernerService = new ConcernerService();
-        Livraison livraison = new Livraison(1);
-        List<Concerner> list = concernerService.findByIdLiv(livraison);
-        System.out.println(list);
-
+//        List<Vente> list = venteService.ventesParMois("2019");
+//        for (Vente v: list) {
+//            
+//            System.out.println(v.getQteVen());
+//        }
+//        Date mois = new Date();
+//        List<Vente> ventes = venteService.ventesParMois(01);
+//        System.out.println(ventes);
+//        java.sql.Date d = new java.sql.Date
+//IConcerner concernerService = new ConcernerService();
+//        Livraison livraison = new Livraison(1);
+//        List<Concerner> list = concernerService.findByIdLiv(livraison);
+//        System.out.println(list);
     }
 
 }

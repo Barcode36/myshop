@@ -47,4 +47,14 @@ public class VenteService implements IVenteService {
         return venteJpaController.venteParCaissier(vente);
     }
 
+    @Override
+    public List<Vente> ventesParMois(String mois) {
+        return venteJpaController.venteParMois(mois);
+    }
+
+    @Override
+    public List<Vente> ventesEntreDeuxDate(String d1, String d2) {
+        return venteJpaController.venteEntreDeuxDate(d1, d2);
+    }
+
 }

@@ -153,4 +153,21 @@ public class VenteJpaController implements Serializable {
         return query.getResultList();
     }
 
+    public List<Vente> venteParMois(String mois) {
+        EntityManager em = this.getEntityManager();
+        //TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByDateVen");
+        Query query = em.createNativeQuery("SELECT * FROM vente where strftime('%Y-%m', dateVen / 1000, 'unixepoch')=?", Vente.class);
+        query.setParameter(1, mois);
+        return (List<Vente>) query.getResultList();
+    }
+
+    public List<Vente> venteEntreDeuxDate(String date1, String date2) {
+        EntityManager em = this.getEntityManager();
+        //TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByDateVen");
+        Query query = em.createNativeQuery("SELECT * FROM vente where strftime('%Y-%m-%d', dateVen / 1000, 'unixepoch')>=? and strftime('%Y-%m-%d', dateVen / 1000, 'unixepoch')<=?", Vente.class);
+        query.setParameter(1, date1);
+        query.setParameter(2, date2);
+        return (List<Vente>) query.getResultList();
+    }
+
 }

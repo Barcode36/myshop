@@ -6,7 +6,7 @@
 package entites;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -26,7 +26,7 @@ public class VentePK implements Serializable {
     @Column(name = "idClt")
     private Integer idClt;
 
-    @Column(name = "dateVen")
+    @Column(name = "dateVen", columnDefinition = "Date")
     private Date dateVen;
 
     @Override

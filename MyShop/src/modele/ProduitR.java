@@ -6,6 +6,7 @@
 package modele;
 
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXTextField;
 import entites.Produit;
 import entites.Vente;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -30,6 +31,7 @@ public class ProduitR {
     private SimpleIntegerProperty qteProdCom;
     private JFXCheckBox Suppression;
     private SimpleStringProperty total;
+    private JFXTextField qteCom;
     
     public ProduitR(Produit produit) {
         this.idProd = new SimpleIntegerProperty(produit.getIdProd());
@@ -57,6 +59,8 @@ public class ProduitR {
         this.codeProd = new SimpleStringProperty(produit.getCodeProd());
         this.total = new SimpleStringProperty(String.valueOf(Integer.parseInt(prixUniProd.getValue()) * qteProdCom.getValue()));
         this.Suppression = new JFXCheckBox("Supprimer");
+        this.qteCom = new JFXTextField();
+        this.qteCom.setText(String.valueOf(com));
         this.Suppression.setOnMousePressed(e -> {
             ProduitR pr = produitCaisseTable.getSelectionModel().getSelectedItem();
             // if (pr.getSuppression().isSelected()) {
@@ -128,6 +132,14 @@ public class ProduitR {
     
     public void setQteProdCom(SimpleIntegerProperty qteProdCom) {
         this.qteProdCom = qteProdCom;
+    }
+
+    public JFXTextField getQteCom() {
+        return qteCom;
+    }
+
+    public void setQteCom(JFXTextField qteCom) {
+        this.qteCom = qteCom;
     }
     
     @Override
