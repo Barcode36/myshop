@@ -63,7 +63,7 @@ public class CompteService implements ICompteService {
 
     @Override
     public List<Compte> compteList() {
-        return compteJpaController.findCompteEntities();
+        return compteJpaController.AllCompte();
     }
 
     @Override

@@ -5,6 +5,7 @@
  */
 package javafxapplication3;
 
+import com.sun.javafx.css.StyleManager;
 import entites.Compte;
 import entites.TypeCompte;
 import java.io.IOException;
@@ -56,12 +57,13 @@ public class JavaFXApplication3 extends Application {
 //
 //        });
         Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/modena.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/icon.jpg")));
         primaryStage.setTitle("MyShop");
         primaryStage.setMaximized(true);
         primaryStage.show();
-        
+
     }
 
     /**

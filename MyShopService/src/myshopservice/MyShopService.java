@@ -12,7 +12,7 @@ import entites.Livraison;
 import entites.Produit;
 import entites.TypeCompte;
 import entites.Vente;
-import entites.VentePK;
+import entites.ContenirVentePK;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

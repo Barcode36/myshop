@@ -5,6 +5,7 @@
  */
 package service.imp;
 
+import entites.Compte;
 import entites.Vente;
 import java.util.List;
 import java.util.logging.Level;
@@ -43,8 +44,8 @@ public class VenteService implements IVenteService {
     }
 
     @Override
-    public List<Vente> ventesParCaissier(Vente vente) {
-        return venteJpaController.venteParCaissier(vente);
+    public List<Vente> ventesParCaissier(Compte compte) {
+        return venteJpaController.venteParCaissier(compte);
     }
 
     @Override
@@ -53,8 +54,18 @@ public class VenteService implements IVenteService {
     }
 
     @Override
-    public List<Vente> ventesEntreDeuxDate(String d1, String d2) {
-        return venteJpaController.venteEntreDeuxDate(d1, d2);
+    public List<Vente> ventesEntreDeuxDate(String d1, String d2,Compte compte) {
+        return venteJpaController.venteEntreDeuxDate(d1, d2,compte);
+    }
+
+    @Override
+    public Vente findByIdVen(Vente vente) {
+        return venteJpaController.findVente(vente.getIdVen());
+    }
+
+    @Override
+    public List<Vente> ventesParCaissierMois(Compte compte, String mois) {
+        return venteJpaController.venteParCaissierMois(compte, mois);
     }
 
 }

@@ -15,7 +15,7 @@
     -fx-background-radius: 5em;
     -fx-font: bold italic 20pt "Arial";
     -fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );
-}
+} 
 .table-column {
     -fx-alignment: CENTER;
 }
@@ -30,4 +30,14 @@
 }
 .table-row-cell {
     -fx-cell-size: 50px;
+}
+#txtRemise{
+    -fx-text-fill: red;
+    -fx-animated: true;
+    
+}
+#txtRemise , #txtMontCllt{
+    -fx-text-alignment: center;
+    -fx-alignment: CENTER;
+    
 }

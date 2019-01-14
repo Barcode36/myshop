@@ -20,10 +20,17 @@ public class VenteR {
     private SimpleStringProperty caissier;
     private SimpleIntegerProperty totalCaissier;
     private SimpleIntegerProperty idCompte;
+    private SimpleIntegerProperty idVen;
 
-    public VenteR(Produit produit, Compte compte, Vente vente) {
+    public VenteR(Compte compte,Vente vente, Integer totVent) {
         this.caissier = new SimpleStringProperty(compte.getNomComp() + compte.getPrenomComp());
-        this.totalCaissier = new SimpleIntegerProperty(Integer.parseInt(produit.getPrixUniProd()) * vente.getQteVen());
+        this.totalCaissier = new SimpleIntegerProperty(totVent);
+        this.idCompte = new SimpleIntegerProperty(compte.getIdComp());
+        this.idVen = new SimpleIntegerProperty(vente.getIdVen());
+    }
+    public VenteR(Compte compte, Integer totVent) {
+        this.caissier = new SimpleStringProperty(compte.getNomComp() + compte.getPrenomComp());
+        this.totalCaissier = new SimpleIntegerProperty(totVent);
         this.idCompte = new SimpleIntegerProperty(compte.getIdComp());
     }
 
@@ -41,6 +48,22 @@ public class VenteR {
 
     public void setTotalCaissier(SimpleIntegerProperty totalCaissier) {
         this.totalCaissier = totalCaissier;
+    }
+
+    public SimpleIntegerProperty getIdCompte() {
+        return idCompte;
+    }
+
+    public void setIdCompte(SimpleIntegerProperty idCompte) {
+        this.idCompte = idCompte;
+    }
+
+    public SimpleIntegerProperty getIdVen() {
+        return idVen;
+    }
+
+    public void setIdVen(SimpleIntegerProperty idVen) {
+        this.idVen = idVen;
     }
 
     public SimpleIntegerProperty getidCompte() {

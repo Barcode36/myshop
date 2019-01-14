@@ -5,7 +5,9 @@
  */
 package jpaController;
 
-import entites.Compte;
+import entites.ContenirVente;
+import entites.ContenirVentePK;
+import entites.Vente;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -22,9 +24,9 @@ import jpaController.exceptions.PreexistingEntityException;
  *
  * @author Christ
  */
-public class CompteJpaController implements Serializable {
+public class ContenirVenteJpaController implements Serializable {
 
-    public CompteJpaController(EntityManagerFactory emf) {
+    public ContenirVenteJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -33,16 +35,19 @@ public class CompteJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Compte compte) throws PreexistingEntityException, Exception {
+    public void create(ContenirVente contenirVente) throws PreexistingEntityException, Exception {
+        if (contenirVente.getContenirVentePK() == null) {
+            contenirVente.setContenirVentePK(new ContenirVentePK());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(compte);
+            em.persist(contenirVente);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findCompte(compte.getIdComp()) != null) {
-                throw new PreexistingEntityException("Compte " + compte + " already exists.", ex);
+            if (findContenirVente(contenirVente.getContenirVentePK()) != null) {
+                throw new PreexistingEntityException("ContenirVente " + contenirVente + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -52,19 +57,19 @@ public class CompteJpaController implements Serializable {
         }
     }
 
-    public void edit(Compte compte) throws NonexistentEntityException, Exception {
+    public void edit(ContenirVente contenirVente) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            compte = em.merge(compte);
+            contenirVente = em.merge(contenirVente);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = compte.getIdComp();
-                if (findCompte(id) == null) {
-                    throw new NonexistentEntityException("The compte with id " + id + " no longer exists.");
+                ContenirVentePK id = contenirVente.getContenirVentePK();
+                if (findContenirVente(id) == null) {
+                    throw new NonexistentEntityException("The contenirVente with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -75,19 +80,19 @@ public class CompteJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(ContenirVentePK id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Compte compte;
+            ContenirVente contenirVente;
             try {
-                compte = em.getReference(Compte.class, id);
-                compte.getIdComp();
+                contenirVente = em.getReference(ContenirVente.class, id);
+                contenirVente.getContenirVentePK();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The compte with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The contenirVente with id " + id + " no longer exists.", enfe);
             }
-            em.remove(compte);
+            em.remove(contenirVente);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -96,19 +101,19 @@ public class CompteJpaController implements Serializable {
         }
     }
 
-    public List<Compte> findCompteEntities() {
-        return findCompteEntities(true, -1, -1);
+    public List<ContenirVente> findContenirVenteEntities() {
+        return findContenirVenteEntities(true, -1, -1);
     }
 
-    public List<Compte> findCompteEntities(int maxResults, int firstResult) {
-        return findCompteEntities(false, maxResults, firstResult);
+    public List<ContenirVente> findContenirVenteEntities(int maxResults, int firstResult) {
+        return findContenirVenteEntities(false, maxResults, firstResult);
     }
 
-    private List<Compte> findCompteEntities(boolean all, int maxResults, int firstResult) {
+    private List<ContenirVente> findContenirVenteEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Compte.class));
+            cq.select(cq.from(ContenirVente.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -120,20 +125,20 @@ public class CompteJpaController implements Serializable {
         }
     }
 
-    public Compte findCompte(Integer id) {
+    public ContenirVente findContenirVente(ContenirVentePK id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Compte.class, id);
+            return em.find(ContenirVente.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getCompteCount() {
+    public int getContenirVenteCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Compte> rt = cq.from(Compte.class);
+            Root<ContenirVente> rt = cq.from(ContenirVente.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -141,18 +146,10 @@ public class CompteJpaController implements Serializable {
             em.close();
         }
     }
-
-    public Compte ConnexionReussi(Compte compte) {
+    public List<ContenirVente> recuperationParVente(Vente vente) {
         EntityManager em = this.getEntityManager();
-        TypedQuery<Compte> query = (TypedQuery<Compte>) em.createNamedQuery("Compte.findByPseudoCompAndMdpComp");
-        query.setParameter("pseudoComp", compte.getPseudoComp());
-        query.setParameter("mdpComp", compte.getMdpComp());
-        return query.getSingleResult();
-    }
-    public List<Compte> AllCompte() {
-        EntityManager em = this.getEntityManager();
-        TypedQuery<Compte> query = (TypedQuery<Compte>) em.createNamedQuery("Compte.findAll");
-        
+        TypedQuery<ContenirVente> query = (TypedQuery<ContenirVente>) em.createNamedQuery("ContenirVente.findByIdVen");
+        query.setParameter("idVen", vente.getIdVen());
         return query.getResultList();
     }
 }

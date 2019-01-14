@@ -5,6 +5,7 @@
  */
 package service;
 
+import entites.Compte;
 import entites.Vente;
 import java.util.List;
 
@@ -16,12 +17,16 @@ public interface IVenteService {
 
     public void ajouter(Vente vente);
 
+    public Vente findByIdVen(Vente vente);
+
     public List<Vente> ventes();
 
-    public List<Vente> ventesParCaissier(Vente vente);
+    public List<Vente> ventesParCaissier(Compte compte);
+
+    public List<Vente> ventesParCaissierMois(Compte compte, String mois);
 
     public List<Vente> ventesParMois(String mois);
 
-    public List<Vente> ventesEntreDeuxDate(String d1, String d2);
+    public List<Vente> ventesEntreDeuxDate(String d1, String d2,Compte compte);
 
 }

@@ -11,8 +11,9 @@
     <class>entites.Livraison</class>
     <class>entites.Fournisseur</class>
     <class>entites.Concerner</class>
+    <class>entites.ContenirVente</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:test.sqlite"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:G:\Java Projet\Travail\MyShop\test.sqlite"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
       <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
       <property name="javax.persistence.jdbc.password" value=""/>
