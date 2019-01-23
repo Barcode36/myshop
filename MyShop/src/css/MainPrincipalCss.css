@@ -34,10 +34,16 @@
 #txtRemise{
     -fx-text-fill: red;
     -fx-animated: true;
-    
+
 }
 #txtRemise , #txtMontCllt{
     -fx-text-alignment: center;
     -fx-alignment: CENTER;
-    
+
+}
+#fancytext {
+    -fx-font: 15px Tahoma;
+    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
 }

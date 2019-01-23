@@ -16,6 +16,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -51,7 +52,7 @@ import tray.notification.TrayNotification;
  * @author Christ
  */
 public class CaisseConfirmationController implements Initializable {
-    
+
     @FXML
     private TableView<ProduitR> produitCaisseTable;
     @FXML
@@ -70,15 +71,16 @@ public class CaisseConfirmationController implements Initializable {
     private TextField txtRemise;
     @FXML
     private Button btnClose;
-    
+
     ObservableList<ProduitR> produitListVent = FXCollections.observableArrayList();
-    
+
     IVenteService venteService = new VenteService();
     ICompteService compteService = new CompteService();
     IContenirVente contenirVenteService = new ContenirVenteService();
     IProduitService produitService = new ProduitService();
-    
+
     Compte compteActif = new Compte();
+    
 
     /**
      * Initializes the controller class.
@@ -86,12 +88,19 @@ public class CaisseConfirmationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                txtMontCllt.setFocusTraversable(true);
+                txtMontCllt.requestFocus();
+            }
+        });
     }
-    
+
     @FXML
     private void SupprimerProdVent(ActionEvent event) {
     }
-    
+
     public void setListProd(ObservableList<ProduitR> list, Compte c) {
         int tot = 0;
         for (ProduitR pr : list) {
@@ -112,7 +121,7 @@ public class CaisseConfirmationController implements Initializable {
         //   cellData -> cellData.getValue().getQteProdCom().asObject()
 //     new PropertyValueFactory<ProduitR, JFXTextField>("qteCom")
     }
-    
+
     @FXML
     private void Valider(ActionEvent event) {
         Vente vente = new Vente();
@@ -128,7 +137,7 @@ public class CaisseConfirmationController implements Initializable {
             Produit p = new Produit(pr.getIdProd().getValue());
             Produit produit = produitService.findById(p);
             produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
-            
+
             produitService.modifier(produit);
         }
         TrayNotification notification = new TrayNotification();
@@ -138,7 +147,7 @@ public class CaisseConfirmationController implements Initializable {
         Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();
     }
-    
+
     @FXML
     private void calculRemise(KeyEvent event) {
         if (!txtMontCllt.getText().equals("")) {
@@ -148,5 +157,5 @@ public class CaisseConfirmationController implements Initializable {
             txtRemise.clear();
         }
     }
-    
+
 }

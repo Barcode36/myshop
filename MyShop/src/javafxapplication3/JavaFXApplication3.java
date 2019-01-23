@@ -50,14 +50,14 @@ public class JavaFXApplication3 extends Application {
 //
 //        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
 //            @Override
-//            public void handle(MouseEvent event) {
+//            public void handle(MouseEvent event) {//
 //                primaryStage.setX(event.getScreenX() - xOffset);
 //                primaryStage.setY(event.getScreenY() - yOffset);
 //            }
 //
 //        });
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("/css/modena.css").toExternalForm());
+       // scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/icon.jpg")));
         primaryStage.setTitle("MyShop");

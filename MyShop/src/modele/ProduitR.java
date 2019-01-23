@@ -8,19 +8,16 @@ package modele;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import entites.ContenirVente;
-import entites.ContenirVentePK;
 import entites.Produit;
 import entites.Vente;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyEvent;
 
 /**
  *
@@ -69,29 +66,42 @@ public class ProduitR {
         this.total = new SimpleStringProperty(String.valueOf(Integer.parseInt(prixUniProd.getValue()) * qteProdCom.getValue()));
         this.Suppression = new JFXCheckBox("Supprimer");
         this.qteCom = new JFXTextField();
-        this.qteCom.setText(String.valueOf(com));
-
-        this.Suppression.setOnMouseClicked(e -> {
-//            Boolean sup = false;
-//            if (false == sup) {
-//                ProduitR pr = produitCaisseTable.getSelectionModel().getSelectedItem();
-//                System.out.println(pr);
-//                Boolean find = false;
-//                int t = 0;
-//                for (int i = 0; i < produitListVent.size(); i++) {
-//                    if (produitListVent.get(i).getIdProd().getValue() == pr.getIdProd().getValue()) {
-//                        t = i;
-//                        find = true;
+//        this.qteCom.setOnKeyReleased(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent event) {
+//                if (!qteCom.getText().equals("") ) {
+//                    total = new SimpleStringProperty(String.valueOf(Integer.parseInt(prixUniProd.getValue()) * Integer.parseInt(qteCom.getText())));
+//                    
+//                    Boolean find = false;
+//                    int i = 0;
+//                    int index = 0;
+//                    for (ProduitR pr : produitListVent) {
+//                        if (libProd.getValue().equals(pr.getLibProd().getValue())) {
+//                            find = true;
+//                            index = i;
+//                        }
+//                        i++;
 //                    }
-//                }
-//                if (find == true) {
-//                    produitListVent.remove(t);
-//                    produitCaisseTable.setItems(produitListVent);
+//                    if (find == true) {
+//                        System.out.println(produitListVent.get(index));
+//                        ProduitR prr = new ProduitR(produit);
+//                        JFXTextField x = new JFXTextField(qteCom.getText());
+//                        prr.setQteCom(x);
+//                        JFXCheckBox c = new JFXCheckBox();
+//                        prr.setSuppression(c);
+//                        prr.setTotal(total);
+//                        System.out.println(prr.getTotal());
+//                        produitListVent.remove(index);
+//                        
+//                        qteCom.setFocusTraversable(true);
+//                        qteCom.requestFocus();
+//                    }
 //                }
 //            }
 //
-//            sup = true;
-        });
+//        });
+        this.qteCom.setText(String.valueOf(com));
+
     }
 
     public SimpleStringProperty getDateVen() {

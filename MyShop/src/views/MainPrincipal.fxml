@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXDrawer?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -91,6 +92,9 @@
                </children>
             </Pane>
          </children>
+         <effect>
+            <DropShadow />
+         </effect>
       </GridPane>
       <GridPane fx:id="gridAPropos" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
          <columnConstraints>
@@ -124,212 +128,9 @@
                </children>
             </Pane>
          </children>
-      </GridPane>
-      <GridPane fx:id="gridInventaire" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
-          <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="292.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <Pane prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <GridPane layoutX="184.0" layoutY="18.0" prefHeight="158.0" prefWidth="503.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="199.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0" prefWidth="206.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="93.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints />
-                      <RowConstraints maxHeight="97.0" minHeight="30.0" prefHeight="89.0" />
-                        <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <TextField fx:id="txtCode" prefHeight="62.0" prefWidth="201.0" promptText="Code de Produit" style="-fx-border-radius: 3em; -fx-background-radius: 3em;" GridPane.rowIndex="1">
-                           <effect>
-                              <Glow />
-                           </effect>
-                           <font>
-                              <Font name="Lucida Bright Regular" size="20.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="txtQteProd" prefHeight="62.0" prefWidth="208.0" promptText="Quantité initiale" style="-fx-background-radius: 3em;" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <effect>
-                              <Glow />
-                           </effect>
-                           <font>
-                              <Font name="Lucida Bright Regular" size="20.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="txtPrixProd" prefHeight="62.0" prefWidth="201.0" promptText="Prix Unitaire" style="-fx-background-radius: 3em;" GridPane.rowIndex="2">
-                           <effect>
-                              <Glow />
-                           </effect>
-                           <font>
-                              <Font name="Lucida Bright Regular" size="20.0" />
-                           </font>
-                        </TextField>
-                        <TextField fx:id="txtLibProd" prefHeight="62.0" prefWidth="208.0" promptText="Produit" style="-fx-background-radius: 3em;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <effect>
-                              <Glow />
-                           </effect>
-                           <font>
-                              <Font name="Lucida Bright Regular" size="20.0" />
-                           </font>
-                        </TextField>
-                        <JFXButton alignment="CENTER" buttonType="RAISED" onAction="#deleteProduit" prefHeight="45.0" prefWidth="82.0" style="-fx-background-radius: 3em; -fx-background-color: F8F8FF;" text="Supprimer" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                           <effect>
-                              <InnerShadow />
-                           </effect>
-                        </JFXButton>
-                        <JFXButton fx:id="tbnSaveProd" alignment="CENTER" buttonType="RAISED" onAction="#saveProduit" prefHeight="45.0" prefWidth="82.0" style="-fx-background-radius: 3em; -fx-background-color: F8F8FF;" text="Ajouter" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <effect>
-                              <InnerShadow />
-                           </effect>
-                        </JFXButton>
-                     </children>
-                  </GridPane>
-                  <Label layoutX="828.0" layoutY="2.0" onMouseClicked="#closeInventaire" text="X">
-                     <font>
-                        <Font name="Lucida Bright Demibold" size="20.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <TableView fx:id="produitTable" onMouseClicked="#getProduitFromTable" prefHeight="292.0" prefWidth="842.0" stylesheets="@../css/MainPrincipalCss.css" GridPane.rowIndex="1">
-               <columns>
-                  <TableColumn fx:id="libProdCol" prefWidth="75.0" text="Produit" />
-                  <TableColumn fx:id="codeProdcol" prefWidth="75.0" text="Code" />
-                  <TableColumn fx:id="qteProdCol" prefWidth="75.0" text="Quantité" />
-                  <TableColumn fx:id="prixProdCol" prefWidth="75.0" text="Prix Unitaire" />
-               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-            <Label text="Nouveau Produit">
-               <font>
-                  <Font name="Times New Roman Bold" size="21.0" />
-               </font>
-            </Label>
-         </children>
-      </GridPane>
-      <GridPane fx:id="grid" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="277.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints />
-          <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <JFXButton fx:id="btnCaisse" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" onAction="#selectForm" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnInventaire" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="157.0" prefWidth="280.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Inventaire" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
-               
-            </JFXButton>
-            <JFXButton fx:id="btnBilan" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="160.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Bilan" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnReglage" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="140.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Reglage" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnComp" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="127.0" prefWidth="259.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Compte" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-            <JFXButton fx:id="btnPropos" alignment="CENTER" contentDisplay="CENTER" onAction="#selectForm" prefHeight="127.0" prefWidth="268.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="A Propos" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-         </children>
-      </GridPane>
-      <GridPane fx:id="gridCaisse" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="277.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <JFXButton fx:id="btnCaisse1" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" onAction="#selectForm" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
-         </children>
-      </GridPane>
-      <GridPane fx:id="gridBilan" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="5.0" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="386.0" minHeight="10.0" prefHeight="382.0" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <TableView fx:id="CaissierVenteTable" onMouseClicked="#getCaissier" prefHeight="330.0" prefWidth="425.0" stylesheets="@../css/MainPrincipalCss.css" GridPane.rowIndex="4">
-               <columns>
-                  <TableColumn fx:id="caissierColVente" prefWidth="75.0" text="Caissier" />
-                  <TableColumn fx:id="totCaissierColVente" prefWidth="75.0" text="Montant Total vandu" />
-               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-            <Label prefHeight="17.0" prefWidth="421.0" style="-fx-alignment: center;" text="Total par Caissier" textAlignment="JUSTIFY" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Lucida Bright Demibold" size="27.0" />
-               </font>
-            </Label>
-            <Label prefHeight="17.0" prefWidth="421.0" style="-fx-alignment: center;" text="Detail des ventes" GridPane.columnIndex="1" GridPane.rowIndex="3">
-               <font>
-                  <Font name="Lucida Bright Demibold" size="27.0" />
-               </font>
-            </Label>
-            <TableView fx:id="tableDetailCaissier" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/MainPrincipalCss.css" GridPane.columnIndex="1" GridPane.rowIndex="4">
-               <columns>
-                  <TableColumn fx:id="DateCaissier" prefWidth="75.0" text="Date" />
-                  <TableColumn fx:id="ProduitCaissier" prefWidth="75.0" text="Produit" />
-                  <TableColumn fx:id="QteCaissierCol" prefWidth="75.0" text="Quantité" />
-                  <TableColumn fx:id="PuCaissierCol" prefWidth="75.0" text="Prix Unitaire" />
-                  <TableColumn fx:id="totDetCaissierCol" prefWidth="75.0" text="Total" />
-               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
-            <HBox prefHeight="100.0" prefWidth="535.0" spacing="20.0" GridPane.columnSpan="2">
-               <children>
-                  <RadioButton fx:id="rbMoisCours" mnemonicParsing="false" onAction="#choixBilan" prefHeight="38.0" prefWidth="120.0" text="Mois en cours">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="periode" />
-                     </toggleGroup></RadioButton>
-                  <Button fx:id="btnMoisCours" disable="true" mnemonicParsing="false" onAction="#bilanParMois" prefHeight="49.0" prefWidth="151.0" text="Mois en cours" />
-                  <Label fx:id="lblCLose" onMouseClicked="#closeInventaire" text="X">
-                     <font>
-                        <Font name="Lucida Bright Demibold" size="20.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="500.0" />
-                     </HBox.margin>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
-               <children>
-                  <RadioButton fx:id="rbMois" mnemonicParsing="false" onAction="#choixBilan" prefHeight="32.0" prefWidth="120.0" text="Mois" toggleGroup="$periode" />
-                  <ComboBox fx:id="moisCombo" disable="true" onAction="#CaisseParMois" prefHeight="47.0" prefWidth="187.0" promptText="Choisir un mois" />
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
-               <children>
-                  <RadioButton fx:id="rbDeuxDate" mnemonicParsing="false" onAction="#choixBilan" prefHeight="32.0" prefWidth="120.0" text="Entre deux dates" toggleGroup="$periode" />
-                  <JFXDatePicker fx:id="datePiker1" disable="true" prefHeight="30.0" prefWidth="171.0" />
-                  <JFXDatePicker fx:id="datePiker2" disable="true" prefHeight="36.0" prefWidth="171.0" />
-                  <Button fx:id="btnDeuxDateSearch" disable="true" mnemonicParsing="false" onAction="#caisseEntreDate" text="Chercher" />
-               </children>
-            </HBox>
-         </children>
+         <effect>
+            <DropShadow />
+         </effect>
       </GridPane>
       <GridPane fx:id="gridCompte" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
          <columnConstraints>
@@ -426,6 +227,148 @@
                </font>
             </Label>
          </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </GridPane>
+      <GridPane fx:id="gridBilan" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="5.0" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="42.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="386.0" minHeight="10.0" prefHeight="382.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <TableView fx:id="CaissierVenteTable" onMouseClicked="#getCaissier" prefHeight="330.0" prefWidth="425.0" stylesheets="@../css/MainPrincipalCss.css" GridPane.rowIndex="4">
+               <columns>
+                  <TableColumn fx:id="caissierColVente" prefWidth="75.0" text="Caissier" />
+                  <TableColumn fx:id="totCaissierColVente" prefWidth="75.0" text="Montant Total vandu" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Label prefHeight="17.0" prefWidth="421.0" style="-fx-alignment: center;" text="Total par Caissier" textAlignment="JUSTIFY" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Lucida Bright Demibold" size="27.0" />
+               </font>
+            </Label>
+            <Label prefHeight="17.0" prefWidth="421.0" style="-fx-alignment: center;" text="Detail des ventes" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <font>
+                  <Font name="Lucida Bright Demibold" size="27.0" />
+               </font>
+            </Label>
+            <TableView fx:id="tableDetailCaissier" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/MainPrincipalCss.css" GridPane.columnIndex="1" GridPane.rowIndex="4">
+               <columns>
+                  <TableColumn fx:id="DateCaissier" prefWidth="75.0" text="Date" />
+                  <TableColumn fx:id="ProduitCaissier" prefWidth="75.0" text="Produit" />
+                  <TableColumn fx:id="QteCaissierCol" prefWidth="75.0" text="Quantité" />
+                  <TableColumn fx:id="PuCaissierCol" prefWidth="75.0" text="Prix Unitaire" />
+                  <TableColumn fx:id="totDetCaissierCol" prefWidth="75.0" text="Total" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <HBox prefHeight="100.0" prefWidth="535.0" spacing="20.0" GridPane.columnSpan="2">
+               <children>
+                  <RadioButton fx:id="rbMoisCours" mnemonicParsing="false" onAction="#choixBilan" prefHeight="38.0" prefWidth="120.0" text="Mois en cours">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="periode" />
+                     </toggleGroup></RadioButton>
+                  <Button fx:id="btnMoisCours" disable="true" mnemonicParsing="false" onAction="#bilanParMois" prefHeight="49.0" prefWidth="151.0" text="Mois en cours" />
+                  <Label fx:id="lblCLose" onMouseClicked="#closeInventaire" text="X">
+                     <font>
+                        <Font name="Lucida Bright Demibold" size="20.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="500.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+               <children>
+                  <RadioButton fx:id="rbMois" mnemonicParsing="false" onAction="#choixBilan" prefHeight="32.0" prefWidth="120.0" text="Mois" toggleGroup="$periode" />
+                  <ComboBox fx:id="moisCombo" disable="true" onAction="#CaisseParMois" prefHeight="47.0" prefWidth="187.0" promptText="Choisir un mois" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+               <children>
+                  <RadioButton fx:id="rbDeuxDate" mnemonicParsing="false" onAction="#choixBilan" prefHeight="32.0" prefWidth="120.0" text="Entre deux dates" toggleGroup="$periode" />
+                  <JFXDatePicker fx:id="datePiker1" disable="true" prefHeight="30.0" prefWidth="171.0" />
+                  <JFXDatePicker fx:id="datePiker2" disable="true" prefHeight="36.0" prefWidth="171.0" />
+                  <Button fx:id="btnDeuxDateSearch" disable="true" mnemonicParsing="false" onAction="#caisseEntreDate" text="Chercher" />
+               </children>
+            </HBox>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </GridPane>
+      <GridPane fx:id="grid" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="277.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints />
+          <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <JFXButton fx:id="btnCaisse" alignment="CENTER" contentDisplay="TOP" nodeOrientation="LEFT_TO_RIGHT" onAction="#selectForm" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="LINE_CHART" size="50" />
+               </graphic></JFXButton>
+            <JFXButton fx:id="btnInventaire" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="157.0" prefWidth="280.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Inventaire" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="INDENT" size="50" />
+               </graphic></JFXButton>
+            <JFXButton fx:id="btnBilan" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="160.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Bilan" wrapText="true" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="BAR_CHART_ALT" size="50" />
+               </graphic></JFXButton>
+            <JFXButton fx:id="btnReglage" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="140.0" prefWidth="291.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Reglage" wrapText="true" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="SLIDERS" size="50" />
+               </graphic></JFXButton>
+            <JFXButton fx:id="btnComp" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="127.0" prefWidth="259.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Compte" wrapText="true" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="USERS" size="50" />
+               </graphic></JFXButton>
+            <JFXButton fx:id="btnPropos" alignment="CENTER" contentDisplay="TOP" onAction="#selectForm" prefHeight="127.0" prefWidth="268.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Aide" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <graphic>
+                  <FontAwesomeIconView fill="WHITE" glyphName="BUYSELLADS" size="50" />
+               </graphic></JFXButton>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+      </GridPane>
+      <GridPane fx:id="gridCaisse" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="277.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="270.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints maxHeight="127.0" minHeight="10.0" prefHeight="92.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="127.0" minHeight="7.0" prefHeight="104.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <JFXButton fx:id="btnCaisse1" alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" onAction="#selectForm" prefHeight="153.0" prefWidth="283.0" ripplerFill="#153f94" stylesheets="@../css/MainPrincipalCss.css" text="Caisse" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="ALWAYS" />
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
       </GridPane>
       <GridPane fx:id="gridCaisse" alignment="CENTER" focusTraversable="true" hgap="10.0" layoutX="28.0" layoutY="62.0" onMouseClicked="#selectScene" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
          <columnConstraints>
@@ -439,11 +382,12 @@
             <RowConstraints maxHeight="308.0" minHeight="10.0" prefHeight="11.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <GridPane GridPane.columnSpan="2">
+            <GridPane GridPane.columnSpan="3">
               <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="399.0" minWidth="10.0" prefWidth="234.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="573.0" minWidth="10.0" prefWidth="231.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="573.0" minWidth="10.0" prefWidth="352.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="399.0" minWidth="10.0" prefWidth="234.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="416.0" minWidth="10.0" prefWidth="416.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="573.0" minWidth="10.0" prefWidth="205.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="573.0" minWidth="10.0" prefWidth="20.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="64.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
@@ -453,28 +397,35 @@
                   <RowConstraints maxHeight="32.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="txtCodeProdCaisse" onKeyTyped="#recuperationProduitInfo" prefHeight="56.0" prefWidth="231.0" promptText="code du produit" style="-fx-background-radius: 3em;">
+                  <TextField fx:id="txtCodeProdCaisse" onKeyTyped="#recuperationProduitInfo" prefHeight="56.0" prefWidth="231.0" promptText="code du produit" style="-fx-background-radius: 3em;" GridPane.columnIndex="1">
                      <font>
                         <Font name="Lucida Bright Regular" size="17.0" />
                      </font></TextField>
-                  <TextField fx:id="txtNomProdCaisse" editable="false" prefHeight="56.0" prefWidth="231.0" promptText="Nom du produit" style="-fx-background-radius: 3em;" GridPane.rowIndex="1">
+                  <TextField fx:id="txtNomProdCaisse" disable="true" editable="false" prefHeight="56.0" prefWidth="231.0" promptText="Nom du produit" style="-fx-background-radius: 3em;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <font>
                         <Font name="Lucida Bright Regular" size="17.0" />
                      </font></TextField>
-                  <TextField fx:id="txtQteProdCaisse" editable="false" prefHeight="56.0" prefWidth="231.0" promptText="Quatité disponible" style="-fx-background-radius: 3em;" GridPane.rowIndex="2">
+                  <TextField fx:id="txtQteProdCaisse" disable="true" editable="false" prefHeight="56.0" prefWidth="231.0" promptText="Quatité disponible" style="-fx-background-radius: 3em;" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <font>
                         <Font name="Lucida Bright Regular" size="17.0" />
                      </font></TextField>
-                  <TextField fx:id="txtPrixUnitCaisse" editable="false" prefHeight="56.0" prefWidth="231.0" promptText="prix du produit" style="-fx-background-radius: 3em;" GridPane.rowIndex="3">
+                  <TextField fx:id="txtPrixUnitCaisse" disable="true" editable="false" prefHeight="56.0" prefWidth="231.0" promptText="prix du produit" style="-fx-background-radius: 3em;" GridPane.columnIndex="1" GridPane.rowIndex="3">
                      <font>
                         <Font name="Lucida Bright Regular" size="17.0" />
                      </font></TextField>
-                  <Label fx:id="lblCLose11" alignment="TOP_RIGHT" contentDisplay="RIGHT" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#closeInventaire" text="X" GridPane.columnIndex="2">
+                  <Label fx:id="lblCLose11" alignment="TOP_RIGHT" contentDisplay="RIGHT" nodeOrientation="RIGHT_TO_LEFT" onMouseClicked="#closeInventaire" text="X" GridPane.columnIndex="3">
                      <font>
                         <Font name="Lucida Bright Demibold" size="20.0" />
                      </font>
+                     <GridPane.margin>
+                        <Insets />
+                     </GridPane.margin>
                   </Label>
-                  <Button fx:id="btnCaisseVente" mnemonicParsing="false" onAction="#recuperationProduitInfoB" prefHeight="47.0" prefWidth="134.0" text="Valider" visible="false" GridPane.columnIndex="1" />
+                  <Button fx:id="btnCaisseVente" mnemonicParsing="false" onAction="#recuperationProduitInfoB" prefHeight="47.0" prefWidth="134.0" text="Valider" visible="false" GridPane.columnIndex="2" />
+                  <Label prefHeight="117.0" prefWidth="119.0" text="MyShop CAISSE" textAlignment="CENTER" textFill="#3480fa" wrapText="true" GridPane.rowSpan="3">
+                     <font>
+                        <Font name="Times New Roman Bold Italic" size="33.0" />
+                     </font></Label>
                </children>
             </GridPane>
             <TableView fx:id="produitCaisseTable" editable="true" prefHeight="200.0" prefWidth="200.0" stylesheets="@../css/MainPrincipalCss.css" GridPane.columnSpan="2" GridPane.rowIndex="1">
@@ -482,7 +433,7 @@
                 <TableColumn fx:id="libProdColCaisse" prefWidth="75.0" text="Produit" />
                 <TableColumn fx:id="qteColCaisse" prefWidth="75.0" text="Quantié commandée " />
                   <TableColumn fx:id="prixColCaisse" prefWidth="75.0" text="Prix unitaire" />
-                  <TableColumn fx:id="totalColCaisse" prefWidth="75.0" text="Total" />
+                  <TableColumn fx:id="totalColCaisse" prefWidth="75.0" text="Total" visible="false" />
                   <TableColumn fx:id="actionColCaisse" prefWidth="75.0" text="A retirer" />
               </columns>
                <columnResizePolicy>
@@ -498,20 +449,148 @@
             </TableView>
             <HBox prefHeight="100.0" prefWidth="651.0" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <children>
-                  <Button mnemonicParsing="false" onAction="#saveVente" prefHeight="25.0" prefWidth="135.0" text="Vendre" />
+                  <Button mnemonicParsing="false" onAction="#saveVente" prefHeight="25.0" prefWidth="135.0" text="Vendre">
+                     <font>
+                        <Font name="Times New Roman Bold" size="16.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView fill="#24a424" glyphName="CHECK_CIRCLE" size="24" />
+                     </graphic></Button>
                </children>
                <GridPane.margin>
                   <Insets left="300.0" />
                </GridPane.margin>
             </HBox>
-            <Button mnemonicParsing="false" onAction="#supprimerProduitCaisse" prefHeight="59.0" prefWidth="188.0" text="Supprimer" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button mnemonicParsing="false" onAction="#supprimerProduitCaisse" prefHeight="59.0" prefWidth="188.0" text="Supprimer" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <graphic>
+                  <FontAwesomeIconView fill="RED" glyphName="CLOSE" size="24" />
+               </graphic>
+               <font>
+                  <Font name="Times New Roman Bold" size="16.0" />
+               </font></Button>
          </children>
+         <effect>
+            <DropShadow />
+         </effect>
+         <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+         </padding>
       </GridPane>
-      <GridPane fx:id="gridConnect" alignment="CENTER" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+      <GridPane fx:id="gridInventaire" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" visible="false" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="182.0" minHeight="10.0" prefHeight="135.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="306.0" minHeight="10.0" prefHeight="292.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <GridPane layoutX="184.0" layoutY="18.0" prefHeight="158.0" prefWidth="550.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="199.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="254.0" minWidth="10.0" prefWidth="206.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="93.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints />
+                      <RowConstraints maxHeight="97.0" minHeight="30.0" prefHeight="89.0" />
+                        <RowConstraints maxHeight="70.0" minHeight="10.0" prefHeight="52.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TextField fx:id="txtCode" prefHeight="62.0" prefWidth="201.0" promptText="Code de Produit" style="-fx-border-radius: 3em; -fx-background-radius: 3em;" GridPane.rowIndex="1">
+                           <effect>
+                              <Glow />
+                           </effect>
+                           <font>
+                              <Font name="Lucida Bright Regular" size="20.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="txtQteProd" prefHeight="62.0" prefWidth="208.0" promptText="Quantité initiale" style="-fx-background-radius: 3em;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <effect>
+                              <Glow />
+                           </effect>
+                           <font>
+                              <Font name="Lucida Bright Regular" size="20.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="txtPrixProd" prefHeight="62.0" prefWidth="201.0" promptText="Prix Unitaire" style="-fx-background-radius: 3em;" GridPane.rowIndex="2">
+                           <effect>
+                              <Glow />
+                           </effect>
+                           <font>
+                              <Font name="Lucida Bright Regular" size="20.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="txtLibProd" prefHeight="62.0" prefWidth="208.0" promptText="Produit" style="-fx-background-radius: 3em;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <effect>
+                              <Glow />
+                           </effect>
+                           <font>
+                              <Font name="Lucida Bright Regular" size="20.0" />
+                           </font>
+                        </TextField>
+                        <JFXButton alignment="CENTER" buttonType="RAISED" onAction="#deleteProduit" prefHeight="45.0" prefWidth="124.0" style="-fx-background-color: F8F8FF;" text="Supprimer" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <effect>
+                              <InnerShadow />
+                           </effect>
+                           <font>
+                              <Font name="Times New Roman" size="16.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView glyphName="CLOSE" size="20" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="tbnSaveProd" alignment="CENTER" buttonType="RAISED" onAction="#saveProduit" prefHeight="45.0" prefWidth="114.0" style="-fx-background-color: F8F8FF;" text="Ajouter" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <effect>
+                              <InnerShadow />
+                           </effect>
+                           <font>
+                              <Font name="Times New Roman" size="16.0" />
+                           </font>
+                           <graphic>
+                              <FontAwesomeIconView glyphName="SAVE" size="20" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </GridPane>
+                  <Label layoutX="814.0" layoutY="2.0" onMouseClicked="#closeInventaire" text="X">
+                     <font>
+                        <Font name="Lucida Bright Demibold" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <TableView fx:id="produitTable" onMouseClicked="#getProduitFromTable" prefHeight="292.0" prefWidth="842.0" stylesheets="@../css/MainPrincipalCss.css" GridPane.rowIndex="1">
+               <columns>
+                  <TableColumn fx:id="libProdCol" prefWidth="75.0" text="Produit" />
+                  <TableColumn fx:id="codeProdcol" prefWidth="75.0" text="Code" />
+                  <TableColumn fx:id="qteProdCol" prefWidth="75.0" text="Quantité" />
+                  <TableColumn fx:id="prixProdCol" prefWidth="75.0" text="Prix Unitaire" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Label prefHeight="91.0" prefWidth="154.0" text="MyShop Inventaire" textFill="#3480fa" wrapText="true">
+               <font>
+                  <Font name="Times New Roman Bold" size="30.0" />
+               </font>
+            </Label>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </GridPane>
+      <GridPane fx:id="gridConnect" hgap="10.0" layoutX="28.0" layoutY="62.0" prefHeight="550.0" prefWidth="849.0" style="-fx-background-color: FCFCFC;" vgap="10.0" AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="28.0" AnchorPane.topAnchor="62.0">
          <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="284.0" minWidth="10.0" prefWidth="266.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="422.0" minWidth="10.0" prefWidth="338.0" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="225.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="400.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0" prefWidth="351.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="78.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="540.0" minHeight="10.0" prefHeight="540.0" vgrow="SOMETIMES" />
@@ -530,18 +609,30 @@
                   <RowConstraints maxHeight="304.0" minHeight="10.0" prefHeight="304.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="txtPseudoCennect" onKeyTyped="#essai" prefHeight="70.0" prefWidth="350.0" promptText="Pseudo" style="-fx-background-radius: 3em;" GridPane.rowIndex="1">
+                  <TextField fx:id="txtPseudoCennect" onKeyTyped="#essai" prefHeight="70.0" prefWidth="350.0" promptText="Pseudo" GridPane.rowIndex="1">
                      <font>
                         <Font name="Lucida Bright Regular" size="29.0" />
                      </font></TextField>
-                  <PasswordField fx:id="txtPassConnect" prefHeight="70.0" prefWidth="350.0" promptText="Mot de passe" style="-fx-background-radius: 3em;" GridPane.rowIndex="2">
+                  <PasswordField fx:id="txtPassConnect" prefHeight="70.0" prefWidth="350.0" promptText="Mot de passe" GridPane.rowIndex="2">
                      <font>
                         <Font name="Lucida Bright Regular" size="29.0" />
                      </font></PasswordField>
                   <HBox prefHeight="75.0" prefWidth="350.0" spacing="30.0" GridPane.rowIndex="3">
                      <children>
-                        <Button defaultButton="true" mnemonicParsing="false" onAction="#connexionButton" prefHeight="58.0" prefWidth="113.0" text="Se Connecter" />
-                        <Button mnemonicParsing="false" onMouseClicked="#closeInventaire" prefHeight="58.0" prefWidth="107.0" text="Annuler" />
+                        <Button defaultButton="true" mnemonicParsing="false" onAction="#connexionButton" prefHeight="58.0" prefWidth="126.0" text="Se Connecter">
+                           <graphic>
+                              <FontAwesomeIconView fill="#23da5d" glyphName="CHECK" size="15.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Times New Roman Italic" size="13.0" />
+                           </font></Button>
+                        <Button mnemonicParsing="false" onAction="#fermerApp" prefHeight="58.0" prefWidth="107.0" text="Annuler">
+                           <graphic>
+                              <FontAwesomeIconView fill="#d32929" glyphName="CLOSE" size="15.0" />
+                           </graphic>
+                           <font>
+                              <Font name="Times New Roman Italic" size="13.0" />
+                           </font></Button>
                      </children>
                      <padding>
                         <Insets left="50.0" />
@@ -550,7 +641,22 @@
                   <JFXDrawer fx:id="drawer" defaultDrawerSize="325.0" direction="BOTTOM" prefHeight="277.0" prefWidth="338.0" GridPane.rowIndex="4" />
                </children>
             </GridPane>
+            <ImageView fitHeight="274.0" fitWidth="287.0" pickOnBounds="true" />
+            <Pane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="274.0" fitWidth="287.0" layoutX="57.0" layoutY="31.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../img/login3.jpg" />
+                     </image>
+                     <effect>
+                        <InnerShadow choke="0.14" height="95.13" offsetX="1.0" radius="45.582499999999996" width="89.2" />
+                     </effect></ImageView>
+               </children>
+            </Pane>
          </children>
+         <effect>
+            <DropShadow />
+         </effect>
       </GridPane>
    </children>
 </AnchorPane>

@@ -32,6 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.FillTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -300,6 +301,8 @@ public class MainPrincipalController implements Initializable {
     private Button btnDeuxDateSearch;
     @FXML
     private Button btnCaisseVente;
+    @FXML
+    private Label lbAnim;
 
     private void mois() {
         listMois.addAll("Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre",
@@ -435,6 +438,8 @@ public class MainPrincipalController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    private StringBuffer barcode = new StringBuffer();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         if (listTypeCompte().size() == 0) {
@@ -482,25 +487,34 @@ public class MainPrincipalController implements Initializable {
                 imgShop.setFitWidth(produitTable.getWidth() - 100);
             }
         };
+///        lbAnim.setId("fancytext");
+   ///     lbAnim.setBackground(Background.EMPTY);
         t.schedule(timerTask, 2000l);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 txtPseudoCennect.setFocusTraversable(true);
                 txtPseudoCennect.requestFocus();
-                System.out.println(gridConnect.isFocused());
+                
             }
         });
-        gridCaisse.setOnKeyTyped(new EventHandler<KeyEvent>(){
-            final StringBuffer barcode = new StringBuffer();
+
+        gridCaisse.setOnKeyTyped(new EventHandler<KeyEvent>() {
+
+            //String b = new String();
             @Override
             public void handle(KeyEvent event) {
-                
-                
-                barcode.append(event.getCharacter());
+                if (event.getCharacter().charAt(0) == (char) 0x000d) {
+
+                    barcode.delete(0, barcode.length());
+                } else {
+                    barcode.append(event.getCharacter());
+                }
+                //  barcode.append(event.getCharacter());
+                //b = b + event.getCharacter();
                 System.out.println(barcode);
                 caisseProduitInfo(barcode);
-                event.consume();
+                //event.consume();
             }
 
         });
@@ -620,6 +634,8 @@ public class MainPrincipalController implements Initializable {
         grid.setVisible(true);
         gridInventaire.toBack();
         gridInventaire.setVisible(false);
+        venteList.clear();
+
         TypeCompte tc = new TypeCompte(compteActif.getIdTypComp());
         TypeCompte typeCompte = typeService.findById(tc);
         if (typeCompte.getLibTyp().equals("Caissier")) {
@@ -716,6 +732,7 @@ public class MainPrincipalController implements Initializable {
             }
             if (find == false) {
                 produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
+                barcode = new StringBuffer();
             }
 
             libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
@@ -725,7 +742,8 @@ public class MainPrincipalController implements Initializable {
             totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
             produitCaisseTable.setItems(produitListVent);
             txtCodeProdCaisse.clear();
-            b.delete(0, b.length());
+
+            //System.out.println(produitListVent);
         } catch (Exception e) {
         }
     }
@@ -1199,7 +1217,6 @@ public class MainPrincipalController implements Initializable {
         for (ProduitR produitR : produitListVent) {
             if (produitR.getSuppression().isSelected()) {
                 listEff.add(produitR);
-
             }
         }
         produitListVent.removeAll(listEff);
@@ -1208,12 +1225,15 @@ public class MainPrincipalController implements Initializable {
 
     @FXML
     private void choixBilan(ActionEvent event) {
+        venteList.clear();
+        produitListVentCaissier.clear();
         if (rbMoisCours.isSelected()) {
             btnMoisCours.setDisable(false);
             moisCombo.setDisable(true);
             datePiker1.setDisable(true);
             datePiker2.setDisable(true);
             btnDeuxDateSearch.setDisable(true);
+
         } else if (rbMois.isSelected()) {
             moisCombo.setDisable(false);
             btnMoisCours.setDisable(true);
@@ -1232,13 +1252,18 @@ public class MainPrincipalController implements Initializable {
 
     @FXML
     private void recuperationProduitInfoB(ActionEvent event) {
-       // caisseProduitInfo();
+        // caisseProduitInfo();
     }
 
     @FXML
     private void selectScene(MouseEvent event) {
         gridCaisse.setFocusTraversable(true);
         gridCaisse.requestFocus();
+    }
+
+    @FXML
+    private void fermerApp(ActionEvent event) {
+        System.exit(0);
     }
 
 }
