@@ -7,6 +7,7 @@ package service;
 
 import entites.ContenirVente;
 import entites.ContenirVentePK;
+import entites.Produit;
 import entites.Vente;
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface IContenirVente {
     public void supprimerContenirVente(ContenirVentePK contenirVentePK);
 
     public List<ContenirVente> listParVente(Vente vente);
+
+    public List<ContenirVente> listParVente(Produit p);
 }

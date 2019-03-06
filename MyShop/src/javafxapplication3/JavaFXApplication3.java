@@ -5,28 +5,19 @@
  */
 package javafxapplication3;
 
-import com.sun.javafx.css.StyleManager;
-import entites.Compte;
-import entites.TypeCompte;
+import Utils.Constants;
+import controller.MainViewController;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import service.ICompteService;
-import service.ITypeService;
-import service.imp.CompteService;
-import service.imp.TypeService;
+import javax.swing.JOptionPane;
+import sun.plugin2.ipc.windows.WindowsEvent;
 
 /**
  *
@@ -37,8 +28,9 @@ public class JavaFXApplication3 extends Application {
 //    private double xOffset = 0;
 //    private double yOffset = 0;
     @Override
-    public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/views/MainPrincipal.fxml"));
+    public void start(Stage primaryStage) {
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource(Constants.MainView));
 //        root.setOnMousePressed(new EventHandler<MouseEvent>() {
 //            @Override
 //            public void handle(MouseEvent event) {
@@ -56,13 +48,21 @@ public class JavaFXApplication3 extends Application {
 //            }
 //
 //        });
-        Scene scene = new Scene(root);
-       // scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
-        primaryStage.setScene(scene);
-        primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/icon.jpg")));
-        primaryStage.setTitle("MyShop");
-        primaryStage.setMaximized(true);
-        primaryStage.show();
+            Scene scene = new Scene(root);
+// scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
+            primaryStage.setScene(scene);
+            primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/icon.jpg")));
+            primaryStage.setTitle("MyShop");
+            primaryStage.setMaximized(true);
+            primaryStage.show();
+           
+            primaryStage.setOnHiding(((event) -> {
+                System.exit(0);
+            }));
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
 
     }
 

@@ -7,6 +7,7 @@ package jpaController;
 
 import entites.ContenirVente;
 import entites.ContenirVentePK;
+import entites.Produit;
 import entites.Vente;
 import java.io.Serializable;
 import java.util.List;
@@ -146,10 +147,19 @@ public class ContenirVenteJpaController implements Serializable {
             em.close();
         }
     }
+
     public List<ContenirVente> recuperationParVente(Vente vente) {
         EntityManager em = this.getEntityManager();
         TypedQuery<ContenirVente> query = (TypedQuery<ContenirVente>) em.createNamedQuery("ContenirVente.findByIdVen");
         query.setParameter("idVen", vente.getIdVen());
         return query.getResultList();
     }
+
+    public List<ContenirVente> findByProd(Produit produit) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<ContenirVente> query = (TypedQuery<ContenirVente>) em.createNamedQuery("ContenirVente.findByIdProd");
+        query.setParameter("idProd", produit.getIdProd());
+        return query.getResultList();
+    }
+
 }

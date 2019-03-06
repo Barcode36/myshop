@@ -34,6 +34,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.FillTransition;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -48,6 +51,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -57,6 +61,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -282,8 +287,6 @@ public class MainPrincipalController implements Initializable {
     private Label lblCLose1;
     @FXML
     private JFXButton btnCaisse1;
-    @FXML
-    private Label lblCLose11;
     ObservableList<String> listMois = FXCollections.observableArrayList();
     @FXML
     private JFXDatePicker datePiker1;
@@ -299,10 +302,19 @@ public class MainPrincipalController implements Initializable {
     private Button btnMoisCours;
     @FXML
     private Button btnDeuxDateSearch;
-    @FXML
     private Button btnCaisseVente;
     @FXML
-    private Label lbAnim;
+    private MenuItem menuProduct;
+    @FXML
+    private Button btnInventaireClose;
+    @FXML
+    private Button btnCaisseClose;
+    @FXML
+    private Pane paneCaisseClose;
+    @FXML
+    private Pane paneBilanClose;
+    @FXML
+    private Button btnBilanClose;
 
     private void mois() {
         listMois.addAll("Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre",
@@ -459,14 +471,51 @@ public class MainPrincipalController implements Initializable {
             typeService.ajouter(tc1);
         }
 
-        if (txtPseudoCennect.isFocused()) {
+        txtCodeProdCaisse.setOnKeyPressed((event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                Produit p = new Produit();
+                p.setCodeProd(txtCodeProdCaisse.getText());
+                try {
+                    produitVente = produitService.findByCode(p);
+                    txtNomProdCaisse.setText(produitVente.getLibProd());
+                    txtQteProdCaisse.setText(String.valueOf(produitVente.getQteIniProd()));
+                    txtPrixUnitCaisse.setText(String.valueOf(produitVente.getPrixUniProd()));
+                    Boolean find = false;
+                    int i = 0;
+                    int e = 0;
+                    for (ProduitR pr : produitListVent) {
 
-        }
-        loadInventairegrid();
-        loadCompteGrid();
-        loadTypeCompteCombo();
-        showClavier();
-        mois();
+                        if (produitVente.getCodeProd().equals(pr.getCodeProd().getValue())) {
+                            find = true;
+                            e = i;
+                        }
+                        i++;
+                    }
+                    if (find == false) {
+                        produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
+                        barcode = new StringBuffer();
+                    } else if (find == true) {
+                        ProduitR pm = produitListVent.get(e);
+                        // pm.setQteProdCom(new SimpleIntegerProperty(pm.getQteProdCom().getValue() + 1));
+                        produitListVent.remove(e);
+                        produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, Integer.parseInt(pm.getQteCom().getText()) + 1));
+                        // produitListVent.set(e, pm);
+                    }
+
+                    libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
+                    prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
+                    qteColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXTextField>("qteCom"));
+                    actionColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXCheckBox>("suppression"));
+                    totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
+                    produitCaisseTable.setItems(produitListVent);
+                    txtCodeProdCaisse.clear();
+
+                    //System.out.println(produitListVent);
+                } catch (Exception e) {
+                }
+            }
+        });
+       
 //        List<Vente> listvv = venteService.ventes();
 //        loadVenteCaissier(listvv);
         fileChooser = new FileChooser();
@@ -477,25 +526,43 @@ public class MainPrincipalController implements Initializable {
                 autoComplete();
             }
         });
-        Timer t = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println();
-                lblCLose.setLayoutX(produitTable.getWidth() + 1);
-
-                imgShop.setFitWidth(produitTable.getWidth() - 100);
-            }
-        };
-///        lbAnim.setId("fancytext");
-   ///     lbAnim.setBackground(Background.EMPTY);
-        t.schedule(timerTask, 2000l);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                 loadInventairegrid();
+        loadCompteGrid();
+        loadTypeCompteCombo();
+        showClavier();
+        mois();
                 txtPseudoCennect.setFocusTraversable(true);
                 txtPseudoCennect.requestFocus();
-                
+                Stage stage = (Stage) btnBilan.getScene().getWindow();
+                stage.setMaximized(true);
+                btnInventaireClose.setLayoutX(produitTable.getWidth() - 80);
+                btnCaisseClose.setLayoutX(paneCaisseClose.getWidth() - 80);
+                btnBilanClose.setLayoutX(paneBilanClose.getWidth() - 80);
+                produitTable.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        btnInventaireClose.setLayoutX(newValue.doubleValue() - 80);
+                    }
+
+                });
+                paneCaisseClose.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        btnCaisseClose.setLayoutX(newValue.doubleValue() - 80);
+                    }
+
+                });
+                paneBilanClose.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                        btnCaisseClose.setLayoutX(newValue.doubleValue() - 80);
+                    }
+
+                });
+
             }
         });
 
@@ -522,7 +589,7 @@ public class MainPrincipalController implements Initializable {
 
     @FXML
     private void selectForm(ActionEvent event) {
-        if (event.getSource() == btnInventaire) {
+        if (event.getSource() == btnInventaire || event.getSource() == menuProduct) {
             gridInventaire.toFront();
             gridInventaire.setVisible(true);
             grid.toBack();
@@ -629,18 +696,29 @@ public class MainPrincipalController implements Initializable {
     }
 
     @FXML
-    private void closeInventaire(MouseEvent event) {
+    private void closeInventaire(ActionEvent event) {
         grid.toFront();
         grid.setVisible(true);
         gridInventaire.toBack();
         gridInventaire.setVisible(false);
         venteList.clear();
-
+        clearCompteTxt();
+        clearProduitText();
+        clearCaisseTxt();
         TypeCompte tc = new TypeCompte(compteActif.getIdTypComp());
         TypeCompte typeCompte = typeService.findById(tc);
         if (typeCompte.getLibTyp().equals("Caissier")) {
             System.exit(0);
         }
+    }
+
+    private void clearCaisseTxt() {
+        txtCodeProdCaisse.clear();
+        txtNomProdCaisse.clear();
+        txtQteProdCaisse.clear();
+        txtPrixUnitCaisse.clear();
+        venteList.clear();
+        produitListVent.clear();
     }
 
     @FXML
@@ -714,6 +792,8 @@ public class MainPrincipalController implements Initializable {
     @FXML
     private void recuperationProduitInfo(KeyEvent event) {
         //caisseProduitInfo();
+        //txtNomProdCaisse.setOnKeyTyped(new);
+
     }
 
     private void caisseProduitInfo(StringBuffer b) {
@@ -725,14 +805,25 @@ public class MainPrincipalController implements Initializable {
             txtQteProdCaisse.setText(String.valueOf(produitVente.getQteIniProd()));
             txtPrixUnitCaisse.setText(String.valueOf(produitVente.getPrixUniProd()));
             Boolean find = false;
+            int i = 0;
+            int e = 0;
             for (ProduitR pr : produitListVent) {
+
                 if (produitVente.getCodeProd().equals(pr.getCodeProd().getValue())) {
                     find = true;
+                    e = i;
                 }
+                i++;
             }
             if (find == false) {
                 produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
                 barcode = new StringBuffer();
+            } else if (find == true) {
+                ProduitR pm = produitListVent.get(e);
+                // pm.setQteProdCom(new SimpleIntegerProperty(pm.getQteProdCom().getValue() + 1));
+                produitListVent.remove(e);
+                produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, pm.getQteProdCom().getValue() + 1));
+                // produitListVent.set(e, pm);
             }
 
             libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
@@ -954,6 +1045,7 @@ public class MainPrincipalController implements Initializable {
                         produitService.ajouter(p);
                     }
                 }
+
                 wb.close();
                 fis.close();
                 loadInventairegrid();
@@ -1251,11 +1343,6 @@ public class MainPrincipalController implements Initializable {
     }
 
     @FXML
-    private void recuperationProduitInfoB(ActionEvent event) {
-        // caisseProduitInfo();
-    }
-
-    @FXML
     private void selectScene(MouseEvent event) {
         gridCaisse.setFocusTraversable(true);
         gridCaisse.requestFocus();
@@ -1264,6 +1351,10 @@ public class MainPrincipalController implements Initializable {
     @FXML
     private void fermerApp(ActionEvent event) {
         System.exit(0);
+    }
+
+    @FXML
+    private void closeInventaire(MouseEvent event) {
     }
 
 }

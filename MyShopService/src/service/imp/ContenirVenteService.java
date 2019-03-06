@@ -7,6 +7,7 @@ package service.imp;
 
 import entites.ContenirVente;
 import entites.ContenirVentePK;
+import entites.Produit;
 import entites.Vente;
 import java.util.List;
 import java.util.logging.Level;
@@ -54,6 +55,11 @@ public class ContenirVenteService implements IContenirVente{
     @Override
     public List<ContenirVente> listParVente(Vente vente) {
         return  contenirVenteJpaController.recuperationParVente(vente);
+    }
+
+    @Override
+    public List<ContenirVente> listParVente(Produit p) {
+        return contenirVenteJpaController.findByProd(p);
     }
     
 }

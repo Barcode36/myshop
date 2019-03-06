@@ -7,23 +7,25 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="706.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.102" fx:controller="controller.CaisseConfirmationController">
-   <effect>
-      <DropShadow radius="21.12" width="65.48" />
-   </effect>
+<AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="706.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CaisseConfirmationController">
    <children>
       <Pane layoutX="11.0" layoutY="10.0" prefHeight="487.0" prefWidth="689.0">
-         <effect>
-            <DropShadow />
-         </effect>
          <children>
             <Button fx:id="btnClose" layoutX="466.0" layoutY="435.0" mnemonicParsing="false" onAction="#Valider" prefHeight="32.0" prefWidth="119.0" text="Valider" />
+            <Label layoutX="257.0" layoutY="333.0" prefHeight="44.0" prefWidth="106.0" text="Donné">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <Label layoutX="257.0" layoutY="382.0" prefHeight="44.0" prefWidth="106.0" text="Rendu">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
       <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">

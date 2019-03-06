@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import service.IClientService;
 import service.ICompteService;
 import service.IConcerner;
@@ -68,7 +69,9 @@ public class MyShopService {
 //        compte.setIdTypComp(typeCompte.getIdTyp());
 //        compteService.ajouter(compte);
 //
-//        IProduitService produitService = new ProduitService();
+        IProduitService produitService = new ProduitService();
+        List<Produit> list = produitService.recherche("c");
+        System.out.println(list);
 //        Produit produit = new Produit();
 //        produit.setCodeProd("6921734952417");
 //        produit.setLibProd("pile");
@@ -102,6 +105,7 @@ public class MyShopService {
 //        Livraison livraison = new Livraison(1);
 //        List<Concerner> list = concernerService.findByIdLiv(livraison);
 //        System.out.println(list);
+        
     }
 
 }
