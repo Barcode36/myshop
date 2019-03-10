@@ -6,7 +6,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -21,7 +20,7 @@
    <children>
       <AnchorPane fx:id="stage" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1240.0">
          <children>
-            <Group fx:id="gp" layoutX="80.0" layoutY="63.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="79.0">
+            <Group fx:id="gp" layoutX="85.0" layoutY="69.0" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="85.0">
                <children>
                   <GridPane fx:id="cont" hgap="20.0" layoutX="6.0" layoutY="52.0" prefHeight="436.0" prefWidth="1058.0">
                      <columnConstraints>
@@ -51,8 +50,8 @@
                               <JFXTextField fx:id="txtQteProd" labelFloat="true" prefHeight="25.0" prefWidth="306.0" promptText="Qte en Stock" GridPane.rowIndex="4" />
                               <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="5">
                                  <children>
-                                    <JFXButton onAction="#suppProduit" styleClass="btn-delete" text="Supprimer" visible="false" />
-                                    <JFXButton fx:id="saveUp" defaultButton="true" onAction="#saveProd" prefHeight="44.0" prefWidth="131.0" styleClass="btn-save" text="Enregistrer" />
+                                    <JFXButton fx:id="saveUp" onAction="#saveProd" prefHeight="44.0" prefWidth="131.0" styleClass="btn-save" text="Enregistrer" />
+                                    <JFXButton onAction="#suppProduit" styleClass="btn-delete" text="Supprimer" />
                                  </children>
                                  <padding>
                                     <Insets left="70.0" />
@@ -65,7 +64,7 @@
                         </GridPane>
                         <VBox fx:id="pane2" prefHeight="436.0" prefWidth="602.0" spacing="10.0" styleClass="card" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
                            <children>
-                              <TableView fx:id="produitTable" prefHeight="408.0" prefWidth="451.0" stylesheets="@../css/MainPrincipalCss.css">
+                              <TableView fx:id="produitTable" onMouseClicked="#getProduitFromTable" prefHeight="408.0" prefWidth="451.0" stylesheets="@../css/MainPrincipalCss.css">
                                  <columns>
                                     <TableColumn fx:id="libProdCol" prefWidth="75.0" text="Produit" />
                                     <TableColumn fx:id="codeProdcol" prefWidth="75.0" text="Code" />
@@ -83,10 +82,9 @@
                         </VBox>
                      </children>
                   </GridPane>
-                  <AnchorPane fx:id="ent" layoutX="14.0" layoutY="14.0" prefHeight="108.0" prefWidth="415.0">
+                  <AnchorPane fx:id="ent" layoutX="14.0" layoutY="1.0" prefHeight="108.0" prefWidth="415.0">
                      <children>
-                        <Label layoutX="55.0" layoutY="32.0" prefHeight="45.0" prefWidth="306.0" style="-fx-font-size: 25; -fx-font-family: Times New Roman; -fx-alignment: center;" text="AJOUTER DES PRODUITS" textFill="WHITE" />
-                        <Separator layoutX="108.0" layoutY="77.0" prefWidth="200.0" />
+                        <Label fx:id="label" layoutX="55.0" layoutY="32.0" prefHeight="45.0" prefWidth="306.0" style="-fx-font-size: 25; -fx-font-family: Times New Roman; -fx-alignment: center;" text="AJOUTER DES PRODUITS" textFill="WHITE" />
                      </children>
                      <styleClass>
                         <String fx:value="card" />

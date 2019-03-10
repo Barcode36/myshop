@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
@@ -9,62 +9,68 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="706.0" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CaisseConfirmationController">
+
+<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CaisseConfirmationController">
    <children>
-      <Pane layoutX="11.0" layoutY="10.0" prefHeight="487.0" prefWidth="689.0">
+      <AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="706.0">
          <children>
-            <Button fx:id="btnClose" layoutX="466.0" layoutY="435.0" mnemonicParsing="false" onAction="#Valider" prefHeight="32.0" prefWidth="119.0" text="Valider" />
-            <Label layoutX="257.0" layoutY="333.0" prefHeight="44.0" prefWidth="106.0" text="Donné">
+            <Pane layoutX="11.0" layoutY="10.0" prefHeight="487.0" prefWidth="689.0" styleClass="card">
+               <children>
+                  <Label layoutX="257.0" layoutY="333.0" prefHeight="44.0" prefWidth="106.0" text="Donné">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="257.0" layoutY="382.0" prefHeight="44.0" prefWidth="106.0" text="Rendu">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <JFXButton defaultButton="true" layoutX="389.0" layoutY="435.0" styleClass="save-buton" text="Valider" />
+               </children>
+            </Pane>
+            <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">
+               <columns>
+                  <TableColumn fx:id="libProdColCaisse" prefWidth="75.0" text="Produit" />
+                  <TableColumn fx:id="qteColCaisse" prefWidth="75.0" text="Quantié commandée " />
+                  <TableColumn fx:id="prixColCaisse" prefWidth="75.0" text="Prix unitaire" />
+                  <TableColumn fx:id="totalColCaisse" prefWidth="75.0" text="Total" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+               <contextMenu>
+                  <ContextMenu>
+                     <items>
+                        <MenuItem mnemonicParsing="false" onAction="#SupprimerProdVent" text="Supprimer" />
+                     </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <Label layoutX="265.0" layoutY="286.0" text="Total:">
                <font>
                   <Font size="36.0" />
                </font>
             </Label>
-            <Label layoutX="257.0" layoutY="382.0" prefHeight="44.0" prefWidth="106.0" text="Rendu">
+            <TextField fx:id="txtMontCllt" layoutX="377.0" layoutY="347.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="216.0">
                <font>
-                  <Font size="36.0" />
+                  <Font name="Times New Roman" size="24.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtRemise" layoutX="377.0" layoutY="395.0" prefHeight="38.0" prefWidth="216.0">
+               <font>
+                  <Font name="Times New Roman Bold" size="24.0" />
+               </font>
+            </TextField>
+            <Label fx:id="lblTot" layoutX="377.0" layoutY="288.0" prefHeight="53.0" prefWidth="295.0">
+               <font>
+                  <Font name="Times New Roman Bold" size="36.0" />
                </font>
             </Label>
          </children>
-      </Pane>
-      <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">
-         <columns>
-            <TableColumn fx:id="libProdColCaisse" prefWidth="75.0" text="Produit" />
-            <TableColumn fx:id="qteColCaisse" prefWidth="75.0" text="Quantié commandée " />
-            <TableColumn fx:id="prixColCaisse" prefWidth="75.0" text="Prix unitaire" />
-            <TableColumn fx:id="totalColCaisse" prefWidth="75.0" text="Total" />
-         </columns>
-         <columnResizePolicy>
-            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-         </columnResizePolicy>
-         <contextMenu>
-            <ContextMenu>
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#SupprimerProdVent" text="Supprimer" />
-               </items>
-            </ContextMenu>
-         </contextMenu>
-      </TableView>
-      <Label layoutX="265.0" layoutY="286.0" text="Total:">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <TextField fx:id="txtMontCllt" layoutX="377.0" layoutY="347.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="216.0">
-         <font>
-            <Font name="Times New Roman" size="24.0" />
-         </font>
-      </TextField>
-      <TextField fx:id="txtRemise" layoutX="377.0" layoutY="395.0" prefHeight="38.0" prefWidth="216.0">
-         <font>
-            <Font name="Times New Roman Bold" size="24.0" />
-         </font>
-      </TextField>
-      <Label fx:id="lblTot" layoutX="377.0" layoutY="288.0" prefHeight="53.0" prefWidth="295.0">
-         <font>
-            <Font name="Times New Roman Bold" size="36.0" />
-         </font>
-      </Label>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</StackPane>

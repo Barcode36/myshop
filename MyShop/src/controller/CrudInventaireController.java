@@ -28,8 +28,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -90,6 +93,8 @@ public class CrudInventaireController implements Initializable {
     private AnchorPane ent;
     @FXML
     private Group gp;
+    @FXML
+    private Label label;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
@@ -102,37 +107,60 @@ public class CrudInventaireController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         loadInventairegrid();
-        
+
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                Stage s =(Stage) stage.getScene().getWindow();
-                if(s.isMaximized()){
+                Stage s = (Stage) stage.getScene().getWindow();
+                if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
-                    System.out.println(s.getWidth());
+
                 }
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 159);
+                cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 170);
             }
         });
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                cont.setPrefWidth(newValue.doubleValue() - 159);
+                System.out.println(newValue.doubleValue());
+                cont.setPrefWidth(newValue.doubleValue() - 170);
+                pane1.widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                       
+                        ent.setPrefWidth(newValue.doubleValue() - 15);
+                    }
+                });
+                //if (newValue.doubleValue() <= 1024) {
+                    label.setStyle("-fx-font-size:15px");
+
+                //}
             }
 
         });
-        pane1.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (pane1.getPrefWidth() < 436) {
-                    ent.setVisible(false);
-                } else {
-                    ent.setVisible(true);
-                }
-                ent.setPrefWidth(newValue.doubleValue() - 13);
+
+//        
+        txtQteProd.setOnKeyPressed((event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                save();
             }
         });
-//        
+        txtCode.setOnKeyPressed((event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                save();
+            }
+        });
+        txtPrixProd.setOnKeyPressed((event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                save();
+            }
+        });
+        txtLibProd.setOnKeyPressed((event) -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                save();
+            }
+        });
+
     }
 
     public void loadInventairegrid() {
@@ -147,6 +175,7 @@ public class CrudInventaireController implements Initializable {
         produitTable.setItems(produitList);
     }
 
+    @FXML
     private void getProduitFromTable(MouseEvent event) {
         ProduitR pr = produitTable.getSelectionModel().getSelectedItem();
 //      
@@ -161,37 +190,43 @@ public class CrudInventaireController implements Initializable {
 
     @FXML
     private void saveProd(ActionEvent event) {
-       // if (saveUp.equals("Enregistrer")) {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("MyShop");
-            alert.setContentText("Apres cet enregistrement vous pourrez plus supprimer ni modifier coontinuer?");
-            Optional<ButtonType> answer = alert.showAndWait();
-            if (answer.get() == ButtonType.OK) {
+        save();
+    }
 
-                Produit produit = new Produit();
-                produit.setCodeProd(txtCode.getText());
-                produit.setLibProd(txtLibProd.getText());
-                produit.setPrixUniProd(txtPrixProd.getText());
-                produit.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
+    private void save() {
+        if (saveUp.getText().equals("Enregistrer")) {
+
+            Produit produit = new Produit();
+            produit.setCodeProd(txtCode.getText());
+            produit.setLibProd(txtLibProd.getText());
+            produit.setPrixUniProd(txtPrixProd.getText());
+            produit.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
+            try {
+                Produit p = produitService.findByCode(produit);
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Ce produit existe déjà", NotificationType.WARNING);
+                notification.showAndDismiss(Duration.seconds(1));
+            } catch (Exception e) {
                 produitService.ajouter(produit);
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
-                notification.setTray("MyShop", "Supprimer avec succès", NotificationType.SUCCESS);
+                notification.setTray("MyShop", "Enregistrement effectué", NotificationType.SUCCESS);
                 notification.showAndDismiss(Duration.seconds(1));
+                clearProduitText();
             }
 
-       // }
-
-//        } else {
-//            produitModif.setCodeProd(txtCode.getText());
-//            produitModif.setLibProd(txtLibProd.getText());
-//            produitModif.setPrixUniProd(txtPrixProd.getText());
-//            produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
-//            produitService.modifier(produitModif);
-//            saveUp.setText("Enregistrer");
-//        }
+        } else {
+            produitModif.setCodeProd(txtCode.getText());
+            produitModif.setLibProd(txtLibProd.getText());
+            produitModif.setPrixUniProd(txtPrixProd.getText());
+            produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
+            produitService.modifier(produitModif);
+            saveUp.setText("Enregistrer");
+            clearProduitText();
+        }
         loadInventairegrid();
-        clearProduitText();
+
     }
 
     private void clearProduitText() {
@@ -206,5 +241,7 @@ public class CrudInventaireController implements Initializable {
         produitService.supprimer(produitModif);
         loadInventairegrid();
         clearProduitText();
+        saveUp.setText("Enregistrer");
     }
+
 }
