@@ -25,4 +25,6 @@ public interface IProduitService {
     public Produit findByCode(Produit produit);
 
     public List<Produit> produitList();
+
+    public List<Produit> recherche(String s);
 }

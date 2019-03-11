@@ -22,5 +22,7 @@ public interface ITypeService {
 
     public TypeCompte findById(TypeCompte typeCompte);
 
+    public TypeCompte findByLib(TypeCompte typeCompte);
+
     public List<TypeCompte> typeCmopteList();
 }

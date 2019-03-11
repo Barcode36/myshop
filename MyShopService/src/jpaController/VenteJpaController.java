@@ -5,14 +5,15 @@
  */
 package jpaController;
 
+import entites.Compte;
 import entites.Vente;
-import entites.VentePK;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpaController.exceptions.NonexistentEntityException;
@@ -34,9 +35,6 @@ public class VenteJpaController implements Serializable {
     }
 
     public void create(Vente vente) throws PreexistingEntityException, Exception {
-        if (vente.getVentePK() == null) {
-            vente.setVentePK(new VentePK());
-        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -44,7 +42,7 @@ public class VenteJpaController implements Serializable {
             em.persist(vente);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findVente(vente.getVentePK()) != null) {
+            if (findVente(vente.getIdVen()) != null) {
                 throw new PreexistingEntityException("Vente " + vente + " already exists.", ex);
             }
             throw ex;
@@ -65,7 +63,7 @@ public class VenteJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                VentePK id = vente.getVentePK();
+                Integer id = vente.getIdVen();
                 if (findVente(id) == null) {
                     throw new NonexistentEntityException("The vente with id " + id + " no longer exists.");
                 }
@@ -78,7 +76,7 @@ public class VenteJpaController implements Serializable {
         }
     }
 
-    public void destroy(VentePK id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -86,7 +84,7 @@ public class VenteJpaController implements Serializable {
             Vente vente;
             try {
                 vente = em.getReference(Vente.class, id);
-                vente.getVentePK();
+                vente.getIdVen();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The vente with id " + id + " no longer exists.", enfe);
             }
@@ -123,7 +121,7 @@ public class VenteJpaController implements Serializable {
         }
     }
 
-    public Vente findVente(VentePK id) {
+    public Vente findVente(Integer id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Vente.class, id);
@@ -144,5 +142,37 @@ public class VenteJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Vente> venteParCaissier(Compte compte) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByIdComp");
+        query.setParameter("idComp", compte.getIdComp());
+        return query.getResultList();
+    }
+    public List<Vente> venteParCaissierMois(Compte compte,String mois) {
+       EntityManager em = this.getEntityManager();
+        //TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByDateVen");
+        Query query = em.createNativeQuery("SELECT * FROM vente where strftime('%Y-%m', dateVen / 1000, 'unixepoch')=? and idComp=?", Vente.class);
+        query.setParameter(1, mois);
+        query.setParameter(2, compte.getIdComp());
+        return (List<Vente>) query.getResultList();
+    }
+
+    public List<Vente> venteParMois(String mois) {
+        EntityManager em = this.getEntityManager();
+        //TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByDateVen");
+        Query query = em.createNativeQuery("SELECT * FROM vente where strftime('%Y-%m', dateVen / 1000, 'unixepoch')=?", Vente.class);
+        query.setParameter(1, mois);
+        return (List<Vente>) query.getResultList();
+    }
+
+    public List<Vente> venteEntreDeuxDate(String date1, String date2,Compte compte) {
+        EntityManager em = this.getEntityManager();
+        //TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByDateVen");
+        Query query = em.createNativeQuery("SELECT * FROM vente where strftime('%Y-%m-%d', dateVen / 1000, 'unixepoch')>=? and strftime('%Y-%m-%d', dateVen / 1000, 'unixepoch')<=? and idComp=?", Vente.class);
+        query.setParameter(1, date1);
+        query.setParameter(2, date2);
+        query.setParameter(3, compte.getIdComp());
+        return (List<Vente>) query.getResultList();
+    }
 }

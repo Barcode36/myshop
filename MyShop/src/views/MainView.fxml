@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import com.jfoenix.controls.JFXToolbar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane prefWidth="1240.0" stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
+   <children>
+      <AnchorPane id="AnchorPane" fx:id="stageTot" prefHeight="669.0" prefWidth="1240.0">
+         <children>
+            <JFXToolbar fx:id="toolbar" prefHeight="60.0" prefWidth="1240.0" styleClass="toolbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <left>
+                  <JFXHamburger fx:id="hamburger" prefHeight="60.0" prefWidth="107.0" styleClass="jfx-hamburger-icon" BorderPane.alignment="CENTER" />
+               </left>
+               <center>
+                  <Label style="-fx-font-size: 30;" text="Myshop Managnment" textFill="WHITE" BorderPane.alignment="CENTER" />
+               </center>
+            </JFXToolbar>
+            <GridPane alignment="CENTER" layoutX="-1.0" layoutY="59.0" prefHeight="620.0" prefWidth="1240.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <AnchorPane fx:id="contentPane" prefHeight="620.0" prefWidth="1240.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+               </children>
+            </GridPane>
+            <JFXDrawer fx:id="drawer" defaultDrawerSize="200.0" layoutX="2.0" layoutY="58.0" prefHeight="620.0" prefWidth="150.0" AnchorPane.leftAnchor="2.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

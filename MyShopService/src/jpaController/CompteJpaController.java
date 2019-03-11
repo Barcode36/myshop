@@ -149,4 +149,10 @@ public class CompteJpaController implements Serializable {
         query.setParameter("mdpComp", compte.getMdpComp());
         return query.getSingleResult();
     }
+    public List<Compte> AllCompte() {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Compte> query = (TypedQuery<Compte>) em.createNamedQuery("Compte.findAll");
+        
+        return query.getResultList();
+    }
 }

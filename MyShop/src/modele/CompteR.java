@@ -23,14 +23,23 @@ public class CompteR {
     private SimpleStringProperty mdpComp;
     private SimpleStringProperty libTypComp;
     private SimpleStringProperty etatComp;
-    
+
     public CompteR(Compte compte, TypeCompte typeCompte) {
+        this.idComp = new SimpleIntegerProperty(compte.getIdComp());
         this.nomComp = new SimpleStringProperty(compte.getNomComp());
         this.prenomComp = new SimpleStringProperty(compte.getPrenomComp());
         this.pseudoComp = new SimpleStringProperty(compte.getPseudoComp());
         this.mdpComp = new SimpleStringProperty(compte.getMdpComp());
         this.libTypComp = new SimpleStringProperty(typeCompte.getLibTyp());
         this.etatComp = new SimpleStringProperty(compte.getEtatComp());
+    }
+
+    public CompteR(Compte compte) {
+        this.idComp = new SimpleIntegerProperty(compte.getIdComp());
+        this.nomComp = new SimpleStringProperty(compte.getNomComp());
+        this.prenomComp = new SimpleStringProperty(compte.getPrenomComp());
+        this.pseudoComp = new SimpleStringProperty(compte.getPseudoComp());
+        this.mdpComp = new SimpleStringProperty(compte.getMdpComp());
     }
 
     public SimpleStringProperty getNomComp() {

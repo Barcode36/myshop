@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpaController.exceptions.NonexistentEntityException;
@@ -140,5 +141,12 @@ public class TypeCompteJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public TypeCompte findByLibType(TypeCompte typeCompte) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<TypeCompte> query = (TypedQuery<TypeCompte>) em.createNamedQuery("TypeCompte.findByLibTyp");
+        query.setParameter("pseudoComp", typeCompte.getLibTyp());
+        return query.getSingleResult();
+    }
+
 }

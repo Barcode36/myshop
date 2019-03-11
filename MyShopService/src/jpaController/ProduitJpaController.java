@@ -148,4 +148,14 @@ public class ProduitJpaController implements Serializable {
         query.setParameter("codeProd", produit.getCodeProd());
         return query.getSingleResult();
     }
+
+    public List<Produit> Recherche(String s) {
+        EntityManager em = this.getEntityManager();
+       // Query query = em.createNativeQuery("select * from produit where libProd like :lib", Produit.class);
+       
+        TypedQuery<Produit> query = (TypedQuery<Produit>) em.createNamedQuery("Produit.findByLibProdLike");
+        query.setParameter("libProd", "%" + s + "%");
+
+        return query.getResultList();
+    }
 }
