@@ -8,4 +8,5 @@
 /MyShopService/dist/
 /MyShop/build.xml
 /MyShopService/build.xml
-
+/MyShop/nbproject/project.properties 
+/MyShopService/nbproject/project.properties/

@@ -66,4 +66,9 @@ public class CompteService implements ICompteService {
         return compteJpaController.findCompteEntities();
     }
 
+    @Override
+    public Compte Connexion(Compte compte) {
+        return compteJpaController.ConnexionReussi(compte);
+    }
+
 }

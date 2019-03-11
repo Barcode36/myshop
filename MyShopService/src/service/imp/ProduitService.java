@@ -66,4 +66,9 @@ public class ProduitService implements IProduitService {
         return produitJpaController.findProduitEntities();
     }
 
+    @Override
+    public Produit findByCode(Produit produit) {
+        return produitJpaController.findByCode(produit);
+    }
+
 }
