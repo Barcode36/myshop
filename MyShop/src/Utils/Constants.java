@@ -13,6 +13,7 @@ public class Constants {
 
     public static final String MainView = "/views/MainView.fxml";
     public static final String MenuLateral = "/views/MenuLaterale.fxml";
+    public static final String MenuLateralC = "/views/MenuLateraleC.fxml";
     public static final String CrudInventaire = "/views/CrudInventaire.fxml";
     public static final String CrudCompte = "/views/CRUDCompte.fxml";
     public static final String CrudBilan = "/views/BilanPane.fxml";

@@ -90,10 +90,9 @@ public class CrudInventaireController implements Initializable {
     @FXML
     private GridPane cont;
     @FXML
-    private AnchorPane ent;
+    private Label ent;
     @FXML
     private Group gp;
-    @FXML
     private Label label;
 
     public List<Produit> listProduit() {
@@ -119,22 +118,21 @@ public class CrudInventaireController implements Initializable {
                 cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 170);
             }
         });
+
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                System.out.println(newValue.doubleValue());
+                double val = newValue.doubleValue() / 4;
+                ent.setLayoutX(val);
                 cont.setPrefWidth(newValue.doubleValue() - 170);
                 pane1.widthProperty().addListener(new ChangeListener<Number>() {
                     @Override
                     public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                       
+
                         ent.setPrefWidth(newValue.doubleValue() - 15);
                     }
                 });
-                //if (newValue.doubleValue() <= 1024) {
-                    label.setStyle("-fx-font-size:15px");
-
-                //}
+                
             }
 
         });

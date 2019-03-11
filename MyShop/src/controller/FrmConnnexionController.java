@@ -14,6 +14,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +24,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import modele.CompteR;
@@ -70,9 +73,24 @@ public class FrmConnnexionController implements Initializable {
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 922);
+                double val = s.getWidth() / 2;
+                double val2 = cont.getPrefWidth() /2;
+                
+                cont.setLayoutX(val-val2);
+                
             }
+        });
+
+        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+               double val = newValue.doubleValue() / 2;
+                double val2 = cont.getPrefWidth() /2;
+                
+                cont.setLayoutX(val-val2);
+
+            }
+
         });
     }
 
@@ -99,10 +117,12 @@ public class FrmConnnexionController implements Initializable {
             MainViewController.initialise = true;
             if (MainViewController.initialise == true) {
                 if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                    MenuLateraleController.btnComp.setVisible(false);
-                    MenuLateraleController.btnInvent.setVisible(false);
-                    MenuLateraleController.btnBil.setVisible(false);
-                    DashBoardController.btnComp.setDisable(true);
+                    DashBoardController.btnComp.setVisible(false);
+                    DashBoardController.btnInvent.setVisible(false);
+                    DashBoardController.btnBil.setVisible(false);
+                    VBox menu = null;
+                    menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateralC));
+                    MainViewController.drawerTmp.setSidePane(menu);
                 }
             }
         } catch (Exception e) {

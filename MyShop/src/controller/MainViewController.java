@@ -66,6 +66,7 @@ public class MainViewController implements Initializable {
     public static Compte compteActif = new Compte();
     public static TypeCompte typeCompteActif = new TypeCompte();
     public static Boolean initialise = false;
+    public static VBox menuL = null;
 
     ITypeService typeService = new TypeService();
     ICompteService compteService = compteServiceD;
@@ -108,7 +109,9 @@ public class MainViewController implements Initializable {
 
     private void initDrawer() {
         try {
-            VBox menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
+            VBox menu = null;
+            menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
+            
 
             drawer.setSidePane(menu);
             HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);

@@ -16,7 +16,7 @@
    <children>
       <AnchorPane id="AnchorPane" prefHeight="605.0" prefWidth="1240.0">
          <children>
-            <GridPane fx:id="cont" layoutX="461.0" layoutY="96.0" prefHeight="414.0" prefWidth="318.0" styleClass="card" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="461.0" AnchorPane.rightAnchor="461.0" AnchorPane.topAnchor="96.0">
+            <GridPane fx:id="cont" layoutX="461.0" layoutY="96.0" prefHeight="414.0" prefWidth="318.0" styleClass="card" AnchorPane.bottomAnchor="95.0" AnchorPane.topAnchor="96.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

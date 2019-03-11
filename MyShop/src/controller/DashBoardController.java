@@ -8,7 +8,6 @@ package controller;
 import Utils.Constants;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXHamburger;
-import static controller.MenuLateraleController.btnComp;
 import entites.ContenirVente;
 import entites.Produit;
 import java.io.IOException;
@@ -36,6 +35,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import service.IContenirVente;
 import service.IProduitService;
@@ -74,6 +74,8 @@ public class DashBoardController implements Initializable {
     private JFXButton btnCOmpte;
 
     public static JFXButton btnComp;
+    public static JFXButton btnInvent;
+    public static JFXButton btnBil;
     @FXML
     private AnchorPane stage;
     @FXML
@@ -104,6 +106,8 @@ public class DashBoardController implements Initializable {
         pieChart.setData(datas);
         barCode.getData().addAll(series);
         btnComp = btnCOmpte;
+        btnInvent = btnInventaire;
+        btnBil = btnBilan;
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -123,6 +127,15 @@ public class DashBoardController implements Initializable {
             }
 
         });
+        
+         if (MainViewController.initialise == true) {
+                if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                    this.btnComp.setVisible(false);
+                    this.btnInvent.setVisible(false);
+                    this.btnBil.setVisible(false);
+                    
+                }
+            }
     }
 
     private void openAccueil(ActionEvent event) {

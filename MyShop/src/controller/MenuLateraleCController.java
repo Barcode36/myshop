@@ -8,7 +8,6 @@ package controller;
 import Utils.Constants;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -27,18 +26,14 @@ import javafx.scene.layout.StackPane;
  *
  * @author Christ
  */
-public class MenuLateraleController implements Initializable {
+public class MenuLateraleCController implements Initializable {
 
     @FXML
     private JFXButton btnAccueil;
     @FXML
-    private JFXButton btnInventaire;
-    @FXML
-    private JFXButton btnCOmpte;
+    private JFXButton btnRec;
     @FXML
     private JFXButton btnCaisse;
-    @FXML
-    private JFXButton btnBilan;
     @FXML
     private JFXButton btnReglage;
     @FXML
@@ -46,23 +41,13 @@ public class MenuLateraleController implements Initializable {
     @FXML
     private JFXButton btnQuitter;
 
-    @FXML
-    private JFXButton btnRec;
-
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
-        try {
-
-            StackPane dashBoard = FXMLLoader.load(getClass().getResource(Constants.Connect));
-            MainViewController.temporaryPane.getChildren().setAll(dashBoard);
-        } catch (IOException ex) {
-            Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+        // TODO
+    }    
 
     @FXML
     private void openAccueil(ActionEvent event) {
@@ -121,5 +106,5 @@ public class MenuLateraleController implements Initializable {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
 }

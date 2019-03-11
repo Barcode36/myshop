@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.Label?>
@@ -82,17 +81,9 @@
                         </VBox>
                      </children>
                   </GridPane>
-                  <AnchorPane fx:id="ent" layoutX="14.0" layoutY="1.0" prefHeight="108.0" prefWidth="415.0">
-                     <children>
-                        <Label fx:id="label" layoutX="55.0" layoutY="32.0" prefHeight="45.0" prefWidth="306.0" style="-fx-font-size: 25; -fx-font-family: Times New Roman; -fx-alignment: center;" text="AJOUTER DES PRODUITS" textFill="WHITE" />
-                     </children>
-                     <styleClass>
-                        <String fx:value="card" />
-                        <String fx:value="linear_gradient_red" />
-                     </styleClass>
-                  </AnchorPane>
                </children>
             </Group>
+            <Label fx:id="ent" layoutX="428.0" layoutY="30.0" prefHeight="79.0" prefWidth="384.0" style="-fx-font-size: 25; -fx-font-family: Times New Roman; -fx-alignment: center;" styleClass="linear_gradient_red" text="AJOUTER DES PRODUITS" textFill="WHITE" />
          </children>
       </AnchorPane>
    </children>
