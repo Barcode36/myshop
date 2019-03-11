@@ -18,12 +18,15 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import service.ICompteService;
 import service.IContenirVente;
@@ -122,6 +125,24 @@ public class MainViewController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void switchPane(String pane) {
+        try {
+            MainViewController.temporaryPane.getChildren().clear();
+            StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
+            ObservableList<Node> elements = stackPane.getChildren();
+            MainViewController.temporaryPane.getChildren().setAll(elements);
+            MainViewController.drawerTmp.close();
+            MainViewController.hamburgerTmp = new JFXHamburger();
+        } catch (IOException ex) {
+            Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void Acceuil(MouseEvent event) {
+        switchPane(Constants.DashBoard);
     }
 
 }

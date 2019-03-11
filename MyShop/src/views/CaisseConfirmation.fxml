@@ -12,12 +12,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CaisseConfirmationController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="706.0">
          <children>
-            <Pane layoutX="11.0" layoutY="10.0" prefHeight="487.0" prefWidth="689.0" styleClass="card">
+            <Pane prefHeight="503.0" prefWidth="706.0" styleClass="card">
                <children>
                   <Label layoutX="257.0" layoutY="333.0" prefHeight="44.0" prefWidth="106.0" text="Donné">
                      <font>
@@ -29,7 +28,7 @@
                         <Font size="36.0" />
                      </font>
                   </Label>
-                  <JFXButton defaultButton="true" layoutX="389.0" layoutY="435.0" styleClass="save-buton" text="Valider" />
+                  <JFXButton fx:id="btnClose" defaultButton="true" layoutX="464.0" layoutY="445.0" onAction="#Valider" styleClass="save-buton" text="Valider" />
                </children>
             </Pane>
             <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">

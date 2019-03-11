@@ -107,6 +107,7 @@ public class CRUDCompteController implements Initializable {
                 cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 41);
             }
         });
+        System.out.println(MainViewController.temporaryPaneTot.getWidth());
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {

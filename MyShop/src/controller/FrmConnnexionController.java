@@ -99,7 +99,9 @@ public class FrmConnnexionController implements Initializable {
             MainViewController.initialise = true;
             if (MainViewController.initialise == true) {
                 if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                    MenuLateraleController.btnComp.setDisable(true);
+                    MenuLateraleController.btnComp.setVisible(false);
+                    MenuLateraleController.btnInvent.setVisible(false);
+                    MenuLateraleController.btnBil.setVisible(false);
                     DashBoardController.btnComp.setDisable(true);
                 }
             }
