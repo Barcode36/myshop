@@ -47,6 +47,8 @@ public class MenuLateraleController implements Initializable {
     private JFXButton btnQuitter;
 
     public static JFXButton btnComp;
+    public static JFXButton btnInvent;
+    public static JFXButton btnBil;
     @FXML
     private JFXButton btnRec;
 
@@ -56,9 +58,16 @@ public class MenuLateraleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnComp = btnCOmpte;
+        btnInvent = btnInventaire;
+        btnBil = btnBilan;
         if (MainViewController.initialise == true) {
             if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                MenuLateraleController.btnComp.setDisable(true);
+                if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                    MenuLateraleController.btnComp.setVisible(false);
+                    MenuLateraleController.btnInvent.setVisible(false);
+                    MenuLateraleController.btnBil.setVisible(false);
+                    DashBoardController.btnComp.setDisable(true);
+                }
             }
         }
 

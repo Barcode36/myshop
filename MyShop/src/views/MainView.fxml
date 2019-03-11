@@ -8,6 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
@@ -20,7 +21,11 @@
                   <JFXHamburger fx:id="hamburger" prefHeight="60.0" prefWidth="107.0" styleClass="jfx-hamburger-icon" BorderPane.alignment="CENTER" />
                </left>
                <center>
-                  <Label style="-fx-font-size: 30;" text="Myshop Managnment" textFill="WHITE" BorderPane.alignment="CENTER" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <Label onMouseClicked="#Acceuil" style="-fx-font-size: 30;" text="Myshop Managnment" textFill="WHITE" />
+                     </children>
+                  </HBox>
                </center>
             </JFXToolbar>
             <GridPane alignment="CENTER" layoutX="-1.0" layoutY="59.0" prefHeight="620.0" prefWidth="1240.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

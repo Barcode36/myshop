@@ -13,8 +13,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="card">
                      <children>
-                        <JFXButton layoutX="111.0" layoutY="161.0" onAction="#importInventaire" prefHeight="71.0" prefWidth="198.0" styleClass="save-del" text="Importation" AnchorPane.leftAnchor="111.0" AnchorPane.rightAnchor="359.0" />
-                        <JFXButton layoutX="408.0" layoutY="161.0" onAction="#exportInventaire" prefHeight="71.0" prefWidth="197.0" styleClass="save-del" text="Exportation" AnchorPane.leftAnchor="392.0" AnchorPane.rightAnchor="95.0" />
+                        <JFXButton layoutX="111.0" layoutY="161.0" onAction="#importInventaire" prefHeight="71.0" prefWidth="198.0" styleClass="save-del" text="Importation" />
+                        <JFXButton layoutX="408.0" layoutY="161.0" onAction="#exportInventaire" prefHeight="71.0" prefWidth="197.0" styleClass="save-del" text="Exportation" />
                      </children>
                   </AnchorPane>
               </content>

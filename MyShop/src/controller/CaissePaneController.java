@@ -100,12 +100,15 @@ public class CaissePaneController implements Initializable {
                 Stage s = (Stage) pane.getScene().getWindow();
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
+                } else {
+                    MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
                 pane.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
                 cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 87);
+                System.out.println(s.isMaximized());
             }
         });
-
+        System.out.println(MainViewController.temporaryPaneTot.getPrefWidth());
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -256,9 +259,9 @@ public class CaissePaneController implements Initializable {
             CaisseConfirmationController caisseConfirmationController = (CaisseConfirmationController) loader.getController();
             caisseConfirmationController.setListProd(produitListVent, compteActif);
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
+            scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
             stage.setScene(scene);
-            stage.initStyle(StageStyle.UNDECORATED);
+            stage.initStyle(StageStyle.UTILITY);
             stage.show();
 
             stage.setOnHidden(e -> {

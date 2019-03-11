@@ -119,12 +119,15 @@ public class BilanPaneController implements Initializable {
                 Stage s = (Stage) stage.getScene().getWindow();
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
+                } else {
+                    MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
+                System.out.println(s.isMaximized());
                 stage.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
                 cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 71);
             }
         });
-
+        System.out.println(MainViewController.temporaryPaneTot.getPrefWidth());
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
