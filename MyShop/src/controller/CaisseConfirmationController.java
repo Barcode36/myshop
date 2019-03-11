@@ -80,7 +80,7 @@ public class CaisseConfirmationController implements Initializable {
     IProduitService produitService = new ProduitService();
 
     Compte compteActif = new Compte();
-    
+    private boolean corr = true;
 
     /**
      * Initializes the controller class.
@@ -124,28 +124,36 @@ public class CaisseConfirmationController implements Initializable {
 
     @FXML
     private void Valider(ActionEvent event) {
-        Vente vente = new Vente();
-        vente.setDateVen(new Date());
-        vente.setIdClt(0);
-        vente.setIdComp(compteActif.getIdComp());
-        venteService.ajouter(vente);
-        for (ProduitR pr : produitListVent) {
-            ContenirVentePK cvpk = new ContenirVentePK(vente.getIdVen(), pr.getIdProd().getValue());
-            ContenirVente contenirVente = new ContenirVente(cvpk);
-            contenirVente.setQteVen(pr.getQteProdCom().getValue());
-            contenirVenteService.ajouterContenirVente(contenirVente);
-            Produit p = new Produit(pr.getIdProd().getValue());
-            Produit produit = produitService.findById(p);
-            produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
+        if(corr == true){
+            Vente vente = new Vente();
+            vente.setDateVen(new Date());
+            vente.setIdClt(0);
+            vente.setIdComp(compteActif.getIdComp());
+            venteService.ajouter(vente);
+            for (ProduitR pr : produitListVent) {
+                ContenirVentePK cvpk = new ContenirVentePK(vente.getIdVen(), pr.getIdProd().getValue());
+                ContenirVente contenirVente = new ContenirVente(cvpk);
+                contenirVente.setQteVen(pr.getQteProdCom().getValue());
+                contenirVenteService.ajouterContenirVente(contenirVente);
+                Produit p = new Produit(pr.getIdProd().getValue());
+                Produit produit = produitService.findById(p);
+                produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
 
-            produitService.modifier(produit);
+                produitService.modifier(produit);
+            }
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1.5));
+            Stage stage = (Stage) btnClose.getScene().getWindow();
+            stage.close();
+        }else{
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Montant incorrect", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1.5));
         }
-        TrayNotification notification = new TrayNotification();
-        notification.setAnimationType(AnimationType.POPUP);
-        notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
-        notification.showAndDismiss(Duration.seconds(1.5));
-        Stage stage = (Stage) btnClose.getScene().getWindow();
-        stage.close();
+        
     }
 
     @FXML
@@ -155,6 +163,11 @@ public class CaisseConfirmationController implements Initializable {
             txtRemise.setText(String.valueOf(rem));
         } else {
             txtRemise.clear();
+        }
+        if (Integer.parseInt(txtRemise.getText()) < 0) {
+            corr = false;
+        } else {
+            corr = false;
         }
     }
 
