@@ -13,6 +13,7 @@ import entites.Produit;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,6 +37,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import service.IContenirVente;
 import service.IProduitService;
@@ -80,6 +82,8 @@ public class DashBoardController implements Initializable {
     private AnchorPane stage;
     @FXML
     private GridPane cont;
+    @FXML
+    private JFXButton btnDeconnexion;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
@@ -94,7 +98,9 @@ public class DashBoardController implements Initializable {
         ObservableList<PieChart.Data> datas = FXCollections.observableArrayList();
         //ObservableList<BarChart<String,Number>> databar = FXCollections.observableArrayList();
         XYChart.Series series = new XYChart.Series<>();
+        Random random = new Random();
         for (Produit p : listProduit()) {
+
             List<ContenirVente> list = contenirVenteService.listParVente(p);
             int tot = 0;
             for (ContenirVente cv : list) {
@@ -127,15 +133,20 @@ public class DashBoardController implements Initializable {
             }
 
         });
-        
-         if (MainViewController.initialise == true) {
-                if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                    this.btnComp.setVisible(false);
-                    this.btnInvent.setVisible(false);
-                    this.btnBil.setVisible(false);
-                    
-                }
+
+        if (MainViewController.initialise == true) {
+            if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                this.btnComp.setVisible(false);
+                this.btnInvent.setVisible(false);
+                this.btnBil.setVisible(false);
+
             }
+        }
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
     }
 
     private void openAccueil(ActionEvent event) {
@@ -175,6 +186,12 @@ public class DashBoardController implements Initializable {
 
     @FXML
     private void openAide(ActionEvent event) {
+        switchPane(Constants.Aide);
+    }
+
+    @FXML
+    private void deconnexion(ActionEvent event) {
+        switchPane(Constants.Connect);
     }
 
     private void switchPane(String pane) {

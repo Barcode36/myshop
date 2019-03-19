@@ -31,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import modele.ProduitR;
@@ -51,7 +52,7 @@ import tray.notification.TrayNotification;
  *
  * @author Christ
  */
-public class CaisseConfirmationController implements Initializable {
+public class CaisseConfirmationController extends Traitement implements Initializable {
 
     @FXML
     private TableView<ProduitR> produitCaisseTable;
@@ -88,6 +89,11 @@ public class CaisseConfirmationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -124,50 +130,66 @@ public class CaisseConfirmationController implements Initializable {
 
     @FXML
     private void Valider(ActionEvent event) {
-        if(corr == true){
-            Vente vente = new Vente();
-            vente.setDateVen(new Date());
-            vente.setIdClt(0);
-            vente.setIdComp(compteActif.getIdComp());
-            venteService.ajouter(vente);
-            for (ProduitR pr : produitListVent) {
-                ContenirVentePK cvpk = new ContenirVentePK(vente.getIdVen(), pr.getIdProd().getValue());
-                ContenirVente contenirVente = new ContenirVente(cvpk);
-                contenirVente.setQteVen(pr.getQteProdCom().getValue());
-                contenirVenteService.ajouterContenirVente(contenirVente);
-                Produit p = new Produit(pr.getIdProd().getValue());
-                Produit produit = produitService.findById(p);
-                produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
+        Boolean txtNumber = textFieldTypeNumber(txtMontCllt);
+        if (txtNumber) {
+            if (corr == true) {
+                Vente vente = new Vente();
+                vente.setDateVen(new Date());
+                vente.setIdClt(0);
+                vente.setIdComp(compteActif.getIdComp());
+                venteService.ajouter(vente);
+                for (ProduitR pr : produitListVent) {
+                    ContenirVente contenirVente = new ContenirVente();
+                    contenirVente.setQteVen(pr.getQteProdCom().getValue());
+                    contenirVente.setIdVen(vente.getIdVen());
+                    contenirVente.setIdProd(pr.getIdProd().getValue());
+                    contenirVente.setPrixProd(Integer.parseInt(pr.getPrixUniProd().getValue()));
+                    contenirVenteService.ajouterContenirVente(contenirVente);
+                    Produit p = new Produit(pr.getIdProd().getValue());
+                    Produit produit = produitService.findById(p);
+                    produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
 
-                produitService.modifier(produit);
+                    produitService.modifier(produit);
+                }
+                CaissePaneController.vente = true;
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
+                notification.showAndDismiss(Duration.seconds(1.5));
+                Stage stage = (Stage) btnClose.getScene().getWindow();
+                stage.close();
+            } else {
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Montant incorrect", NotificationType.ERROR);
+                notification.showAndDismiss(Duration.seconds(1.5));
             }
+        } else {
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
-            notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
-            notification.showAndDismiss(Duration.seconds(1.5));
-            Stage stage = (Stage) btnClose.getScene().getWindow();
-            stage.close();
-        }else{
-            TrayNotification notification = new TrayNotification();
-            notification.setAnimationType(AnimationType.POPUP);
-            notification.setTray("MyShop", "Montant incorrect", NotificationType.ERROR);
+            notification.setTray("MyShop", "Montant doit etre numerique", NotificationType.ERROR);
             notification.showAndDismiss(Duration.seconds(1.5));
         }
-        
+
     }
 
     @FXML
     private void calculRemise(KeyEvent event) {
+        int rem = 0;
         if (!txtMontCllt.getText().equals("")) {
-            int rem = Integer.parseInt(txtMontCllt.getText()) - Integer.parseInt(lblTot.getText());
-            txtRemise.setText(String.valueOf(rem));
+            try {
+                rem = Integer.parseInt(txtMontCllt.getText()) - Integer.parseInt(lblTot.getText());
+                txtRemise.setText(String.valueOf(rem));
+            } catch (Exception e) {
+            }
+
         } else {
             txtRemise.clear();
         }
-        if (Integer.parseInt(txtRemise.getText()) < 0) {
+        if (rem < 0) {
             corr = false;
         } else {
-            corr = false;
+            corr = true;
         }
     }
 

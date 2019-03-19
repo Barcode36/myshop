@@ -51,8 +51,8 @@
 
     -->
     <!--
-     <target name="-post-jfx-deploy">
-        <fx:deploy verbose="true" nativeBundles="exe" outdir="${basedir}/${dist.dir}" outfile="${application.title}">
+    <target name="-post-jfx-deploy">
+        <fx:deploy verbose="true" nativeBundles="all" outdir="${basedir}/${dist.dir}" outfile="${application.title}">
             <fx:application name="${application.title}" mainClass="${javafx.main.class}"/>
             <fx:resources>
                 <fx:fileset dir="${basedir}/${dist.dir}" includes="*.jar"/>
@@ -60,11 +60,11 @@
             </fx:resources>
             <fx:info title="{application.title}" vendor="{application.vendor}"/>
             <fx:info>
-                <fx:icon href="${basedir}/icon.ico"></fx:icon>
+                <fx:icon href="${basedir}/MyShop.ico"></fx:icon>
             </fx:info>
             <fx:preferences shortcut="true"/>
         </fx:deploy>
     </target>
-   --> 
+   -->
    
 </project>

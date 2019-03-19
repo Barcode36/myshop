@@ -22,4 +22,5 @@ public class Constants {
     public static final String DashBoard = "/views/DashBoard.fxml";
     public static final String Connect = "/views/FrmConnnexion.fxml";
     public static final String RechercheProd = "/views/RechercheProduitPane.fxml";
+    public static final String Aide = "/views/AidePane.fxml";
 }

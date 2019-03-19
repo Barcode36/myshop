@@ -29,7 +29,8 @@ public class VenteR {
         this.idVen = new SimpleIntegerProperty(vente.getIdVen());
     }
     public VenteR(Compte compte, Integer totVent) {
-        this.caissier = new SimpleStringProperty(compte.getNomComp() + compte.getPrenomComp());
+        this.caissier = new SimpleStringProperty(compte.getNomComp()+" "
+                + "" + compte.getPrenomComp());
         this.totalCaissier = new SimpleIntegerProperty(totVent);
         this.idCompte = new SimpleIntegerProperty(compte.getIdComp());
     }

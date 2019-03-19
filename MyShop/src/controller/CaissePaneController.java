@@ -36,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -81,7 +82,7 @@ public class CaissePaneController implements Initializable {
 
     private Produit produitVente = new Produit();
     private StringBuffer barcode = new StringBuffer();
-
+    public static boolean vente = false;
     IProduitService produitService = MainViewController.produitService;
 
     ObservableList<ProduitR> produitListVent = FXCollections.observableArrayList();
@@ -94,6 +95,11 @@ public class CaissePaneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -140,13 +146,29 @@ public class CaissePaneController implements Initializable {
                         i++;
                     }
                     if (find == false) {
-                        produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
-                        barcode = new StringBuffer();
+                        if (produitVente.getQteIniProd() <= 0) {
+                            TrayNotification notification = new TrayNotification();
+                            notification.setAnimationType(AnimationType.POPUP);
+                            notification.setTray("MyShop", "Produit en rupture de stock", NotificationType.ERROR);
+                            notification.showAndDismiss(Duration.seconds(1));
+                        } else {
+                            produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
+                            barcode = new StringBuffer();
+                        }
+
                     } else if (find == true) {
                         ProduitR pm = produitListVent.get(e);
+                        if (produitVente.getQteIniProd() <= Integer.parseInt(pm.getQteCom().getText())) {
+                            TrayNotification notification = new TrayNotification();
+                            notification.setAnimationType(AnimationType.POPUP);
+                            notification.setTray("MyShop", "Stock atteint", NotificationType.ERROR);
+                            notification.showAndDismiss(Duration.seconds(1));
+                        } else {
+                            produitListVent.remove(e);
+                            produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, Integer.parseInt(pm.getQteCom().getText()) + 1));
+                        }
                         // pm.setQteProdCom(new SimpleIntegerProperty(pm.getQteProdCom().getValue() + 1));
-                        produitListVent.remove(e);
-                        produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, Integer.parseInt(pm.getQteCom().getText()) + 1));
+
                         // produitListVent.set(e, pm);
                     }
 
@@ -206,13 +228,27 @@ public class CaissePaneController implements Initializable {
                 i++;
             }
             if (find == false) {
-                produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
-                barcode = new StringBuffer();
+                if (produitVente.getQteIniProd() <= 0) {
+                    TrayNotification notification = new TrayNotification();
+                    notification.setAnimationType(AnimationType.POPUP);
+                    notification.setTray("MyShop", "Produit en rupture de stock", NotificationType.ERROR);
+                    notification.showAndDismiss(Duration.seconds(1));
+                } else {
+                    produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
+                    barcode = new StringBuffer();
+                }
             } else if (find == true) {
                 ProduitR pm = produitListVent.get(e);
-                // pm.setQteProdCom(new SimpleIntegerProperty(pm.getQteProdCom().getValue() + 1));
-                produitListVent.remove(e);
-                produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, pm.getQteProdCom().getValue() + 1));
+                if (produitVente.getQteIniProd() <= Integer.parseInt(pm.getQteCom().getText())) {
+                    TrayNotification notification = new TrayNotification();
+                    notification.setAnimationType(AnimationType.POPUP);
+                    notification.setTray("MyShop", "Stock atteint", NotificationType.ERROR);
+                    notification.showAndDismiss(Duration.seconds(1));
+                } else {
+                    produitListVent.remove(e);
+                    produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, Integer.parseInt(pm.getQteCom().getText()) + 1));
+                }
+// pm.setQteProdCom(new SimpleIntegerProperty(pm.getQteProdCom().getValue() + 1));
                 // produitListVent.set(e, pm);
             }
 
@@ -249,15 +285,28 @@ public class CaissePaneController implements Initializable {
 
     @FXML
     private void saveVente(ActionEvent event) {
+        for (ProduitR pr : produitListVent) {
+            Produit p = new Produit(pr.getIdProd().getValue());
+            Produit produit = produitService.findById(p);
+            if (produit.getQteIniProd() < Integer.parseInt(pr.getQteCom().getText())) {
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "La quantite de " + produit.getLibProd() + " en stock est inferieur à \n celle commandée", NotificationType.ERROR);
+                notification.showAndDismiss(Duration.seconds(1));
+                produitListVent.remove(pr);
+                produitListVent.add(new ProduitR(produit, produitListVent, produitCaisseTable, produit.getQteIniProd()));
+                produitCaisseTable.setItems(produitListVent);
+                return;
+            }
+        }
         Stage stage = new Stage();
         Parent root;
         FXMLLoader loader = new FXMLLoader();
-        Compte compteActif = new Compte(10);
         try {
             root = loader.load(getClass().getResource("/views/CaisseConfirmation.fxml").openStream());
 
             CaisseConfirmationController caisseConfirmationController = (CaisseConfirmationController) loader.getController();
-            caisseConfirmationController.setListProd(produitListVent, compteActif);
+            caisseConfirmationController.setListProd(produitListVent, MainViewController.compteActif);
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
             stage.setScene(scene);
@@ -265,11 +314,15 @@ public class CaissePaneController implements Initializable {
             stage.show();
 
             stage.setOnHidden(e -> {
-                produitListVent.clear();
-                txtCodeProdCaisse.clear();
-                txtNomProdCaisse.clear();
-                txtQteProdCaisse.clear();
-                txtPrixUnitCaisse.clear();
+                if (this.vente == true) {
+                    produitListVent.clear();
+                    txtCodeProdCaisse.clear();
+                    txtNomProdCaisse.clear();
+                    txtQteProdCaisse.clear();
+                    txtPrixUnitCaisse.clear();
+                    this.vente = false;
+                }
+
             });
 
         } catch (IOException ex) {

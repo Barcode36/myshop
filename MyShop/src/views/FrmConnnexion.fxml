@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -30,10 +31,10 @@
                <children>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0" styleClass="linear_gradient_red" GridPane.columnSpan="2">
                      <children>
-                        <Label layoutX="46.0" layoutY="23.0" style="-fx-font-weight: bold; -fx-font-size: 45px;" text="Connexion" textFill="WHITE" textOverrun="CENTER_WORD_ELLIPSIS" />
+                        <Label layoutX="87.0" layoutY="38.0" styleClass="titre" text="CONNEXION" textFill="WHITE" textOverrun="CENTER_WORD_ELLIPSIS" />
                      </children>
                   </AnchorPane>
-                  <JFXComboBox fx:id="txtPseudoCennect" editable="true" prefHeight="44.0" prefWidth="225.0" promptText="Peudo" style="-jfx-label-float: true;" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                  <JFXComboBox fx:id="txtPseudoCennect" editable="true" prefHeight="44.0" prefWidth="225.0" promptText="Pseudo" style="-jfx-label-float: true;" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                   <JFXPasswordField fx:id="txtPassConnect" labelFloat="true" prefHeight="44.0" prefWidth="262.0" promptText="Mot de passe" GridPane.columnSpan="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets left="45.0" right="45.0" />
@@ -41,8 +42,12 @@
                   </JFXPasswordField>
                   <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="10.0" GridPane.columnSpan="2" GridPane.rowIndex="3">
                      <children>
-                        <JFXButton defaultButton="true" onAction="#connexionButton" prefHeight="44.0" prefWidth="131.0" styleClass="btn-save" text="Connexion" />
-                        <JFXButton onAction="#cancel" prefHeight="44.0" prefWidth="131.0" styleClass="save-del" text="Annuler" />
+                        <JFXButton defaultButton="true" onAction="#connexionButton" prefHeight="44.0" prefWidth="131.0" text="CONNEXION">
+                           <styleClass>
+                              <String fx:value="btn-save" />
+                              <String fx:value="save-buton" />
+                           </styleClass></JFXButton>
+                        <JFXButton onAction="#cancel" prefHeight="44.0" prefWidth="131.0" styleClass="save-del" text="ANNULER" />
                      </children>
                   </HBox>
                </children>

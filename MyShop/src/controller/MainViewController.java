@@ -24,10 +24,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import service.ICompteService;
 import service.IContenirVente;
 import service.IProduitService;
@@ -45,7 +47,7 @@ import service.imp.VenteService;
  * @author Christ
  */
 public class MainViewController implements Initializable {
-
+    
     @FXML
     private JFXToolbar toolbar;
     @FXML
@@ -67,12 +69,15 @@ public class MainViewController implements Initializable {
     public static TypeCompte typeCompteActif = new TypeCompte();
     public static Boolean initialise = false;
     public static VBox menuL = null;
-
+    public static Label mainCss;
+    
     ITypeService typeService = new TypeService();
     ICompteService compteService = compteServiceD;
     @FXML
     private AnchorPane stageTot;
-
+    @FXML
+    private Label maiCss;
+    
     public List<TypeCompte> listTypeCompte() {
         return typeService.typeCmopteList();
     }
@@ -82,6 +87,7 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         if (listTypeCompte().size() == 0) {
             TypeCompte tc = new TypeCompte();
             tc.setLibTyp("Administrateur");
@@ -89,10 +95,10 @@ public class MainViewController implements Initializable {
             Compte c = new Compte();
             c.setEtatComp("actif");
             c.setIdTypComp(tc.getIdTyp());
-            c.setMdpComp("1234");
-            c.setNomComp("Roi");
-            c.setPrenomComp("King");
-            c.setPseudoComp("sohrel");
+            c.setMdpComp("90628725");
+            c.setNomComp("root");
+            c.setPrenomComp("root");
+            c.setPseudoComp("admin");
             compteService.ajouter(c);
             TypeCompte tc1 = new TypeCompte();
             tc1.setLibTyp("Caissier");
@@ -102,17 +108,24 @@ public class MainViewController implements Initializable {
         temporaryPaneTot = stageTot;
         drawerTmp = drawer;
         hamburgerTmp = hamburger;
+        mainCss = maiCss;
+        maiCss.setVisible(false);
         hamburger.setVisible(false);
-
+        
         initDrawer();
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
+        
     }
-
+    
     private void initDrawer() {
         try {
             VBox menu = null;
             menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
             
-
             drawer.setSidePane(menu);
             HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
             transition.setRate(-1);
@@ -129,7 +142,7 @@ public class MainViewController implements Initializable {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     private void switchPane(String pane) {
         try {
             MainViewController.temporaryPane.getChildren().clear();
@@ -142,10 +155,10 @@ public class MainViewController implements Initializable {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @FXML
     private void Acceuil(MouseEvent event) {
         switchPane(Constants.DashBoard);
     }
-
+    
 }

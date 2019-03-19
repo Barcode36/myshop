@@ -26,6 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -66,6 +67,11 @@ public class ReglagePaneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All files", "*.*"),
                 new FileChooser.ExtensionFilter("Excel files", "*.xlsx"));
@@ -112,10 +118,12 @@ public class ReglagePaneController implements Initializable {
                     p.setQteIniProd((int) row.getCell(3).getNumericCellValue());
                     try {
                         produit = produitService.findByCode(p);
-                        produit.setQteIniProd(produit.getQteIniProd() + p.getQteIniProd());
+                        // Addition + produit.getQteIniProd()
+                        produit.setQteIniProd(p.getQteIniProd());
                         produitService.modifier(produit);
                     } catch (Exception e) {
-                        produitService.ajouter(p);
+                         produitService.ajouter(p);
+                        //e.printStackTrace();
                     }
                 }
 

@@ -102,6 +102,7 @@ public class MenuLateraleController implements Initializable {
 
     @FXML
     private void openAide(ActionEvent event) {
+        switchPane(Constants.Aide);
     }
 
     @FXML

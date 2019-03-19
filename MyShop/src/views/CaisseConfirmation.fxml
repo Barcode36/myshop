@@ -28,7 +28,7 @@
                         <Font size="36.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="btnClose" defaultButton="true" layoutX="464.0" layoutY="445.0" onAction="#Valider" styleClass="save-buton" text="Valider" />
+                  <JFXButton fx:id="btnClose" defaultButton="true" layoutX="464.0" layoutY="445.0" onAction="#Valider" styleClass="save-buton" text="VALIDER" />
                </children>
             </Pane>
             <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">
@@ -59,7 +59,7 @@
                   <Font name="Times New Roman" size="24.0" />
                </font>
             </TextField>
-            <TextField fx:id="txtRemise" layoutX="377.0" layoutY="395.0" prefHeight="38.0" prefWidth="216.0">
+            <TextField fx:id="txtRemise" editable="false" layoutX="377.0" layoutY="395.0" prefHeight="38.0" prefWidth="216.0">
                <font>
                   <Font name="Times New Roman Bold" size="24.0" />
                </font>

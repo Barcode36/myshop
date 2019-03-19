@@ -6,7 +6,6 @@
 package jpaController;
 
 import entites.ContenirVente;
-import entites.ContenirVentePK;
 import entites.Produit;
 import entites.Vente;
 import java.io.Serializable;
@@ -19,7 +18,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpaController.exceptions.NonexistentEntityException;
-import jpaController.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -36,21 +34,13 @@ public class ContenirVenteJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(ContenirVente contenirVente) throws PreexistingEntityException, Exception {
-        if (contenirVente.getContenirVentePK() == null) {
-            contenirVente.setContenirVentePK(new ContenirVentePK());
-        }
+    public void create(ContenirVente contenirVente) {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             em.persist(contenirVente);
             em.getTransaction().commit();
-        } catch (Exception ex) {
-            if (findContenirVente(contenirVente.getContenirVentePK()) != null) {
-                throw new PreexistingEntityException("ContenirVente " + contenirVente + " already exists.", ex);
-            }
-            throw ex;
         } finally {
             if (em != null) {
                 em.close();
@@ -68,7 +58,7 @@ public class ContenirVenteJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                ContenirVentePK id = contenirVente.getContenirVentePK();
+                Long id = contenirVente.getIdCon();
                 if (findContenirVente(id) == null) {
                     throw new NonexistentEntityException("The contenirVente with id " + id + " no longer exists.");
                 }
@@ -81,7 +71,7 @@ public class ContenirVenteJpaController implements Serializable {
         }
     }
 
-    public void destroy(ContenirVentePK id) throws NonexistentEntityException {
+    public void destroy(Long id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -89,7 +79,7 @@ public class ContenirVenteJpaController implements Serializable {
             ContenirVente contenirVente;
             try {
                 contenirVente = em.getReference(ContenirVente.class, id);
-                contenirVente.getContenirVentePK();
+                contenirVente.getIdCon();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The contenirVente with id " + id + " no longer exists.", enfe);
             }
@@ -126,7 +116,7 @@ public class ContenirVenteJpaController implements Serializable {
         }
     }
 
-    public ContenirVente findContenirVente(ContenirVentePK id) {
+    public ContenirVente findContenirVente(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(ContenirVente.class, id);
@@ -147,8 +137,8 @@ public class ContenirVenteJpaController implements Serializable {
             em.close();
         }
     }
-
-    public List<ContenirVente> recuperationParVente(Vente vente) {
+    
+     public List<ContenirVente> recuperationParVente(Vente vente) {
         EntityManager em = this.getEntityManager();
         TypedQuery<ContenirVente> query = (TypedQuery<ContenirVente>) em.createNamedQuery("ContenirVente.findByIdVen");
         query.setParameter("idVen", vente.getIdVen());
@@ -161,5 +151,5 @@ public class ContenirVenteJpaController implements Serializable {
         query.setParameter("idProd", produit.getIdProd());
         return query.getResultList();
     }
-
+    
 }

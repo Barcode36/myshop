@@ -36,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javax.swing.SwingUtilities;
 import modele.ProduitR;
@@ -112,6 +113,11 @@ public class BilanPaneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         mois();
         Platform.runLater(new Runnable() {
             @Override
@@ -148,9 +154,12 @@ public class BilanPaneController implements Initializable {
         for (Vente v : list) {
             List<ContenirVente> listCon = contenirVenteService.listParVente(v);
             for (ContenirVente cv : listCon) {
-                Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-                Produit produit = produitService.findById(p);
-                produitListVentCaissier.add(new ProduitR(produit, v, cv));
+                try {
+                    Produit p = new Produit(cv.getIdProd());
+                    Produit produit = produitService.findById(p);
+                    produitListVentCaissier.add(new ProduitR(produit, v, cv));
+                } catch (Exception e) {
+                }
             }
         }
 
@@ -415,37 +424,21 @@ public class BilanPaneController implements Initializable {
                 List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
                 System.out.println(listCon);
                 for (ContenirVente cv : listCon) {
-                    Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-                    Produit produit = produitService.findById(p);
-                    int totPro = Integer.parseInt(produit.getPrixUniProd()) * cv.getQteVen();
+//                    Produit p = new Produit(cv.getIdProd());
+//                    Produit produit = produitService.findById(p);
+                    int totPro = cv.getPrixProd() * cv.getQteVen();
                     totVent += totPro;
                 }
 
             }
             if (!listVParCaissier.isEmpty()) {
                 venteList.add(new VenteR(c, totVent));
-            } else {
-                venteList.clear();
             }
         }
         caissierColVente.setCellValueFactory(cellData -> cellData.getValue().getCaissier());
         totCaissierColVente.setCellValueFactory(cellData -> cellData.getValue().getTotalCaissier().asObject());
         CaissierVenteTable.setItems(venteList);
-//        for (Vente vente : list) {
-//            Compte c = new Compte(vente.getIdComp());
-//            Compte compte = compteService.findById(c);
-//            List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
-//            int totVent = 0;
-//            for (ContenirVente cv : listCon) {
-//                Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-//                Produit produit = produitService.findById(p);
-//                int totPro = Integer.parseInt(produit.getPrixUniProd()) * cv.getQteVen();
-//                totVent += totPro;
-//            }
-//            venteList.add(new VenteR(compte, vente, totVent));
-//
-//        }
-
+//       
     }
 
 }
