@@ -116,6 +116,7 @@ public class ReglagePaneController implements Initializable {
                     p.setLibProd(row.getCell(1).getStringCellValue());
                     p.setPrixUniProd(row.getCell(2).getStringCellValue());
                     p.setQteIniProd((int) row.getCell(3).getNumericCellValue());
+                    p.setEtatProd("actif");
                     try {
                         produit = produitService.findByCode(p);
                         // Addition + produit.getQteIniProd()

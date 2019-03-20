@@ -43,6 +43,7 @@
                      <children>
                         <JFXButton fx:id="saveUp" onAction="#saveProd" styleClass="save-buton" text="ENREGISTRER" />
                         <JFXButton onAction="#suppProduit" styleClass="btn-delete" text="SUPPRIMER" />
+                        <JFXButton onAction="#vider" styleClass="save-del1" text="VIDER" />
                      </children>
                      <padding>
                         <Insets left="70.0" />

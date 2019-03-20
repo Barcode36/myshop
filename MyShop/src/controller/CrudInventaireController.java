@@ -205,6 +205,7 @@ public class CrudInventaireController implements Initializable {
             produit.setLibProd(txtLibProd.getText());
             produit.setPrixUniProd(txtPrixProd.getText());
             produit.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
+            produit.setEtatProd("actif");
             try {
                 Produit p = produitService.findByCode(produit);
                 TrayNotification notification = new TrayNotification();
@@ -212,6 +213,7 @@ public class CrudInventaireController implements Initializable {
                 notification.setTray("MyShop", "Ce produit existe déjà", NotificationType.WARNING);
                 notification.showAndDismiss(Duration.seconds(1));
             } catch (Exception e) {
+
                 produitService.ajouter(produit);
                 clearProduitText();
                 txtCode.setFocusTraversable(true);
@@ -251,7 +253,7 @@ public class CrudInventaireController implements Initializable {
         produitService.supprimer(produitModif);
         loadInventairegrid();
         clearProduitText();
-        saveUp.setText("Enregistrer");
+        saveUp.setText("ENREGISTRER");
         TrayNotification notification = new TrayNotification();
         notification.setAnimationType(AnimationType.POPUP);
         notification.setTray("MyShop", "Suppression effectué", NotificationType.SUCCESS);
@@ -262,6 +264,7 @@ public class CrudInventaireController implements Initializable {
     @FXML
     private void vider(ActionEvent event) {
         clearProduitText();
+        saveUp.setText("ENREGISTRER");
     }
 
 }

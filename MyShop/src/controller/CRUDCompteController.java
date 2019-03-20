@@ -195,6 +195,7 @@ public class CRUDCompteController implements Initializable {
     @FXML
     private void suppProduit(ActionEvent event) {
         compteService.supprimer(compteModif);
+        saveUp.setText("ENREGISTRER");
         loadCompteGrid();
         clearCompteTxt();
     }
@@ -216,6 +217,12 @@ public class CRUDCompteController implements Initializable {
         } catch (Exception e) {
         }
 
+    }
+
+    @FXML
+    private void vider(ActionEvent event) {
+        clearCompteTxt();
+        saveUp.setText("ENREGISTRER");
     }
 
 }
