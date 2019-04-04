@@ -76,6 +76,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import modele.ClientR;
 import modele.CompteR;
 import modele.ProduitR;
 import modele.TypeCompteR;
@@ -1084,7 +1085,7 @@ public class MainPrincipalController implements Initializable {
             root = loader.load(getClass().getResource("/views/CaisseConfirmation.fxml").openStream());
 
             CaisseConfirmationController caisseConfirmationController = (CaisseConfirmationController) loader.getController();
-            caisseConfirmationController.setListProd(produitListVent, compteActif);
+            caisseConfirmationController.setListProd(produitListVent, compteActif, new ClientR());
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
             stage.setScene(scene);

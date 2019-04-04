@@ -34,6 +34,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import modele.ClientR;
 import modele.ProduitR;
 import service.ICompteService;
 import service.IContenirVente;
@@ -81,6 +82,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     IProduitService produitService = new ProduitService();
 
     Compte compteActif = new Compte();
+    ClientR clientR = new ClientR();
     private boolean corr = true;
 
     /**
@@ -107,7 +109,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     private void SupprimerProdVent(ActionEvent event) {
     }
 
-    public void setListProd(ObservableList<ProduitR> list, Compte c) {
+    public void setListProd(ObservableList<ProduitR> list, Compte c, ClientR cr) {
         int tot = 0;
         for (ProduitR pr : list) {
             pr.setQteProdCom(new SimpleIntegerProperty(Integer.parseInt(pr.getQteCom().getText())));
@@ -124,8 +126,9 @@ public class CaisseConfirmationController extends Traitement implements Initiali
         totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
         produitCaisseTable.setItems(produitListVent);
         compteActif = c;
-        //   cellData -> cellData.getValue().getQteProdCom().asObject()
-//     new PropertyValueFactory<ProduitR, JFXTextField>("qteCom")
+        clientR = cr;
+//   cellData -> cellData.getValue().getQteProdCom().asObject()
+        //     new PropertyValueFactory<ProduitR, JFXTextField>("qteCom")
     }
 
     @FXML
@@ -135,7 +138,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
             if (corr == true) {
                 Vente vente = new Vente();
                 vente.setDateVen(new Date());
-                vente.setIdClt(0);
+                vente.setIdClt(clientR.getIdClt().getValue());
                 vente.setIdComp(compteActif.getIdComp());
                 venteService.ajouter(vente);
                 for (ProduitR pr : produitListVent) {

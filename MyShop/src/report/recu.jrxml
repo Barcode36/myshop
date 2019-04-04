@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" whenNoDataType="NoPages" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c217fbba-580d-4eb2-8e1d-785b7882ce46">
+	<parameter name="totalRecTot" class="java.lang.Integer"/>
+	<field name="dateLiv" class="java.lang.String"/>
+	<field name="totalLiv" class="java.lang.Integer"/>
+	<field name="nomMard" class="java.lang.String"/>
+	<field name="numLiv" class="java.lang.Integer"/>
+	<group name="numLiv">
+		<groupExpression><![CDATA[$F{numLiv}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="20" y="0" width="151" height="30" uuid="03122b0c-f978-40f0-8c16-464122e8092e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="280" height="30" uuid="92ff2d8d-20a7-471f-8937-6f470f94448e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8cc69b63-8abd-411b-8421-2a43990c20e3"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="17" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nom]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="0" width="275" height="30" uuid="99fab690-2b11-469f-8829-e851edb9b23c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="84e6acd7-d91b-48a0-8df7-70ada201e8c3"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="17" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Montant de vente]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="30" width="555" height="1" uuid="30c12df9-5bac-4958-95d1-2abdf9b03cb0"/>
+				<graphicElement>
+					<pen lineWidth="6.0" lineStyle="Double"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField>
+				<reportElement x="280" y="0" width="275" height="15" uuid="a36e63bd-3ce0-4124-b0ca-01f633fe7833">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="84e6acd7-d91b-48a0-8df7-70ada201e8c3"/>
+				</reportElement>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{totalLiv}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="280" height="15" uuid="afff0cbd-11f3-4115-8710-7f06e335c8b9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="da17f809-9edd-4def-b17b-1aac78bad942"/>
+				</reportElement>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomMard}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="455" y="10" width="100" height="20" uuid="4aee174a-96c9-455b-a08d-c3391ce67a95"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalRecTot}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="370" y="10" width="90" height="20" uuid="beca0872-1946-400f-8993-8fc753eb41ed"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="370" y="40" width="100" height="30" uuid="a10a5a71-9c02-4cd7-89bb-edf2fc14a8d3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="470" y="40" width="100" height="30" uuid="a35b728b-d3bf-4309-b120-2de324514b9c"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+
+
+<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ClientDemiFormController">
+   <children>
+      <AnchorPane id="AnchorPane" prefHeight="218.0" prefWidth="302.0">
+         <children>
+            <GridPane fx:id="pane1" layoutY="1.0" prefHeight="249.0" prefWidth="369.0" styleClass="card">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <JFXTextField fx:id="txtNomClt" labelFloat="true" prefHeight="25.0" prefWidth="306.0" promptText="Nom Client" GridPane.rowIndex="1" />
+                  <JFXTextField fx:id="txtAdrClt" labelFloat="true" prefHeight="25.0" prefWidth="306.0" promptText="Adresse Client" GridPane.rowIndex="2" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="4">
+                     <children>
+                        <JFXButton fx:id="saveUp" onAction="#saveProd" prefHeight="44.0" prefWidth="131.0" styleClass="save-buton" text="ENREGISTRER" />
+                        <JFXButton onAction="#vider" prefHeight="39.0" prefWidth="179.0" style="-fx-pref-width: 150;" styleClass="save-del1" text="ANNULER" />
+                     </children>
+                  </HBox>
+               </children>
+               <padding>
+                  <Insets left="10.0" right="15.0" />
+               </padding>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

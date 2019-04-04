@@ -84,6 +84,8 @@ public class DashBoardController implements Initializable {
     private GridPane cont;
     @FXML
     private JFXButton btnDeconnexion;
+    @FXML
+    private JFXButton btnClient;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
@@ -187,6 +189,11 @@ public class DashBoardController implements Initializable {
     @FXML
     private void openAide(ActionEvent event) {
         switchPane(Constants.Aide);
+    }
+
+    @FXML
+    private void openClient(ActionEvent event) {
+        switchPane(Constants.Client);
     }
 
     @FXML

@@ -18,17 +18,22 @@
          <children>
             <Pane prefHeight="503.0" prefWidth="706.0" styleClass="card">
                <children>
-                  <Label layoutX="257.0" layoutY="333.0" prefHeight="44.0" prefWidth="106.0" text="Donné">
+                  <Label alignment="CENTER_RIGHT" layoutX="248.0" layoutY="338.0" prefHeight="44.0" prefWidth="115.0" style="-fx-background-color: linear-gradient(to top, #c0c0aa, #1cefff);;" text="Donné:" textAlignment="JUSTIFY">
                      <font>
                         <Font size="36.0" />
                      </font>
                   </Label>
-                  <Label layoutX="257.0" layoutY="382.0" prefHeight="44.0" prefWidth="106.0" text="Rendu">
+                  <Label alignment="CENTER_RIGHT" layoutX="248.0" layoutY="391.0" prefHeight="44.0" prefWidth="115.0" style="-fx-background-color: linear-gradient(to top, #2193b0, #6dd5ed);;" text="Rendu:" textAlignment="JUSTIFY" textFill="WHITE">
                      <font>
                         <Font size="36.0" />
                      </font>
                   </Label>
-                  <JFXButton fx:id="btnClose" defaultButton="true" layoutX="464.0" layoutY="445.0" onAction="#Valider" styleClass="save-buton" text="VALIDER" />
+                  <JFXButton fx:id="btnClose" defaultButton="true" layoutX="448.0" layoutY="449.0" onAction="#Valider" styleClass="save-buton" text="VALIDER" />
+                  <Label alignment="CENTER_RIGHT" layoutX="248.0" layoutY="285.0" prefHeight="53.0" prefWidth="115.0" style="-fx-background-color: linear-gradient(to top, #fd746c, #ff9068);" text="Total:" textAlignment="JUSTIFY" textFill="WHITE">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
             <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">
@@ -49,17 +54,12 @@
                   </ContextMenu>
                </contextMenu>
             </TableView>
-            <Label layoutX="265.0" layoutY="286.0" text="Total:">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </Label>
-            <TextField fx:id="txtMontCllt" layoutX="377.0" layoutY="347.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="216.0">
+            <TextField fx:id="txtMontCllt" layoutX="377.0" layoutY="344.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="216.0">
                <font>
                   <Font name="Times New Roman" size="24.0" />
                </font>
             </TextField>
-            <TextField fx:id="txtRemise" editable="false" layoutX="377.0" layoutY="395.0" prefHeight="38.0" prefWidth="216.0">
+            <TextField fx:id="txtRemise" editable="false" layoutX="377.0" layoutY="397.0" prefHeight="38.0" prefWidth="216.0">
                <font>
                   <Font name="Times New Roman Bold" size="24.0" />
                </font>

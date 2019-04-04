@@ -61,6 +61,15 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
+                        <JFXButton fx:id="btnClient" buttonType="RAISED" onAction="#openClient" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="CLIENT" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/icons8_Group_100px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
                         <JFXButton fx:id="btnCOmpte" buttonType="RAISED" onAction="#openComptes" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="COMPTE" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
