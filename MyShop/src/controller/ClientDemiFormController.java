@@ -39,6 +39,8 @@ public class ClientDemiFormController implements Initializable {
     private JFXButton saveUp;
 
     private IClientService clientService = MainViewController.clientService;
+    @FXML
+    private JFXTextField txtNumClt;
 
     /**
      * Initializes the controller class.
@@ -51,6 +53,7 @@ public class ClientDemiFormController implements Initializable {
     private void clearTxt() {
         txtAdrClt.clear();
         txtNomClt.clear();
+        txtNumClt.clear();
     }
 
     @FXML
@@ -58,6 +61,8 @@ public class ClientDemiFormController implements Initializable {
         Client c = new Client();
         c.setAdrClt(txtAdrClt.getText());
         c.setNomClt(txtNomClt.getText());
+        c.setNumClt(txtNumClt.getText());
+        c.setEtatClt("actif");
         try {
             clientService.findByNom(c);
             TrayNotification notification = new TrayNotification();
@@ -69,6 +74,7 @@ public class ClientDemiFormController implements Initializable {
             ClientR cr = new ClientR(c);
             CaissePaneController.clientNew = cr;
         }
+        CaissePaneController.newClt = true;
         Stage s = (Stage) saveUp.getScene().getWindow();
         s.close();
     }

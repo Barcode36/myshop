@@ -62,12 +62,17 @@ public class ClientPaneController implements Initializable {
     @FXML
     private TableColumn<ClientR, String> adrCltCol;
     @FXML
+    private TableColumn<ClientR, String> adrNumCol;
+    @FXML
     private Label ent;
     
     private IClientService clientService = MainViewController.clientService;
     private ObservableList<ClientR> listC = FXCollections.observableArrayList();
     
     private Client cltModif = new Client();
+    @FXML
+    private JFXTextField txtNumClt;
+    
 
     /**
      * Initializes the controller class.
@@ -88,7 +93,9 @@ public class ClientPaneController implements Initializable {
             listC.add(new ClientR(c));
         }
         nomCltCol.setCellValueFactory(celldate -> celldate.getValue().getNomClt());
+        adrNumCol.setCellValueFactory(celldate -> celldate.getValue().getNumClt());
         adrCltCol.setCellValueFactory(celldate -> celldate.getValue().getAdrClt());
+        
         ClientTable.setItems(listC);
     }
     
@@ -100,6 +107,7 @@ public class ClientPaneController implements Initializable {
             Client c = new Client();
             c.setNomClt(txtNomClt.getText());
             c.setAdrClt(txtAdrClt.getText());
+            c.setNumClt(txtNumClt.getText());
             c.setEtatClt("actif");
             try {
                 Client clt = clientService.findByNom(c);
@@ -122,6 +130,7 @@ public class ClientPaneController implements Initializable {
         } else {
             cltModif.setAdrClt(txtAdrClt.getText());
             cltModif.setNomClt(txtNomClt.getText());
+            cltModif.setNumClt(txtNumClt.getText());
             clientService.modifier(cltModif);
             saveUp.setText("ENREGISTRER");
             txtNomClt.setFocusTraversable(true);
@@ -135,6 +144,7 @@ public class ClientPaneController implements Initializable {
     private void clearTxt() {
         txtAdrClt.clear();
         txtNomClt.clear();
+        txtNumClt.clear();
     }
     
     @FXML
@@ -157,6 +167,7 @@ public class ClientPaneController implements Initializable {
         cltModif = clientService.findById(c);
         txtAdrClt.setText(cltModif.getAdrClt());
         txtNomClt.setText(cltModif.getNomClt());
+        txtNumClt.setText(cltModif.getNumClt());
         saveUp.setText("MODIFIER");
     }
     

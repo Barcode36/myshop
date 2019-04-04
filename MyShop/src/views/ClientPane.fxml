@@ -53,6 +53,7 @@
                                     <JFXButton onAction="#vider" styleClass="save-del1" text="VIDER" />
                                  </children>
                               </HBox>
+                              <JFXTextField fx:id="txtNumClt" labelFloat="true" prefHeight="25.0" prefWidth="306.0" promptText="Numero Client" GridPane.rowIndex="3" />
                            </children>
                            <padding>
                               <Insets left="10.0" right="15.0" />
@@ -63,6 +64,7 @@
                               <TableView fx:id="ClientTable" onMouseClicked="#getProduitFromTable" prefHeight="408.0" prefWidth="451.0" stylesheets="@../css/MainPrincipalCss.css">
                                  <columns>
                                     <TableColumn fx:id="nomCltCol" prefWidth="75.0" text="Nom" />
+                                    <TableColumn fx:id="adrNumCol" prefWidth="75.0" text="Numero" />
                                     <TableColumn fx:id="adrCltCol" prefWidth="75.0" text="Adresse" />
                                  </columns>
                                  <columnResizePolicy>

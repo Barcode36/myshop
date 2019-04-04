@@ -71,4 +71,9 @@ public class ClientService implements IClientService {
         return clientJpaController.findCltByNom(client);
     }
 
+    @Override
+    public List<Client> recLikeNomOrNum(Client c) {
+        return clientJpaController.recLikeNomOrNum(c);
+    }
+
 }

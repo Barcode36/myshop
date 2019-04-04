@@ -24,5 +24,7 @@ public interface IClientService {
 
     public List<Client> findAll();
 
+    public List<Client> recLikeNomOrNum(Client c);
+
     public Client findByNom(Client client);
 }

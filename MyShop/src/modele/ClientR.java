@@ -18,6 +18,7 @@ public class ClientR {
     private SimpleIntegerProperty idClt;
     private SimpleStringProperty nomClt;
     private SimpleStringProperty adrClt;
+    private SimpleStringProperty numClt;
 
     public ClientR() {
     }
@@ -26,10 +27,19 @@ public class ClientR {
         this.idClt = new SimpleIntegerProperty(c.getIdClt());
         this.nomClt = new SimpleStringProperty(c.getNomClt());
         this.adrClt = new SimpleStringProperty(c.getAdrClt());
+        this.numClt = new SimpleStringProperty(c.getNumClt());
     }
 
     public SimpleIntegerProperty getIdClt() {
         return idClt;
+    }
+
+    public SimpleStringProperty getNumClt() {
+        return numClt;
+    }
+
+    public void setNumClt(SimpleStringProperty numClt) {
+        this.numClt = numClt;
     }
 
     public void setIdClt(SimpleIntegerProperty idClt) {

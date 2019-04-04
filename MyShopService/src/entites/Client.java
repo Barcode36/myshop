@@ -26,6 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c WHERE c.etatClt='actif'")
     , @NamedQuery(name = "Client.findByIdClt", query = "SELECT c FROM Client c WHERE c.idClt = :idClt")
+    , @NamedQuery(name = "Client.findByRec", query = "SELECT c FROM Client c WHERE c.etatClt='actif' AND (c.nomClt LIKE :nomClt OR c.numClt LIKE :nomClt)")
     , @NamedQuery(name = "Client.findByNomClt", query = "SELECT c FROM Client c WHERE c.nomClt = :nomClt AND c.etatClt='actif'")})
 public class Client implements Serializable {
 
@@ -40,6 +41,8 @@ public class Client implements Serializable {
     private String adrClt;
     @Column(name = "etatClt")
     private String etatClt;
+    @Column(name = "numClt")
+    private String numClt;
 
     public Client() {
     }
@@ -50,6 +53,14 @@ public class Client implements Serializable {
 
     public Integer getIdClt() {
         return idClt;
+    }
+
+    public String getNumClt() {
+        return numClt;
+    }
+
+    public void setNumClt(String numClt) {
+        this.numClt = numClt;
     }
 
     public String getEtatClt() {

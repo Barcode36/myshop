@@ -58,7 +58,7 @@ import tray.notification.TrayNotification;
  * @author Christ
  */
 public class CaissePaneController implements Initializable {
-
+    
     @FXML
     private AnchorPane pane;
     @FXML
@@ -85,14 +85,15 @@ public class CaissePaneController implements Initializable {
     private TableColumn<ProduitR, String> totalColCaisse;
     @FXML
     private JFXButton saveUp;
-
+    
     private Produit produitVente = new Produit();
     private StringBuffer barcode = new StringBuffer();
     public static boolean vente = false;
-
+    public static boolean newClt = false;
+    
     public static ProduitR produitChoisi;
     public static ClientR clientNew;
-
+    
     IProduitService produitService = MainViewController.produitService;
     private IClientService clientService = MainViewController.clientService;
     private ObservableList<ClientR> listC = FXCollections.observableArrayList();
@@ -101,11 +102,11 @@ public class CaissePaneController implements Initializable {
     private GridPane cont;
     @FXML
     private JFXComboBox<ClientR> cltCombo;
-
+    
     private List<Client> clientList() {
         return clientService.findAll();
     }
-
+    
     private void fillCombo() {
         listC.clear();
         for (Client c : clientList()) {
@@ -145,9 +146,9 @@ public class CaissePaneController implements Initializable {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 pane.setPrefWidth(newValue.doubleValue());
                 cont.setPrefWidth(newValue.doubleValue() - 87);
-
+                
             }
-
+            
         });
         fillCombo();
         txtCodeProdCaisse.setOnKeyPressed((event) -> {
@@ -163,7 +164,7 @@ public class CaissePaneController implements Initializable {
                     int i = 0;
                     int e = 0;
                     for (ProduitR pr : produitListVent) {
-
+                        
                         if (produitVente.getCodeProd().equals(pr.getCodeProd().getValue())) {
                             find = true;
                             e = i;
@@ -180,7 +181,7 @@ public class CaissePaneController implements Initializable {
                             produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
                             barcode = new StringBuffer();
                         }
-
+                        
                     } else if (find == true) {
                         ProduitR pm = produitListVent.get(e);
                         if (produitVente.getQteIniProd() <= Integer.parseInt(pm.getQteCom().getText())) {
@@ -196,7 +197,7 @@ public class CaissePaneController implements Initializable {
 
                         // produitListVent.set(e, pm);
                     }
-
+                    
                     libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
                     prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
                     qteColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXTextField>("qteCom"));
@@ -210,14 +211,14 @@ public class CaissePaneController implements Initializable {
                 }
             }
         });
-
+        
         pane.setOnKeyTyped(new EventHandler<KeyEvent>() {
 
             //String b = new String();
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCharacter().charAt(0) == (char) 0x000d) {
-
+                    
                     barcode.delete(0, barcode.length());
                 } else {
                     barcode.append(event.getCharacter());
@@ -228,11 +229,22 @@ public class CaissePaneController implements Initializable {
                 caisseProduitInfo(barcode);
                 //event.consume();
             }
-
+            
         });
-
+        cltCombo.setOnKeyReleased((event) -> {
+            listC.clear();
+            Client c = new Client();
+            c.setNomClt(cltCombo.getJFXEditor().getText());
+            c.setNumClt(cltCombo.getJFXEditor().getText());
+            List<Client> l = clientService.recLikeNomOrNum(c);
+            for (Client clt : l) {
+                listC.add(new ClientR(clt));
+            }
+            cltCombo.setItems(listC);
+        });
+        
     }
-
+    
     private void caisseProduitInfo(StringBuffer b) {
         Produit p = new Produit();
         p.setCodeProd(b.toString());
@@ -245,7 +257,7 @@ public class CaissePaneController implements Initializable {
             int i = 0;
             int e = 0;
             for (ProduitR pr : produitListVent) {
-
+                
                 if (produitVente.getCodeProd().equals(pr.getCodeProd().getValue())) {
                     find = true;
                     e = i;
@@ -276,7 +288,7 @@ public class CaissePaneController implements Initializable {
 // pm.setQteProdCom(new SimpleIntegerProperty(pm.getQteProdCom().getValue() + 1));
                 // produitListVent.set(e, pm);
             }
-
+            
             libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
             prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
             qteColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXTextField>("qteCom"));
@@ -289,11 +301,11 @@ public class CaissePaneController implements Initializable {
         } catch (Exception e) {
         }
     }
-
+    
     @FXML
     private void recuperationProduitInfo(KeyEvent event) {
     }
-
+    
     @FXML
     private void SupprimerProdVent(ActionEvent event) {
         ProduitR pr = produitCaisseTable.getSelectionModel().getSelectedItem();
@@ -307,7 +319,7 @@ public class CaissePaneController implements Initializable {
         produitListVent.remove(pr);
         produitCaisseTable.setItems(produitListVent);
     }
-
+    
     @FXML
     private void saveVente(ActionEvent event) {
         for (ProduitR pr : produitListVent) {
@@ -329,7 +341,7 @@ public class CaissePaneController implements Initializable {
         FXMLLoader loader = new FXMLLoader();
         TypeCompte typeCompte = new TypeCompte(MainViewController.typeCompteActif.getIdTyp());
         TypeCompte tC = MainViewController.typeServiceD.findById(typeCompte);
-
+        
         if (tC.getLibTyp().equals("Administrateur")) {
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
@@ -340,15 +352,15 @@ public class CaissePaneController implements Initializable {
             if (selCombo) {
                 try {
                     root = loader.load(getClass().getResource("/views/CaisseConfirmation.fxml").openStream());
-
+                    
                     CaisseConfirmationController caisseConfirmationController = (CaisseConfirmationController) loader.getController();
-                    caisseConfirmationController.setListProd(produitListVent, MainViewController.compteActif,cltCombo.getValue());
+                    caisseConfirmationController.setListProd(produitListVent, MainViewController.compteActif, cltCombo.getValue());
                     Scene scene = new Scene(root);
                     scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
                     stage.setScene(scene);
                     stage.initStyle(StageStyle.UTILITY);
                     stage.show();
-
+                    
                     stage.setOnHidden(e -> {
                         if (this.vente == true) {
                             produitListVent.clear();
@@ -356,12 +368,13 @@ public class CaissePaneController implements Initializable {
                             txtNomProdCaisse.clear();
                             txtQteProdCaisse.clear();
                             txtPrixUnitCaisse.clear();
+                            cltCombo.setValue(null);
                             fillCombo();
                             this.vente = false;
                         }
-
+                        
                     });
-
+                    
                 } catch (IOException ex) {
                     Logger.getLogger(MainPrincipalController.class
                             .getName()).log(Level.SEVERE, null, ex);
@@ -372,11 +385,11 @@ public class CaissePaneController implements Initializable {
                 notification.setTray("MyShop", "Choississez un client", NotificationType.ERROR);
                 notification.showAndDismiss(Duration.seconds(1));
             }
-
+            
         }
-
+        
     }
-
+    
     @FXML
     private void supprimerProduitCaisse(ActionEvent event) {
         ObservableList<ProduitR> listEff = FXCollections.observableArrayList();
@@ -388,13 +401,13 @@ public class CaissePaneController implements Initializable {
         produitListVent.removeAll(listEff);
         produitCaisseTable.setItems(produitListVent);
     }
-
+    
     @FXML
     private void focus(MouseEvent event) {
         pane.setFocusTraversable(true);
         pane.requestFocus();
     }
-
+    
     @FXML
     private void choixProd(ActionEvent event) {
         try {
@@ -402,7 +415,7 @@ public class CaissePaneController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             root = loader.load(getClass().getResource("/views/CaisseChoixProd.fxml").openStream());
             Stage stage = new Stage();
-
+            
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
             stage.setScene(scene);
@@ -410,25 +423,24 @@ public class CaissePaneController implements Initializable {
             stage.setResizable(false);
             stage.show();
             
-
             stage.setOnHidden(ex -> {
                 txtCodeProdCaisse.setFocusTraversable(true);
                 txtCodeProdCaisse.requestFocus();
                 Produit p = new Produit(produitChoisi.getIdProd().getValue());
                 Produit pC = produitService.findById(p);
-
+                
                 Boolean find = false;
                 int i = 0;
                 int e = 0;
                 for (ProduitR pr : produitListVent) {
-
+                    
                     if (pC.getCodeProd().equals(pr.getCodeProd().getValue())) {
                         find = true;
                         e = i;
                     }
                     i++;
                 }
-
+                
                 if (find == false) {
                     if (pC.getQteIniProd() <= 0) {
                         TrayNotification notification = new TrayNotification();
@@ -449,9 +461,9 @@ public class CaissePaneController implements Initializable {
                         produitListVent.remove(e);
                         produitListVent.add(new ProduitR(pC, produitListVent, produitCaisseTable, Integer.parseInt(pm.getQteCom().getText()) + 1));
                     }
-
+                    
                 }
-
+                
                 libProdColCaisse.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
                 prixColCaisse.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
                 qteColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXTextField>("qteCom"));
@@ -459,45 +471,44 @@ public class CaissePaneController implements Initializable {
                 totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
                 produitCaisseTable.setItems(produitListVent);
                 if (this.vente == true) {
-
+                    
                 }
-
+                
             });
-
+            
         } catch (IOException ex) {
             Logger.getLogger(MainPrincipalController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     @FXML
     private void nouveauClt(ActionEvent event) {
         try {
             Parent root;
             FXMLLoader loader = new FXMLLoader();
-            root = loader.load(getClass().getResource("/views/CaisseChoixProd.fxml").openStream());
+            root = loader.load(getClass().getResource("/views/ClientDemiForm.fxml").openStream());
             Stage stage = new Stage();
-
+            
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
             stage.setScene(scene);
-            stage.initStyle(StageStyle.UTILITY);
+            stage.initStyle(StageStyle.UNIFIED);
             stage.setResizable(false);
             stage.show();
             
-
             stage.setOnHidden(ex -> {
                 cltCombo.setValue(clientNew);
-                if (this.vente == true) {
-
+                if (this.newClt == true) {
+                    
                 }
-
+                
             });
-
+            
         } catch (IOException ex) {
             Logger.getLogger(MainPrincipalController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
 }

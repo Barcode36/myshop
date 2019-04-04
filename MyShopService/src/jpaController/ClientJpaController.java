@@ -151,7 +151,14 @@ public class ClientJpaController implements Serializable {
 
     public List<Client> AllClient() {
         EntityManager em = this.getEntityManager();
-         TypedQuery<Client> query = (TypedQuery<Client>) em.createNamedQuery("Client.findAll");
+        TypedQuery<Client> query = (TypedQuery<Client>) em.createNamedQuery("Client.findAll");
+        return query.getResultList();
+    }
+
+    public List<Client> recLikeNomOrNum(Client c) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Client> query = (TypedQuery<Client>) em.createNamedQuery("Client.findByRec");
+        query.setParameter("nomClt", "%" + c.getNomClt() + "%");
         return query.getResultList();
     }
 
