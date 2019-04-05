@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXToolbar;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
+import entites.Client;
 import entites.Compte;
 import entites.TypeCompte;
 import java.io.IOException;
@@ -106,6 +107,11 @@ public class MainViewController implements Initializable {
             TypeCompte tc1 = new TypeCompte();
             tc1.setLibTyp("Caissier");
             typeService.ajouter(tc1);
+            Client clt = new Client();
+            clt.setNomClt("Inconnu");
+            clt.setAdrClt("Inconnu");
+            clt.setNumClt("Inconnu");
+            clientService.ajouter(clt);
         }
         temporaryPane = contentPane;
         temporaryPaneTot = stageTot;

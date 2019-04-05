@@ -34,6 +34,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -356,6 +357,7 @@ public class CaissePaneController implements Initializable {
                     CaisseConfirmationController caisseConfirmationController = (CaisseConfirmationController) loader.getController();
                     caisseConfirmationController.setListProd(produitListVent, MainViewController.compteActif, cltCombo.getValue());
                     Scene scene = new Scene(root);
+                    stage.getIcons().add(new Image(CaissePaneController.class.getResourceAsStream("/img/afnacos.ico")));
                     scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
                     stage.setScene(scene);
                     stage.initStyle(StageStyle.UTILITY);
@@ -418,6 +420,7 @@ public class CaissePaneController implements Initializable {
             
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
+            stage.getIcons().add(new Image(CaissePaneController.class.getResourceAsStream("/img/afnacos.ico")));
             stage.setScene(scene);
             stage.initStyle(StageStyle.UTILITY);
             stage.setResizable(false);
@@ -492,6 +495,7 @@ public class CaissePaneController implements Initializable {
             
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
+            stage.getIcons().add(new Image(CaissePaneController.class.getResourceAsStream("/img/afnacos.ico")));
             stage.setScene(scene);
             stage.initStyle(StageStyle.UNIFIED);
             stage.setResizable(false);

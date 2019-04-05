@@ -5,11 +5,7 @@
  */
 package javafxapplication3;
 
-import Utils.Constants;
-import com.regexlab.j2e.Instances;
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Arrays;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

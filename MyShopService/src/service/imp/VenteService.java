@@ -5,6 +5,7 @@
  */
 package service.imp;
 
+import entites.Client;
 import entites.Compte;
 import entites.Vente;
 import java.util.List;
@@ -66,6 +67,11 @@ public class VenteService implements IVenteService {
     @Override
     public List<Vente> ventesParCaissierMois(Compte compte, String mois) {
         return venteJpaController.venteParCaissierMois(compte, mois);
+    }
+
+    @Override
+    public List<Vente> ventesParClient(Client c) {
+        return venteJpaController.venteParClient(c);
     }
 
 }
