@@ -8,6 +8,8 @@ package controller;
 import Utils.Constants;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXHamburger;
+import static controller.MainViewController.hamburgerTmp;
+import static controller.MainViewController.mainCss;
 import entites.ContenirVente;
 import entites.Produit;
 import java.io.IOException;
@@ -61,7 +63,7 @@ public class DashBoardController implements Initializable {
     @FXML
     private NumberAxis y;
     @FXML
-    private JFXButton btnCaisse;
+    private JFXButton btnCaisse = new JFXButton();
     @FXML
     private JFXButton btnBilan;
     @FXML
@@ -116,17 +118,7 @@ public class DashBoardController implements Initializable {
         btnComp = btnCOmpte;
         btnInvent = btnInventaire;
         btnBil = btnBilan;
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Stage s = (Stage) stage.getScene().getWindow();
-                if (s.isMaximized()) {
-                    MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
-                }
-                stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 45);
-            }
-        });
+
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -149,6 +141,17 @@ public class DashBoardController implements Initializable {
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Stage s = (Stage) btnCaisse.getScene().getWindow();
+                if (s.isMaximized()) {
+                    MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
+                }
+                stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
+                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 45);
+            }
+        });
     }
 
     private void openAccueil(ActionEvent event) {
@@ -198,7 +201,15 @@ public class DashBoardController implements Initializable {
 
     @FXML
     private void deconnexion(ActionEvent event) {
-        switchPane(Constants.Connect);
+
+        try {
+            switchPane(Constants.Connect);
+            VBox menu = null;
+            menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
+            MainViewController.drawerTmp.setSidePane(menu);
+        } catch (IOException ex) {
+            Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void switchPane(String pane) {
@@ -206,9 +217,11 @@ public class DashBoardController implements Initializable {
             MainViewController.temporaryPane.getChildren().clear();
             StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
             ObservableList<Node> elements = stackPane.getChildren();
+
             MainViewController.temporaryPane.getChildren().setAll(elements);
+
             MainViewController.drawerTmp.close();
-            MainViewController.hamburgerTmp = new JFXHamburger();
+            // MainViewController.hamburgerTmp = new JFXHamburger();
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
