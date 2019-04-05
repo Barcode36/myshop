@@ -66,6 +66,8 @@ public class FrmConnnexionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        MainViewController.hamburgerTmp.setVisible(false);
+        MainViewController.mainCss.setVisible(false);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
@@ -80,20 +82,20 @@ public class FrmConnnexionController implements Initializable {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
                 double val = s.getWidth() / 2;
-                double val2 = cont.getPrefWidth() /2;
-                
-                cont.setLayoutX(val-val2);
-                
+                double val2 = cont.getPrefWidth() / 2;
+
+                cont.setLayoutX(val - val2);
+
             }
         });
 
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-               double val = newValue.doubleValue() / 2;
-                double val2 = cont.getPrefWidth() /2;
-                
-                cont.setLayoutX(val-val2);
+                double val = newValue.doubleValue() / 2;
+                double val2 = cont.getPrefWidth() / 2;
+
+                cont.setLayoutX(val - val2);
 
             }
 
@@ -122,8 +124,7 @@ public class FrmConnnexionController implements Initializable {
             MainViewController.temporaryPane.getChildren().setAll(dashBoard);
             MainViewController.hamburgerTmp.setVisible(true);
             MainViewController.mainCss.setVisible(true);
-            MainViewController.initialise = true;
-            if (MainViewController.initialise == true) {
+            
                 if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
                     DashBoardController.btnComp.setVisible(false);
                     DashBoardController.btnInvent.setVisible(false);
@@ -131,8 +132,10 @@ public class FrmConnnexionController implements Initializable {
                     VBox menu = null;
                     menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateralC));
                     MainViewController.drawerTmp.setSidePane(menu);
+                }else{
+                    
                 }
-            }
+            
         } catch (Exception e) {
             // e.printStackTrace();
             TrayNotification notification = new TrayNotification();

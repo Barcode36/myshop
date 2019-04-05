@@ -118,8 +118,7 @@ public class MainViewController implements Initializable {
         drawerTmp = drawer;
         hamburgerTmp = hamburger;
         mainCss = maiCss;
-        maiCss.setVisible(false);
-        hamburger.setVisible(false);
+        
         
         initDrawer();
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
@@ -159,7 +158,7 @@ public class MainViewController implements Initializable {
             ObservableList<Node> elements = stackPane.getChildren();
             MainViewController.temporaryPane.getChildren().setAll(elements);
             MainViewController.drawerTmp.close();
-            MainViewController.hamburgerTmp = new JFXHamburger();
+           // MainViewController.hamburgerTmp = new JFXHamburger();
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
