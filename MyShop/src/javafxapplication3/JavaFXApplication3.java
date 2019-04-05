@@ -5,10 +5,8 @@
  */
 package javafxapplication3;
 
-<<<<<<< HEAD
+ 
 import Utils.Constants;
-=======
->>>>>>> 0cdee1823f776a7ea069111e39a52c49b1aacce5
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
