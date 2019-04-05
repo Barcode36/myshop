@@ -6,6 +6,7 @@
 package service.imp;
 
 import entites.Client;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
@@ -49,8 +50,8 @@ public class ClientService implements IClientService {
     @Override
     public void supprimer(Client client) {
         try {
-            clientJpaController.destroy(client.getIdClt());
-        } catch (NonexistentEntityException ex) {
+            clientJpaController.edit(client);
+        } catch (Exception ex) {
             Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -58,6 +59,21 @@ public class ClientService implements IClientService {
     @Override
     public Client findById(Client client) {
         return clientJpaController.findClient(client.getIdClt());
+    }
+
+    @Override
+    public List<Client> findAll() {
+        return clientJpaController.AllClient();
+    }
+
+    @Override
+    public Client findByNom(Client client) {
+        return clientJpaController.findCltByNom(client);
+    }
+
+    @Override
+    public List<Client> recLikeNomOrNum(Client c) {
+        return clientJpaController.recLikeNomOrNum(c);
     }
 
 }

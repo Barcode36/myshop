@@ -7,6 +7,7 @@ package modele;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
+import entites.Client;
 import entites.ContenirVente;
 import entites.Produit;
 import entites.Vente;
@@ -29,6 +30,7 @@ public class ProduitR {
     private SimpleStringProperty codeProd;
     private SimpleStringProperty libProd;
     private SimpleStringProperty prixUniProd;
+    private SimpleStringProperty cltAch;
     private SimpleIntegerProperty qteIniProd;
     private SimpleIntegerProperty qteProdCom;
     private SimpleStringProperty dateVen;
@@ -51,7 +53,20 @@ public class ProduitR {
         String dateh = dateFormat.format(vente.getDateVen()).toString();
         this.dateVen = new SimpleStringProperty(dateh);
         this.libProd = new SimpleStringProperty(produit.getLibProd());
-        this.prixUniProd = new SimpleStringProperty(produit.getPrixUniProd());
+        this.prixUniProd = new SimpleStringProperty(String.valueOf(contenirVente.getPrixProd()));
+        this.qteProdCom = new SimpleIntegerProperty(contenirVente.getQteVen());
+        this.codeProd = new SimpleStringProperty(produit.getCodeProd());
+        this.total = new SimpleStringProperty(String.valueOf(Integer.parseInt(produit.getPrixUniProd()) * contenirVente.getQteVen()));
+    }
+
+    public ProduitR(Produit produit, Vente vente, ContenirVente contenirVente, Client c) {
+        this.cltAch = new SimpleStringProperty(c.getNomClt());
+        this.idProd = new SimpleIntegerProperty(produit.getIdProd());
+        DateFormat dateFormat = new SimpleDateFormat("d-MM-yyy");
+        String dateh = dateFormat.format(vente.getDateVen()).toString();
+        this.dateVen = new SimpleStringProperty(dateh);
+        this.libProd = new SimpleStringProperty(produit.getLibProd());
+        this.prixUniProd = new SimpleStringProperty(String.valueOf(contenirVente.getPrixProd()));
         this.qteProdCom = new SimpleIntegerProperty(contenirVente.getQteVen());
         this.codeProd = new SimpleStringProperty(produit.getCodeProd());
         this.total = new SimpleStringProperty(String.valueOf(Integer.parseInt(produit.getPrixUniProd()) * contenirVente.getQteVen()));
@@ -102,6 +117,14 @@ public class ProduitR {
 //        });
         this.qteCom.setText(String.valueOf(com));
 
+    }
+
+    public SimpleStringProperty getCltAch() {
+        return cltAch;
+    }
+
+    public void setCltAch(SimpleStringProperty cltAch) {
+        this.cltAch = cltAch;
     }
 
     public SimpleStringProperty getDateVen() {

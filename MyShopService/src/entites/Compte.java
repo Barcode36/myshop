@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "compte")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Compte.findAll", query = "SELECT c FROM Compte c WHERE c.pseudoComp != 'sohrel'")
+    @NamedQuery(name = "Compte.findAll", query = "SELECT c FROM Compte c WHERE c.pseudoComp != 'admin'")
     , @NamedQuery(name = "Compte.findByIdComp", query = "SELECT c FROM Compte c WHERE c.idComp = :idComp")
     , @NamedQuery(name = "Compte.findByNomComp", query = "SELECT c FROM Compte c WHERE c.nomComp = :nomComp")
     , @NamedQuery(name = "Compte.findByPrenomComp", query = "SELECT c FROM Compte c WHERE c.prenomComp = :prenomComp")

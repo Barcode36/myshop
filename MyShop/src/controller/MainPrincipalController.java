@@ -76,6 +76,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import modele.ClientR;
 import modele.CompteR;
 import modele.ProduitR;
 import modele.TypeCompteR;
@@ -379,15 +380,15 @@ public class MainPrincipalController implements Initializable {
                 listVParCaissier = venteService.ventesEntreDeuxDate(d, d2, c);
             }
             int totVent = 0;
-            for (Vente vente : listVParCaissier) {
-                List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
-                for (ContenirVente cv : listCon) {
-                    Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-                    Produit produit = produitService.findById(p);
-                    int totPro = Integer.parseInt(produit.getPrixUniProd()) * cv.getQteVen();
-                    totVent += totPro;
-                }
-            }
+//            for (Vente vente : listVParCaissier) {
+//                List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
+//                for (ContenirVente cv : listCon) {
+////                    Produit p = new Produit(cv.getContenirVentePK().getIdProd());
+//                   // Produit produit = produitService.findById(p);
+//                    int totPro = Integer.parseInt(produit.getPrixUniProd()) * cv.getQteVen();
+//                    totVent += totPro;
+//                }
+//            }
             if (!listVParCaissier.isEmpty()) {
                 venteList.add(new VenteR(c, totVent));
             } else {
@@ -421,11 +422,11 @@ public class MainPrincipalController implements Initializable {
         List<Vente> list = venteService.ventesParCaissier(compte);
         for (Vente v : list) {
             List<ContenirVente> listCon = contenirVenteService.listParVente(v);
-            for (ContenirVente cv : listCon) {
-                Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-                Produit produit = produitService.findById(p);
-                produitListVentCaissier.add(new ProduitR(produit, v, cv));
-            }
+//            for (ContenirVente cv : listCon) {
+//                Produit p = new Produit(cv.getContenirVentePK().getIdProd());
+//                Produit produit = produitService.findById(p);
+//                produitListVentCaissier.add(new ProduitR(produit, v, cv));
+//            }
         }
 
 //        
@@ -1084,7 +1085,7 @@ public class MainPrincipalController implements Initializable {
             root = loader.load(getClass().getResource("/views/CaisseConfirmation.fxml").openStream());
 
             CaisseConfirmationController caisseConfirmationController = (CaisseConfirmationController) loader.getController();
-            caisseConfirmationController.setListProd(produitListVent, compteActif);
+            caisseConfirmationController.setListProd(produitListVent, compteActif, new ClientR());
             Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
             stage.setScene(scene);

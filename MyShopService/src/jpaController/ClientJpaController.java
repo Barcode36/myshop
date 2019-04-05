@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import jpaController.exceptions.NonexistentEntityException;
@@ -140,5 +141,25 @@ public class ClientJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public Client findCltByNom(Client c) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Client> query = (TypedQuery<Client>) em.createNamedQuery("Client.findByNomClt");
+        query.setParameter("nomClt", c.getNomClt());
+        return query.getSingleResult();
+    }
+
+    public List<Client> AllClient() {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Client> query = (TypedQuery<Client>) em.createNamedQuery("Client.findAll");
+        return query.getResultList();
+    }
+
+    public List<Client> recLikeNomOrNum(Client c) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Client> query = (TypedQuery<Client>) em.createNamedQuery("Client.findByRec");
+        query.setParameter("nomClt", "%" + c.getNomClt() + "%");
+        return query.getResultList();
+    }
+
 }

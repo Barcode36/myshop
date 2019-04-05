@@ -5,6 +5,7 @@
  */
 package jpaController;
 
+import entites.Client;
 import entites.Compte;
 import entites.Vente;
 import java.io.Serializable;
@@ -149,8 +150,15 @@ public class VenteJpaController implements Serializable {
         query.setParameter("idComp", compte.getIdComp());
         return query.getResultList();
     }
-    public List<Vente> venteParCaissierMois(Compte compte,String mois) {
-       EntityManager em = this.getEntityManager();
+    public List<Vente> venteParClient(Client c) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByIdClt");
+        query.setParameter("idClt", c.getIdClt());
+        return query.getResultList();
+    }
+
+    public List<Vente> venteParCaissierMois(Compte compte, String mois) {
+        EntityManager em = this.getEntityManager();
         //TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByDateVen");
         Query query = em.createNativeQuery("SELECT * FROM vente where strftime('%Y-%m', dateVen / 1000, 'unixepoch')=? and idComp=?", Vente.class);
         query.setParameter(1, mois);
@@ -166,7 +174,7 @@ public class VenteJpaController implements Serializable {
         return (List<Vente>) query.getResultList();
     }
 
-    public List<Vente> venteEntreDeuxDate(String date1, String date2,Compte compte) {
+    public List<Vente> venteEntreDeuxDate(String date1, String date2, Compte compte) {
         EntityManager em = this.getEntityManager();
         //TypedQuery<Vente> query = (TypedQuery<Vente>) em.createNamedQuery("Vente.findByDateVen");
         Query query = em.createNativeQuery("SELECT * FROM vente where strftime('%Y-%m-%d', dateVen / 1000, 'unixepoch')>=? and strftime('%Y-%m-%d', dateVen / 1000, 'unixepoch')<=? and idComp=?", Vente.class);

@@ -6,14 +6,12 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
@@ -27,13 +25,13 @@
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="634.0" minWidth="10.0" prefWidth="634.0" />
               </columnConstraints>
               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="66.0" minHeight="10.0" prefHeight="20.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="118.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="133.0" minHeight="10.0" prefHeight="90.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="121.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="103.0" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="110.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="75.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
                   <JFXTextField fx:id="txtNomComp" promptText="Nom" GridPane.rowIndex="1" />
@@ -41,10 +39,11 @@
                   <JFXTextField fx:id="txtPseudoComp" promptText="Pseudo" GridPane.rowIndex="3" />
                   <JFXTextField fx:id="txtPassword" promptText="Mot de passe" GridPane.rowIndex="4" />
                   <JFXComboBox fx:id="typeCompteCombo" prefHeight="30.0" prefWidth="260.0" GridPane.rowIndex="5" />
-                  <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="6">
+                  <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="6">
                      <children>
-                        <JFXButton fx:id="saveUp" onAction="#saveProd" styleClass="save-buton" text="Enregistrer" />
-                        <JFXButton onAction="#suppProduit" styleClass="btn-delete" text="Supprimer" />
+                        <JFXButton fx:id="saveUp" onAction="#saveProd" styleClass="save-buton" text="ENREGISTRER" />
+                        <JFXButton onAction="#suppProduit" styleClass="btn-delete" text="SUPPRIMER" />
+                        <JFXButton onAction="#vider" styleClass="save-del1" text="VIDER" />
                      </children>
                      <padding>
                         <Insets left="70.0" />
@@ -68,16 +67,12 @@
                   <Insets left="10.0" right="10.0" />
                </padding>
             </GridPane>
-            <Pane layoutX="87.0" layoutY="41.0" prefHeight="107.0" prefWidth="364.0">
+            <Label layoutX="355.0" layoutY="18.0" prefHeight="77.0" prefWidth="532.0" text="GESTION DES COMPTES" textFill="WHITE">
                <styleClass>
-                  <String fx:value="card" />
+                  <String fx:value="titre" />
                   <String fx:value="blue-gradient" />
                </styleClass>
-               <children>
-                  <Label layoutX="38.0" layoutY="22.0" prefHeight="45.0" prefWidth="306.0" style="-fx-font-size: 25; -fx-font-family: Times New Roman; -fx-alignment: center;" text="GESTION DES COMPTES" textFill="WHITE" />
-                  <Separator layoutX="92.0" layoutY="74.0" prefWidth="200.0" />
-               </children>
-            </Pane>
+            </Label>
          </children>
       </AnchorPane>
    </children>

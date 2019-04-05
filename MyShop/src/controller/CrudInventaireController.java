@@ -37,6 +37,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -132,7 +133,7 @@ public class CrudInventaireController implements Initializable {
                         ent.setPrefWidth(newValue.doubleValue() - 15);
                     }
                 });
-                
+
             }
 
         });
@@ -158,6 +159,11 @@ public class CrudInventaireController implements Initializable {
                 save();
             }
         });
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
 
     }
 
@@ -192,13 +198,14 @@ public class CrudInventaireController implements Initializable {
     }
 
     private void save() {
-        if (saveUp.getText().equals("Enregistrer")) {
+        if (saveUp.getText().equals("ENREGISTRER")) {
 
             Produit produit = new Produit();
             produit.setCodeProd(txtCode.getText());
             produit.setLibProd(txtLibProd.getText());
             produit.setPrixUniProd(txtPrixProd.getText());
             produit.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
+            produit.setEtatProd("actif");
             try {
                 Produit p = produitService.findByCode(produit);
                 TrayNotification notification = new TrayNotification();
@@ -206,12 +213,16 @@ public class CrudInventaireController implements Initializable {
                 notification.setTray("MyShop", "Ce produit existe déjà", NotificationType.WARNING);
                 notification.showAndDismiss(Duration.seconds(1));
             } catch (Exception e) {
+
                 produitService.ajouter(produit);
+                clearProduitText();
+                txtCode.setFocusTraversable(true);
+                txtCode.requestFocus();
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
                 notification.setTray("MyShop", "Enregistrement effectué", NotificationType.SUCCESS);
                 notification.showAndDismiss(Duration.seconds(1));
-                clearProduitText();
+
             }
 
         } else {
@@ -220,9 +231,12 @@ public class CrudInventaireController implements Initializable {
             produitModif.setPrixUniProd(txtPrixProd.getText());
             produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
             produitService.modifier(produitModif);
-            saveUp.setText("Enregistrer");
+            saveUp.setText("ENREGISTRER");
+            txtCode.setFocusTraversable(true);
+            txtCode.requestFocus();
             clearProduitText();
         }
+
         loadInventairegrid();
 
     }
@@ -239,7 +253,18 @@ public class CrudInventaireController implements Initializable {
         produitService.supprimer(produitModif);
         loadInventairegrid();
         clearProduitText();
-        saveUp.setText("Enregistrer");
+        saveUp.setText("ENREGISTRER");
+        TrayNotification notification = new TrayNotification();
+        notification.setAnimationType(AnimationType.POPUP);
+        notification.setTray("MyShop", "Suppression effectué", NotificationType.SUCCESS);
+        notification.showAndDismiss(Duration.seconds(1));
+        clearProduitText();
+    }
+
+    @FXML
+    private void vider(ActionEvent event) {
+        clearProduitText();
+        saveUp.setText("ENREGISTRER");
     }
 
 }

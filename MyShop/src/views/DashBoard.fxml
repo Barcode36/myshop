@@ -34,7 +34,7 @@
                <children>
                   <HBox prefHeight="104.0" prefWidth="875.0" spacing="10.0" GridPane.columnSpan="2">
                      <children>
-                        <JFXButton fx:id="btnInventaire" buttonType="RAISED" onAction="#openInventaire" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Inventaire" textFill="WHITE">
+                        <JFXButton fx:id="btnInventaire" buttonType="RAISED" onAction="#openInventaire" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="INVENTAIRE" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -43,7 +43,7 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="btnRec" buttonType="RAISED" onAction="#openRecherche" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Recherche " textFill="WHITE">
+                        <JFXButton fx:id="btnRec" buttonType="RAISED" onAction="#openRecherche" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="RECHERCHE" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -52,7 +52,7 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="btnCaisse" buttonType="RAISED" onAction="#openCaisse" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Caisse" textFill="WHITE">
+                        <JFXButton fx:id="btnCaisse" buttonType="RAISED" onAction="#openCaisse" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="CAISSE" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -61,7 +61,16 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="btnCOmpte" buttonType="RAISED" onAction="#openComptes" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Compte" textFill="WHITE">
+                        <JFXButton fx:id="btnClient" buttonType="RAISED" onAction="#openClient" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="CLIENT" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/icons8_Group_100px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="btnCOmpte" buttonType="RAISED" onAction="#openComptes" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="COMPTE" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -74,7 +83,7 @@
                   </HBox>
                   <HBox prefHeight="70.0" prefWidth="936.0" spacing="10.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
                      <children>
-                        <JFXButton fx:id="btnBilan" buttonType="RAISED" onAction="#openBilan" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Bilan" textFill="WHITE">
+                        <JFXButton fx:id="btnBilan" buttonType="RAISED" onAction="#openBilan" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="BILAN" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -83,7 +92,7 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="btnReglage" buttonType="RAISED" onAction="#openReglage" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Reglage" textFill="WHITE">
+                        <JFXButton fx:id="btnReglage" buttonType="RAISED" onAction="#openReglage" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="REGLAGE" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -92,7 +101,7 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="btnAide" buttonType="RAISED" onAction="#openAide" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Aide" textFill="WHITE">
+                        <JFXButton fx:id="btnAide" buttonType="RAISED" onAction="#openAide" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="AIDE" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -101,11 +110,20 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
+                        <JFXButton fx:id="btnDeconnexion" buttonType="RAISED" onAction="#deconnexion" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="DECONNEXION" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../img/icons8_Logout_Rounded_Down_104px.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
                      </children>
                   </HBox>
                   <AnchorPane prefHeight="32.0" prefWidth="200.0" styleClass="card" GridPane.columnIndex="1" GridPane.rowIndex="2">
                      <children>
-                        <Label layoutX="15.0" text="Statistique de vente des produits" />
+                        <Label layoutX="14.0" layoutY="6.0" text="STATISTIQUES DES VENTES DES PRODUITS" />
                      </children>
                   </AnchorPane>
                   <BarChart fx:id="barCode" prefHeight="324.0" prefWidth="435.0" styleClass="card" GridPane.rowIndex="3">
@@ -121,7 +139,7 @@
                      <children>
                         <AnchorPane layoutY="-2.0" prefHeight="41.0" prefWidth="250.0" styleClass="card">
                            <children>
-                              <Label layoutX="45.0" layoutY="-2.0" text="Stock" />
+                              <Label layoutX="43.0" layoutY="7.0" text="STOCK" />
                            </children>
                         </AnchorPane>
                      </children>

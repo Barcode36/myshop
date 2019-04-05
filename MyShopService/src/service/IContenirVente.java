@@ -19,7 +19,7 @@ public interface IContenirVente {
 
     public void ajouterContenirVente(ContenirVente contenirVente);
 
-    public void supprimerContenirVente(ContenirVentePK contenirVentePK);
+    public void supprimerContenirVente(ContenirVente contenirVente);
 
     public List<ContenirVente> listParVente(Vente vente);
 

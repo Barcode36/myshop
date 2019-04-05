@@ -50,8 +50,9 @@ public class ProduitService implements IProduitService {
     @Override
     public void supprimer(Produit produit) {
         try {
-            produitJpaController.destroy(produit.getIdProd());
-        } catch (NonexistentEntityException ex) {
+            produit.setEtatProd("inactif");
+            produitJpaController.edit(produit);
+        } catch (Exception ex) {
             Logger.getLogger(ProduitService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -63,7 +64,7 @@ public class ProduitService implements IProduitService {
 
     @Override
     public List<Produit> produitList() {
-        return produitJpaController.findProduitEntities();
+        return produitJpaController.findAll();
     }
 
     @Override

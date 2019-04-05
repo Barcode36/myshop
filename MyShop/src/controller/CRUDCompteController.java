@@ -31,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javax.swing.SwingUtilities;
 import modele.CompteR;
@@ -93,6 +94,11 @@ public class CRUDCompteController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         loadCompteGrid();
         loadTypeCompteCombo();
 
@@ -122,7 +128,7 @@ public class CRUDCompteController implements Initializable {
     @FXML
     private void saveProd(ActionEvent event) {
 //        
-        if (saveUp.getText().equals("Enregistrer")) {
+        if (saveUp.getText().equals("ENREGISTRER")) {
             Compte compte = new Compte();
             compte.setMdpComp(txtPassword.getText());
             compte.setNomComp(txtNomComp.getText());
@@ -189,6 +195,7 @@ public class CRUDCompteController implements Initializable {
     @FXML
     private void suppProduit(ActionEvent event) {
         compteService.supprimer(compteModif);
+        saveUp.setText("ENREGISTRER");
         loadCompteGrid();
         clearCompteTxt();
     }
@@ -210,6 +217,12 @@ public class CRUDCompteController implements Initializable {
         } catch (Exception e) {
         }
 
+    }
+
+    @FXML
+    private void vider(ActionEvent event) {
+        clearCompteTxt();
+        saveUp.setText("ENREGISTRER");
     }
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXDatePicker?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
@@ -25,16 +24,10 @@
          <children>
             <AnchorPane fx:id="cont" layoutX="77.0" layoutY="40.0" prefHeight="550.0" prefWidth="978.0" styleClass="card" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="77.0" AnchorPane.rightAnchor="77.0" AnchorPane.topAnchor="40.0">
                <children>
-                  <Pane fx:id="band" layoutX="70.0" layoutY="7.0" prefHeight="64.0" prefWidth="947.0" styleClass="blue-gradient">
-                     <children>
-                        <Separator layoutX="338.0" layoutY="49.0" prefWidth="200.0" />
-                        <Label layoutX="-1.0" layoutY="6.0" prefHeight="45.0" prefWidth="875.0" style="-fx-font-size: 25; -fx-font-family: Times New Roman; -fx-alignment: center;" text="Bilan" textFill="WHITE" />
-                     </children>
-                  </Pane>
                   <GridPane fx:id="gridBilan" layoutX="60.0" layoutY="71.0" prefHeight="479.0" prefWidth="827.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="59.0" AnchorPane.topAnchor="71.0">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="489.0" minWidth="10.0" prefWidth="372.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="503.0" minWidth="10.0" prefWidth="503.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="489.0" minWidth="10.0" prefWidth="334.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="613.0" minWidth="10.0" prefWidth="613.0" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints maxHeight="243.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
@@ -70,6 +63,7 @@
                               <TableColumn fx:id="QteCaissierCol" prefWidth="75.0" text="Quantité" />
                               <TableColumn fx:id="PuCaissierCol" prefWidth="75.0" text="PU" />
                               <TableColumn fx:id="totDetCaissierCol" prefWidth="75.0" text="Total" />
+                              <TableColumn fx:id="cltCol" prefWidth="75.0" text="Client" />
                            </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -83,6 +77,7 @@
                                  </toggleGroup>
                               </RadioButton>
                               <Button fx:id="btnMoisCours" disable="true" mnemonicParsing="false" onAction="#bilanParMois" prefHeight="44.0" prefWidth="192.0" text="Mois en cours" />
+                              <Button fx:id="btnCLient" mnemonicParsing="false" onAction="#openClientBil" prefHeight="44.0" prefWidth="277.0" text="Bilan relatif aux clients" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0" spacing="77.0" GridPane.columnSpan="2" GridPane.rowIndex="1">
@@ -104,6 +99,12 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </GridPane>
+                  <Label layoutX="65.0" prefHeight="58.0" prefWidth="947.0" text="Bilan" textFill="WHITE">
+                     <styleClass>
+                        <String fx:value="blue-gradient" />
+                        <String fx:value="titre" />
+                     </styleClass>
+                  </Label>
                </children>
             </AnchorPane>
          </children>

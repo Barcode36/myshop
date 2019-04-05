@@ -44,9 +44,9 @@ public class ContenirVenteService implements IContenirVente{
     }
 
     @Override
-    public void supprimerContenirVente(ContenirVentePK contenirVentePK) {
+    public void supprimerContenirVente(ContenirVente contenirVente) {
         try {
-            contenirVenteJpaController.destroy(contenirVentePK);
+            contenirVenteJpaController.destroy(contenirVente.getIdCon());
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ContenirVenteService.class.getName()).log(Level.SEVERE, null, ex);
         }

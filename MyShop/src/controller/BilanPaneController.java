@@ -6,10 +6,13 @@
 package controller;
 
 import com.jfoenix.controls.JFXDatePicker;
+import static controller.CaissePaneController.clientNew;
+import entites.Client;
 import entites.Compte;
 import entites.ContenirVente;
 import entites.Produit;
 import entites.Vente;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -18,6 +21,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -25,18 +30,25 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafxapplication3.JavaFXApplication3;
 import javax.swing.SwingUtilities;
 import modele.ProduitR;
 import modele.VenteR;
@@ -71,6 +83,8 @@ public class BilanPaneController implements Initializable {
     @FXML
     private TableColumn<ProduitR, String> totDetCaissierCol;
     @FXML
+    private TableColumn<ProduitR, String> cltCol;
+    @FXML
     private TableView<ProduitR> tableDetailCaissier;
     @FXML
     private RadioButton rbMoisCours;
@@ -103,8 +117,9 @@ public class BilanPaneController implements Initializable {
     private AnchorPane stage;
     @FXML
     private AnchorPane cont;
-    @FXML
     private Pane band;
+    @FXML
+    private Button btnCLient;
 
     /**
      * Initializes the controller class.
@@ -112,6 +127,11 @@ public class BilanPaneController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         mois();
         Platform.runLater(new Runnable() {
             @Override
@@ -146,11 +166,16 @@ public class BilanPaneController implements Initializable {
         Compte compte = compteService.findById(c);
         List<Vente> list = venteService.ventesParCaissier(compte);
         for (Vente v : list) {
+            Client cl = new Client(v.getIdClt());
+            Client clt = MainViewController.clientService.findById(cl);
             List<ContenirVente> listCon = contenirVenteService.listParVente(v);
             for (ContenirVente cv : listCon) {
-                Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-                Produit produit = produitService.findById(p);
-                produitListVentCaissier.add(new ProduitR(produit, v, cv));
+                try {
+                    Produit p = new Produit(cv.getIdProd());
+                    Produit produit = produitService.findById(p);
+                    produitListVentCaissier.add(new ProduitR(produit, v, cv, clt));
+                } catch (Exception e) {
+                }
             }
         }
 
@@ -160,6 +185,7 @@ public class BilanPaneController implements Initializable {
         QteCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getQteProdCom().asObject());
         DateCaissier.setCellValueFactory(cellData -> cellData.getValue().getDateVen());
         ProduitCaissier.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
+        cltCol.setCellValueFactory(cellData -> cellData.getValue().getCltAch());
         tableDetailCaissier.setItems(produitListVentCaissier);
     }
 
@@ -415,37 +441,43 @@ public class BilanPaneController implements Initializable {
                 List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
                 System.out.println(listCon);
                 for (ContenirVente cv : listCon) {
-                    Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-                    Produit produit = produitService.findById(p);
-                    int totPro = Integer.parseInt(produit.getPrixUniProd()) * cv.getQteVen();
+//                    Produit p = new Produit(cv.getIdProd());
+//                    Produit produit = produitService.findById(p);
+                    int totPro = cv.getPrixProd() * cv.getQteVen();
                     totVent += totPro;
                 }
 
             }
             if (!listVParCaissier.isEmpty()) {
                 venteList.add(new VenteR(c, totVent));
-            } else {
-                venteList.clear();
             }
         }
         caissierColVente.setCellValueFactory(cellData -> cellData.getValue().getCaissier());
         totCaissierColVente.setCellValueFactory(cellData -> cellData.getValue().getTotalCaissier().asObject());
         CaissierVenteTable.setItems(venteList);
-//        for (Vente vente : list) {
-//            Compte c = new Compte(vente.getIdComp());
-//            Compte compte = compteService.findById(c);
-//            List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
-//            int totVent = 0;
-//            for (ContenirVente cv : listCon) {
-//                Produit p = new Produit(cv.getContenirVentePK().getIdProd());
-//                Produit produit = produitService.findById(p);
-//                int totPro = Integer.parseInt(produit.getPrixUniProd()) * cv.getQteVen();
-//                totVent += totPro;
-//            }
-//            venteList.add(new VenteR(compte, vente, totVent));
-//
-//        }
+//       
+    }
 
+    @FXML
+    private void openClientBil(ActionEvent event) {
+        try {
+            Parent root;
+            FXMLLoader loader = new FXMLLoader();
+            root = loader.load(getClass().getResource("/views/BilanClient.fxml").openStream());
+            Stage stage = new Stage();
+
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
+            stage.getIcons().add(new Image(BilanPaneController.class.getResourceAsStream("/img/afnacos.ico")));
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UNIFIED);
+            stage.setResizable(false);
+            stage.show();
+
+        } catch (IOException ex) {
+            Logger.getLogger(MainPrincipalController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

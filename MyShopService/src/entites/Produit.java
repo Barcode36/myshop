@@ -24,11 +24,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "produit")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Produit.findAll", query = "SELECT p FROM Produit p")
+    @NamedQuery(name = "Produit.findAll", query = "SELECT p FROM Produit p WHERE p.etatProd='actif'")
     , @NamedQuery(name = "Produit.findByIdProd", query = "SELECT p FROM Produit p WHERE p.idProd = :idProd")
-    , @NamedQuery(name = "Produit.findByCodeProd", query = "SELECT p FROM Produit p WHERE p.codeProd = :codeProd")
+    , @NamedQuery(name = "Produit.findByCodeProd", query = "SELECT p FROM Produit p WHERE p.codeProd = :codeProd AND p.etatProd='actif'")
     , @NamedQuery(name = "Produit.findByLibProd", query = "SELECT p FROM Produit p WHERE p.libProd = :libProd")
-    , @NamedQuery(name = "Produit.findByLibProdLike", query = "SELECT p FROM Produit p WHERE p.libProd LIKE :libProd OR p.codeProd LIKE :libProd")
+    , @NamedQuery(name = "Produit.findByLibProdLike", query = "SELECT p FROM Produit p WHERE p.etatProd='actif' AND (p.libProd LIKE :libProd OR p.codeProd LIKE :libProd)")
     , @NamedQuery(name = "Produit.findByPrixUniProd", query = "SELECT p FROM Produit p WHERE p.prixUniProd = :prixUniProd")
     , @NamedQuery(name = "Produit.findByQteIniProd", query = "SELECT p FROM Produit p WHERE p.qteIniProd = :qteIniProd")})
 public class Produit implements Serializable {
@@ -46,6 +46,8 @@ public class Produit implements Serializable {
     private Integer idProd;
     @Column(name = "libProd")
     private String libProd;
+    @Column(name = "etatProd")
+    private String etatProd;
     @Column(name = "prixUniProd")
     private String prixUniProd;
 
@@ -68,6 +70,14 @@ public class Produit implements Serializable {
         return libProd;
     }
 
+    public String getEtatProd() {
+        return etatProd;
+    }
+
+    public void setEtatProd(String etatProd) {
+        this.etatProd = etatProd;
+    }
+
     public void setLibProd(String libProd) {
         this.libProd = libProd;
     }
@@ -79,7 +89,6 @@ public class Produit implements Serializable {
     public void setPrixUniProd(String prixUniProd) {
         this.prixUniProd = prixUniProd;
     }
-
 
     @Override
     public int hashCode() {

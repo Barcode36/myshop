@@ -24,9 +24,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "client")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c")
+    @NamedQuery(name = "Client.findAll", query = "SELECT c FROM Client c WHERE c.etatClt='actif'")
     , @NamedQuery(name = "Client.findByIdClt", query = "SELECT c FROM Client c WHERE c.idClt = :idClt")
-    , @NamedQuery(name = "Client.findByNomClt", query = "SELECT c FROM Client c WHERE c.nomClt = :nomClt")})
+    , @NamedQuery(name = "Client.findByRec", query = "SELECT c FROM Client c WHERE c.etatClt='actif' AND (c.nomClt LIKE :nomClt OR c.numClt LIKE :nomClt)")
+    , @NamedQuery(name = "Client.findByNomClt", query = "SELECT c FROM Client c WHERE c.nomClt = :nomClt AND c.etatClt='actif'")})
 public class Client implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -36,6 +37,12 @@ public class Client implements Serializable {
     private Integer idClt;
     @Column(name = "nomClt")
     private String nomClt;
+    @Column(name = "adrClt")
+    private String adrClt;
+    @Column(name = "etatClt")
+    private String etatClt;
+    @Column(name = "numClt")
+    private String numClt;
 
     public Client() {
     }
@@ -46,6 +53,22 @@ public class Client implements Serializable {
 
     public Integer getIdClt() {
         return idClt;
+    }
+
+    public String getNumClt() {
+        return numClt;
+    }
+
+    public void setNumClt(String numClt) {
+        this.numClt = numClt;
+    }
+
+    public String getEtatClt() {
+        return etatClt;
+    }
+
+    public void setEtatClt(String etatClt) {
+        this.etatClt = etatClt;
     }
 
     public void setIdClt(Integer idClt) {
@@ -67,6 +90,14 @@ public class Client implements Serializable {
         return hash;
     }
 
+    public String getAdrClt() {
+        return adrClt;
+    }
+
+    public void setAdrClt(String adrClt) {
+        this.adrClt = adrClt;
+    }
+
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -84,5 +115,5 @@ public class Client implements Serializable {
     public String toString() {
         return "entites.Client[ idClt=" + idClt + " ]";
     }
-    
+
 }

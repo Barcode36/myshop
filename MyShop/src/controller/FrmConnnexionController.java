@@ -25,6 +25,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import modele.CompteR;
@@ -65,6 +66,11 @@ public class FrmConnnexionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
+        Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         fillCompteCombo();
         Platform.runLater(new Runnable() {
             @Override
@@ -108,12 +114,14 @@ public class FrmConnnexionController implements Initializable {
         c.setMdpComp(txtPassConnect.getText());
         try {
             MainViewController.compteActif = MainViewController.compteServiceD.Connexion(c);
+            //System.out.println(MainViewController.compteActif.getIdComp());
             TypeCompte compte = new TypeCompte(MainViewController.compteActif.getIdTypComp());
             MainViewController.typeCompteActif = MainViewController.typeServiceD.findById(compte);
             MainViewController.temporaryPane.getChildren().clear();
             StackPane dashBoard = FXMLLoader.load(getClass().getResource(Constants.DashBoard));
             MainViewController.temporaryPane.getChildren().setAll(dashBoard);
             MainViewController.hamburgerTmp.setVisible(true);
+            MainViewController.mainCss.setVisible(true);
             MainViewController.initialise = true;
             if (MainViewController.initialise == true) {
                 if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {

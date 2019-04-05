@@ -5,10 +5,11 @@
  */
 package javafxapplication3;
 
+<<<<<<< HEAD
 import Utils.Constants;
+=======
+>>>>>>> 0cdee1823f776a7ea069111e39a52c49b1aacce5
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.Arrays;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +18,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javax.swing.JOptionPane;
 
-
 import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -25,6 +25,7 @@ import java.net.Socket;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Platform;
+import javafx.stage.StageStyle;
 
 /**
  *
@@ -112,37 +113,16 @@ public class JavaFXApplication3 extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(Constants.MainView));
-//        root.setOnMousePressed(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                xOffset = event.getSceneX();
-//                yOffset = event.getSceneY();
-//            }
-//
-//        });
-//
-//        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {//
-//                primaryStage.setX(event.getScreenX() - xOffset);
-//                primaryStage.setY(event.getScreenY() - yOffset);
-//            }
-//
-//        });
+            Parent root = FXMLLoader.load(getClass().getResource("/views/essssss.fxml"));
+//        
             Scene scene = new Scene(root);
-// scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
             primaryStage.setScene(scene);
-            primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/icon.jpg")));
+            primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/afnacos.ico")));
+            primaryStage.initStyle(StageStyle.UNDECORATED);
+            primaryStage.setResizable(false);
             primaryStage.setTitle("MyShop");
-            primaryStage.setMaximized(true);
             primaryStage.show();
-
-            primaryStage.setOnHiding(((event) -> {
-                System.exit(0);
-            }));
 
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, ex);
