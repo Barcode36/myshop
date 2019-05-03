@@ -31,6 +31,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -102,7 +103,7 @@ public class CaissePaneController implements Initializable {
     @FXML
     private GridPane cont;
     @FXML
-    private JFXComboBox<ClientR> cltCombo;
+    private ComboBox<ClientR> cltCombo;
     
     private List<Client> clientList() {
         return clientService.findAll();
@@ -151,6 +152,7 @@ public class CaissePaneController implements Initializable {
             }
             
         });
+        new AutoCompleteComboBoxListener<>(cltCombo);
         fillCombo();
         txtCodeProdCaisse.setOnKeyPressed((event) -> {
             if (event.getCode() == KeyCode.ENTER) {
@@ -235,8 +237,8 @@ public class CaissePaneController implements Initializable {
         cltCombo.setOnKeyReleased((event) -> {
             listC.clear();
             Client c = new Client();
-            c.setNomClt(cltCombo.getJFXEditor().getText());
-            c.setNumClt(cltCombo.getJFXEditor().getText());
+            c.setNomClt(cltCombo.getEditor().getText());
+            c.setNumClt(cltCombo.getEditor().getText());
             List<Client> l = clientService.recLikeNomOrNum(c);
             for (Client clt : l) {
                 listC.add(new ClientR(clt));

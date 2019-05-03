@@ -37,6 +37,7 @@ public class ProduitR {
     private JFXCheckBox Suppression;
     private SimpleStringProperty total;
     private JFXTextField qteCom;
+    private Integer to;
 
     public ProduitR(Produit produit) {
         this.idProd = new SimpleIntegerProperty(produit.getIdProd());
@@ -70,6 +71,11 @@ public class ProduitR {
         this.qteProdCom = new SimpleIntegerProperty(contenirVente.getQteVen());
         this.codeProd = new SimpleStringProperty(produit.getCodeProd());
         this.total = new SimpleStringProperty(String.valueOf(Integer.parseInt(produit.getPrixUniProd()) * contenirVente.getQteVen()));
+    }
+
+    public ProduitR(Produit produit, int tot) {
+        this.libProd = new SimpleStringProperty(produit.getLibProd());
+        this.to = tot;
     }
 
     public ProduitR(Produit produit, ObservableList<ProduitR> produitListVent, TableView<ProduitR> produitCaisseTable, Integer com) {
@@ -117,6 +123,14 @@ public class ProduitR {
 //        });
         this.qteCom.setText(String.valueOf(com));
 
+    }
+
+    public Integer getTo() {
+        return to;
+    }
+
+    public void setTo(Integer to) {
+        this.to = to;
     }
 
     public SimpleStringProperty getCltAch() {

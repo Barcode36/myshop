@@ -12,6 +12,7 @@ import com.jfoenix.controls.JFXToolbar;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import entites.Client;
 import entites.Compte;
+import entites.Produit;
 import entites.TypeCompte;
 import java.io.IOException;
 import java.net.URL;
@@ -50,7 +51,7 @@ import service.imp.VenteService;
  * @author Christ
  */
 public class MainViewController implements Initializable {
-    
+
     @FXML
     private JFXToolbar toolbar;
     @FXML
@@ -74,14 +75,14 @@ public class MainViewController implements Initializable {
     public static Boolean initialise = false;
     public static VBox menuL = null;
     public static Label mainCss;
-    
+
     ITypeService typeService = new TypeService();
     ICompteService compteService = compteServiceD;
     @FXML
     private AnchorPane stageTot;
     @FXML
     private Label maiCss;
-    
+
     public List<TypeCompte> listTypeCompte() {
         return typeService.typeCmopteList();
     }
@@ -91,7 +92,7 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         if (listTypeCompte().size() == 0) {
             TypeCompte tc = new TypeCompte();
             tc.setLibTyp("Administrateur");
@@ -113,27 +114,36 @@ public class MainViewController implements Initializable {
             clt.setNumClt("Inconnu");
             clientService.ajouter(clt);
         }
+//        for (int i = 1; i < 500; i++) {
+//            Produit p = new Produit();
+//            p.setCodeProd(String.valueOf(i));
+//            p.setEtatProd("actif");
+//            p.setLibProd(String.valueOf(i));
+//            p.setPrixUniProd(String.valueOf(i));
+//            p.setQteIniProd(i);
+//            produitService.ajouter(p);
+//        }
+
         temporaryPane = contentPane;
         temporaryPaneTot = stageTot;
         drawerTmp = drawer;
         hamburgerTmp = hamburger;
         mainCss = maiCss;
-        
-        
+
         initDrawer();
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
-        
+
     }
-    
+
     private void initDrawer() {
         try {
             VBox menu = null;
             menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
-            
+
             drawer.setSidePane(menu);
             HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
             transition.setRate(-1);
@@ -150,7 +160,7 @@ public class MainViewController implements Initializable {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private void switchPane(String pane) {
         try {
             MainViewController.temporaryPane.getChildren().clear();
@@ -158,15 +168,15 @@ public class MainViewController implements Initializable {
             ObservableList<Node> elements = stackPane.getChildren();
             MainViewController.temporaryPane.getChildren().setAll(elements);
             MainViewController.drawerTmp.close();
-           // MainViewController.hamburgerTmp = new JFXHamburger();
+            // MainViewController.hamburgerTmp = new JFXHamburger();
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
     private void Acceuil(MouseEvent event) {
         switchPane(Constants.DashBoard);
     }
-    
+
 }

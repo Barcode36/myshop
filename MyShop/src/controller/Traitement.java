@@ -10,6 +10,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -84,7 +85,7 @@ public abstract class Traitement {
         return bon;
     }
 
-    public static boolean comboEmty(JFXComboBox<?> comboBox) {
+    public static boolean comboEmty(ComboBox<?> comboBox) {
         boolean bon = false;
         if (comboBox.getValue() != null) {
             bon = true;

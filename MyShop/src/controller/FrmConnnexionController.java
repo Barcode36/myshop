@@ -137,7 +137,7 @@ public class FrmConnnexionController implements Initializable {
                 }
             
         } catch (Exception e) {
-            // e.printStackTrace();
+           //  e.printStackTrace();
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
             notification.setTray("MyShop", "Pseudo ou Mot de passe incorrect", NotificationType.ERROR);

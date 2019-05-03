@@ -82,7 +82,7 @@ public class EssssssController implements Initializable {
                 Scene scene = new Scene(root);
               //  scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
                 primaryStage.setScene(scene);
-                primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/afnacos.ico")));
+              //  primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/afnacos.ico")));
                 primaryStage.setTitle("MyShop");
                 primaryStage.setMaximized(true);
                 primaryStage.show();
