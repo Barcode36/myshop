@@ -8,12 +8,14 @@ package controller;
 import Utils.Constants;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.transitions.JFXFillTransition;
 import static controller.MainViewController.hamburgerTmp;
 import static controller.MainViewController.mainCss;
 import entites.ContenirVente;
 import entites.Produit;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -24,6 +26,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,12 +39,20 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+import modele.ProduitR;
 import service.IContenirVente;
 import service.IProduitService;
 
@@ -57,7 +69,7 @@ public class DashBoardController implements Initializable {
     IProduitService produitService = MainViewController.produitService;
     IContenirVente contenirVenteService = MainViewController.contenirVenteService;
     @FXML
-    private BarChart<?, ?> barCode;
+    private BarChart<String, Integer> barCode;
     @FXML
     private CategoryAxis x;
     @FXML
@@ -89,6 +101,13 @@ public class DashBoardController implements Initializable {
     @FXML
     private JFXButton btnClient;
 
+    ObservableList<PieChart.Data> datas = FXCollections.observableArrayList();
+    ObservableList<ProduitR> obVent = FXCollections.observableArrayList();
+    ObservableList<ProduitR> obPro = FXCollections.observableArrayList();
+    ObservableList<String> databar = FXCollections.observableArrayList();
+    XYChart.Series series = new XYChart.Series<>();
+    Random random = new Random();
+
     public List<Produit> listProduit() {
         return produitService.produitList();
     }
@@ -99,22 +118,7 @@ public class DashBoardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        ObservableList<PieChart.Data> datas = FXCollections.observableArrayList();
-        //ObservableList<BarChart<String,Number>> databar = FXCollections.observableArrayList();
-        XYChart.Series series = new XYChart.Series<>();
-        Random random = new Random();
-        for (Produit p : listProduit()) {
 
-            List<ContenirVente> list = contenirVenteService.listParVente(p);
-            int tot = 0;
-            for (ContenirVente cv : list) {
-                tot += cv.getQteVen();
-            }
-            datas.add(new PieChart.Data(p.getLibProd(), tot));
-            series.getData().add(new XYChart.Data<>(p.getLibProd(), p.getQteIniProd()));
-        }
-        pieChart.setData(datas);
-        barCode.getData().addAll(series);
         btnComp = btnCOmpte;
         btnInvent = btnInventaire;
         btnBil = btnBilan;
@@ -151,6 +155,82 @@ public class DashBoardController implements Initializable {
                 stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
                 cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 45);
             }
+        });
+        // loadTable();
+        for (Produit p : listProduit()) {
+            List<ContenirVente> list = contenirVenteService.listParVente(p);
+            int tot = 0;
+            for (ContenirVente cv : list) {
+                tot += cv.getQteVen();
+            }
+            obVent.add(new ProduitR(p, tot));
+            obPro.add(new ProduitR(p, p.getQteIniProd()));
+            databar.add(p.getLibProd());
+        }
+
+        Comparator<ProduitR> c = Comparator.comparingInt(ProduitR::getTo);
+
+        FXCollections.sort(obVent, c.reversed());
+        FXCollections.sort(obPro, c);
+        for (int i = 0; i < 10; i++) {
+            datas.add(new PieChart.Data(obVent.get(i).getLibProd().getValue(), obVent.get(i).getTo()));
+            series.getData().add(new XYChart.Data<>(obPro.get(i).getLibProd().getValue(), obPro.get(i).getTo()));
+
+            System.out.println(series);
+        }
+        pieChart.setData(datas);
+        barCode.getData().addAll(series);
+    }
+
+    private void loadTable() {
+        Service<Void> loadTableS = new Service<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                // Instancier et retourner une Task<Image> ici.
+                return new Task<Void>() {
+                    @Override
+                    protected Void call() throws Exception {
+                        for (Produit p : listProduit()) {
+                            List<ContenirVente> list = contenirVenteService.listParVente(p);
+                            int tot = 0;
+                            for (ContenirVente cv : list) {
+                                tot += cv.getQteVen();
+                            }
+                            obVent.add(new ProduitR(p, tot));
+                            obPro.add(new ProduitR(p, p.getQteIniProd()));
+                            databar.add(p.getLibProd());
+                        }
+
+                        Comparator<ProduitR> c = Comparator.comparingInt(ProduitR::getTo);
+
+                        FXCollections.sort(obVent, c.reversed());
+                        FXCollections.sort(obPro, c);
+                        for (int i = 0; i < 2; i++) {
+                            datas.add(new PieChart.Data(obVent.get(i).getLibProd().getValue(), obVent.get(i).getTo()));
+                            series.getData().add(new XYChart.Data<>(obPro.get(i).getLibProd().getValue(), obPro.get(i).getTo()));
+
+                            System.out.println(series);
+                        }
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                pieChart.setData(datas);
+                                barCode.getData().addAll(series);
+                            }
+                        });
+                        return null;
+                    }
+                };
+            }
+        };
+        loadTableS.start();
+        loadTableS.setOnSucceeded((event) -> {
+            System.out.println("ok");
+
+        });
+        loadTableS.setOnFailed((event) -> {
+            System.out.println("nonok");
         });
     }
 

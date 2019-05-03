@@ -114,7 +114,7 @@ public class JavaFXApplication3 extends Application {
 //        
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
-            primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/afnacos.ico")));
+           // primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/afnacos.ico")));
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setResizable(false);
             primaryStage.setTitle("MyShop");

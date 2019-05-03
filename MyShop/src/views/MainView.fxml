@@ -24,7 +24,7 @@
                <center>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="maiCss" onMouseClicked="#Acceuil" styleClass="maiCss" text="Myshop Managnment" textFill="WHITE">
+                        <Label fx:id="maiCss" onMouseClicked="#Acceuil" styleClass="maiCss" text="Myshop Management" textFill="WHITE" visible="false">
                            <padding>
                               <Insets left="10.0" right="10.0" />
                            </padding></Label>

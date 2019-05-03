@@ -95,6 +95,8 @@ public class CrudInventaireController implements Initializable {
     @FXML
     private Group gp;
     private Label label;
+    @FXML
+    private JFXTextField txtRec;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
@@ -265,6 +267,21 @@ public class CrudInventaireController implements Initializable {
     private void vider(ActionEvent event) {
         clearProduitText();
         saveUp.setText("ENREGISTRER");
+    }
+
+    @FXML
+    private void recherche(KeyEvent event) {
+        produitList.clear();
+        List<Produit> list = produitService.recherche(txtRec.getText());
+        System.out.println(list);
+        for (Produit produit : list) {
+            produitList.add(new ProduitR(produit));
+        }
+        libProdCol.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
+        codeProdcol.setCellValueFactory(cellData -> cellData.getValue().getCodeProd());
+        prixProdCol.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
+        qteProdCol.setCellValueFactory(cellData -> cellData.getValue().getQteIniProd().asObject());
+        produitTable.setItems(produitList);
     }
 
 }
