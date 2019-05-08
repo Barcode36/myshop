@@ -47,11 +47,19 @@ public class MenuLateraleCController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void openAccueil(ActionEvent event) {
+
         switchPane(Constants.DashBoard);
+        if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+            DashBoardController.btnComp.setVisible(false);
+            DashBoardController.btnInvent.setVisible(false);
+            DashBoardController.btnBil.setVisible(false);
+        } else {
+
+        }
     }
 
     @FXML
@@ -102,10 +110,17 @@ public class MenuLateraleCController implements Initializable {
             ObservableList<Node> elements = stackPane.getChildren();
             MainViewController.temporaryPane.getChildren().setAll(elements);
             MainViewController.drawerTmp.close();
-         //   MainViewController.hamburgerTmp = new JFXHamburger();
+            //   MainViewController.hamburgerTmp = new JFXHamburger();
+            if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                DashBoardController.btnComp.setVisible(false);
+                DashBoardController.btnInvent.setVisible(false);
+                DashBoardController.btnBil.setVisible(false);
+            } else {
+
+            }
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }

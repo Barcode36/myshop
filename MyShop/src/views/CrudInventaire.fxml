@@ -76,6 +76,7 @@
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
                                     <JFXTextField fx:id="txtRec" labelFloat="true" onKeyReleased="#recherche" prefHeight="44.0" prefWidth="308.0" promptText="Nom ou Code du Produit" />
+                                    <JFXButton onAction="#viderRec" styleClass="save-del1" text="VIDER" />
                                  </children>
                               </HBox>
                            </children>

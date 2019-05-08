@@ -84,6 +84,8 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     Compte compteActif = new Compte();
     ClientR clientR = new ClientR();
     private boolean corr = true;
+    @FXML
+    private Label Client;
 
     /**
      * Initializes the controller class.
@@ -99,6 +101,9 @@ public class CaisseConfirmationController extends Traitement implements Initiali
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                Client.setText("Vente au client: " + clientR.getNomClt().getValue().toUpperCase()
+                        + " (" + clientR.getNumClt().getValue() + ")");
+
                 txtMontCllt.setFocusTraversable(true);
                 txtMontCllt.requestFocus();
             }

@@ -77,4 +77,10 @@ public class ProduitService implements IProduitService {
         return produitJpaController.Recherche(s);
     }
 
+    @Override
+    public List<Produit> recherche2(String s) {
+
+        return produitJpaController.Recherche2(s);
+    }
+
 }

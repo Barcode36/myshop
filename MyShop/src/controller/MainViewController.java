@@ -168,7 +168,15 @@ public class MainViewController implements Initializable {
             ObservableList<Node> elements = stackPane.getChildren();
             MainViewController.temporaryPane.getChildren().setAll(elements);
             MainViewController.drawerTmp.close();
+            if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                DashBoardController.btnComp.setVisible(false);
+                DashBoardController.btnInvent.setVisible(false);
+                DashBoardController.btnBil.setVisible(false);
+            } else {
+
+            }
             // MainViewController.hamburgerTmp = new JFXHamburger();
+
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -176,6 +184,13 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void Acceuil(MouseEvent event) {
+        if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+            DashBoardController.btnComp.setVisible(false);
+            DashBoardController.btnInvent.setVisible(false);
+            DashBoardController.btnBil.setVisible(false);
+        } else {
+
+        }
         switchPane(Constants.DashBoard);
     }
 

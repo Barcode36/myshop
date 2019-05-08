@@ -271,17 +271,45 @@ public class CrudInventaireController implements Initializable {
 
     @FXML
     private void recherche(KeyEvent event) {
-        produitList.clear();
-        List<Produit> list = produitService.recherche(txtRec.getText());
-        System.out.println(list);
-        for (Produit produit : list) {
-            produitList.add(new ProduitR(produit));
+        if (txtRec.getText().isEmpty()) {
+            loadInventairegrid();
+        } else {
+            if (event.getCode() == KeyCode.ENTER) {
+                produitList.clear();
+                List<Produit> list = produitService.recherche2(txtRec.getText());
+                System.out.println(list);
+                for (Produit produit : list) {
+                    produitList.add(new ProduitR(produit));
+                }
+                libProdCol.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
+                codeProdcol.setCellValueFactory(cellData -> cellData.getValue().getCodeProd());
+                prixProdCol.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
+                qteProdCol.setCellValueFactory(cellData -> cellData.getValue().getQteIniProd().asObject());
+                produitTable.setItems(produitList);
+            } else {
+                produitList.clear();
+                List<Produit> list = produitService.recherche(txtRec.getText());
+                System.out.println(list);
+                for (Produit produit : list) {
+                    produitList.add(new ProduitR(produit));
+                }
+                libProdCol.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
+                codeProdcol.setCellValueFactory(cellData -> cellData.getValue().getCodeProd());
+                prixProdCol.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
+                qteProdCol.setCellValueFactory(cellData -> cellData.getValue().getQteIniProd().asObject());
+                produitTable.setItems(produitList);
+            }
+
         }
-        libProdCol.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
-        codeProdcol.setCellValueFactory(cellData -> cellData.getValue().getCodeProd());
-        prixProdCol.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
-        qteProdCol.setCellValueFactory(cellData -> cellData.getValue().getQteIniProd().asObject());
-        produitTable.setItems(produitList);
+
+    }
+
+    @FXML
+    private void viderRec(ActionEvent event) {
+        loadInventairegrid();
+        txtRec.clear();
+        txtRec.setFocusTraversable(true);
+        txtRec.requestFocus();
     }
 
 }
