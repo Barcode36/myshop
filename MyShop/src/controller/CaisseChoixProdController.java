@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -73,14 +74,24 @@ public class CaisseChoixProdController implements Initializable {
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         loadInventairegrid();
+        produitCaisseTable.setOnMouseClicked(value -> {
+            try {
+                ProduitR prChoi = produitCaisseTable.getSelectionModel().getSelectedItem();
+                if (prChoi == null) {
+                    return;
+                }
+                CaissePaneController.produitChoisi = prChoi;
+                Stage s = (Stage) txtRec.getScene().getWindow();
+                s.close();
+            } catch (Exception e) {
+            }
+
+        });
     }
 
     @FXML
     private void ChoixProd(MouseEvent event) {
-        ProduitR prChoi = produitCaisseTable.getSelectionModel().getSelectedItem();
-        CaissePaneController.produitChoisi = prChoi;
-        Stage s = (Stage) produitCaisseTable.getScene().getWindow();
-        s.close();
+
     }
 
     @FXML

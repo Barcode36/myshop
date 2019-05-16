@@ -32,6 +32,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import modele.ClientR;
 import service.IClientService;
 import service.ICompteService;
 import service.IContenirVente;
@@ -78,6 +79,7 @@ public class MainViewController implements Initializable {
 
     ITypeService typeService = new TypeService();
     ICompteService compteService = compteServiceD;
+
     @FXML
     private AnchorPane stageTot;
     @FXML
@@ -92,6 +94,20 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        Client client = new Client();
+        client.setNomClt("Defaut");
+        try {
+            client = clientService.findByNom(client);
+            ClientR cr = new ClientR(client);
+            CaissePaneController.clientNew = cr;
+        } catch (Exception e) {
+            client.setEtatClt("actif");
+            client.setAdrClt("Defaut");
+            client.setNumClt("Defaut");
+            clientService.ajouter(client);
+            ClientR cr = new ClientR(client);
+            CaissePaneController.clientNew = cr;
+        }
 
         if (listTypeCompte().size() == 0) {
             TypeCompte tc = new TypeCompte();

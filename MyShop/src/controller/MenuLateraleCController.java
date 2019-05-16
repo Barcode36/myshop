@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -100,7 +101,14 @@ public class MenuLateraleCController implements Initializable {
 
     @FXML
     private void openClose(ActionEvent event) {
-        System.exit(0);
+         try {
+            switchPane(Constants.Connect);
+            VBox menu = null;
+            menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
+            MainViewController.drawerTmp.setSidePane(menu);
+        } catch (IOException ex) {
+            Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void switchPane(String pane) {

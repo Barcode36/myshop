@@ -64,7 +64,7 @@ public class ClientR {
 
     @Override
     public String toString() {
-        return numClt.getValue();
+        return nomClt.getValue();
     }
 
 }
