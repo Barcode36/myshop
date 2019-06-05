@@ -35,6 +35,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.swing.SwingUtilities;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.Drawing;
@@ -227,7 +228,7 @@ public class ReglagePaneController implements Initializable {
             sheet.setColumnWidth(2, 256 * 25);
             sheet.setColumnWidth(3, 256 * 25);
             sheet.setColumnWidth(4, 256 * 25);
-
+            sheet.setDefaultRowHeight(Short.parseShort("800"));
             int index = 1;
             int i = 1;
             for (Produit produit : listProduit()) {
