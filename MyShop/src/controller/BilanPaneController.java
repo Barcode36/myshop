@@ -32,6 +32,9 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -137,6 +140,8 @@ public class BilanPaneController implements Initializable {
     ObservableList<VenteR> venteList = FXCollections.observableArrayList();
     ObservableList<ProduitR> produitListVentCaissier = FXCollections.observableArrayList();
      ObservableList<ProduitR> produitListVentCaissierFiltre = FXCollections.observableArrayList();
+     ObservableList<ProduitR> lTmp = FXCollections.observableArrayList();
+     
     ObservableList<String> listMois = FXCollections.observableArrayList();
     @FXML
     private AnchorPane stage;
@@ -550,7 +555,7 @@ public class BilanPaneController implements Initializable {
             for (Vente vente : listVParCaissier) {
 
                 List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
-                System.out.println(listCon);
+                //System.out.println(listCon);
                 for (ContenirVente cv : listCon) {
 //                    Produit p = new Produit(cv.getIdProd());
 //                    Produit produit = produitService.findById(p);
@@ -577,6 +582,7 @@ public class BilanPaneController implements Initializable {
             
             
         }
+        produitListVentCaissierFiltre.clear();
         loadListDetailVente();
         
     }
@@ -603,13 +609,125 @@ public class BilanPaneController implements Initializable {
         }
     }
     
+    public void loadVenteCaissierDetailList(VenteR venteR)  {
+        produitListVentCaissier.clear();
+        
+        Compte c = new Compte(venteR.getidCompte().getValue());
+        Compte compte = compteService.findById(c);
+        List<Vente> list = venteService.ventesParCaissier(compte);
+        /*if(rbMois.isSelected()){
+             list = venteService.ventesParCaissierMois(compte,moisCombo.getValue());
+        } else if(rbDeuxDate.isSelected()){
+             list = venteService.ventesEntreDeuxDate(datePiker1.getPromptText(),datePiker2.getPromptText(),compte);
+        }*/
+        //List<Vente> list = venteService.ventesParCaissier(compte);
+        for (Vente v : list) {
+            Client cl = new Client(v.getIdClt());
+            Client clt = MainViewController.clientService.findById(cl);
+            List<ContenirVente> listCon = contenirVenteService.listParVente(v);
+            for (ContenirVente cv : listCon) {
+                try {
+                    Produit p = new Produit(cv.getIdProd());
+                    Produit produit = produitService.findById(p);
+                    produitListVentCaissier.add(new ProduitR(produit, v, cv, clt));
+                } catch (Exception e) {
+                }
+            }
+        }
+         
+        for(ProduitR prod:produitListVentCaissier){
+            if(rbMoisCours.isSelected()){
+               
+                 LocalDate dateDuJour = LocalDate.now();
+                 
+                 String dateAsString[] = prod.getDateVen().getValue().split("-");
+                 String mois = dateAsString[1];
+                 //System.out.println("ms"+mois);
+                 
+                 if(Integer.parseInt(mois)==(dateDuJour.getMonthValue())){
+                     try {
+                         
+                        produitListVentCaissierFiltre.add(prod);
+                    } catch (Exception e) {
+                         System.out.println(""+e);
+                    }
+                     
+                 }
+                
+             } else if(rbMois.isSelected()){
+                 System.out.println("ms: "+moisCombo.getSelectionModel().getSelectedIndex());
+                 String dateAsString[] = prod.getDateVen().getValue().split("-");
+                 String mois = dateAsString[1];
+                 if(moisCombo.getSelectionModel().getSelectedIndex()+1 == Integer.parseInt(mois) ){
+                     try {
+                         
+                        produitListVentCaissierFiltre.add(prod);
+                    } catch (Exception e) {
+                         System.out.println(""+e);
+                    }
+                     
+                 }
+             } else if (rbDeuxDate.isSelected()){
+                 String dateAsString[] = prod.getDateVen().getValue().split("-");
+                 String datePiker1Split[] = datePiker1.getValue().toString().split("-");
+                 String datePiker2Split[] = datePiker2.getValue().toString().split("-");
+                 String mois = dateAsString[1];
+                 System.out.println("mw: "+mois);
+                 System.out.println(""+datePiker1Split[1]);
+                 System.out.println(""+datePiker2Split[1]);
+                 if(Integer.parseInt(mois)>= Integer.parseInt(datePiker1Split[1])
+                         && Integer.parseInt(mois)<= Integer.parseInt(datePiker2Split[1]) ){
+                     try {
+                         
+                        produitListVentCaissierFiltre.add(prod);
+                    } catch (Exception e) {
+                         System.out.println(""+e);
+                    }
+                     
+                 }
+                }
+            
+        }
+        int i =0;
+         lTmp.clear();
+           lTmp.setAll(produitListVentCaissierFiltre);
+           //Comparable <ProduitR> cp;
+        List<ProduitR> lTmp2 = produitListVentCaissierFiltre.sorted();
+        System.out.println("tmp2 "+lTmp2);
+        //lTmp.addAll(produitListVentCaissierFiltre.)
+        //System.out.println("ltmp "+lTmp);
+        produitListVentCaissierFiltre.clear();
+        int qte = 0;
+        /*for(ProduitR pdt: lTmp){
+            //System.out.println("pdt bn: "+pdt.getIdProd());
+            for(ProduitR pdt2: lTmp){
+                qte =0;
+                //System.out.println("pdt1 "+pdt.getIdProd()+ " pdt2 "+pdt2.getIdProd() );
+                if(pdt.getIdProd().getValue().intValue() == pdt2.getIdProd().getValue().intValue() ){
+                    qte = qte+pdt.getQteProdCom().intValue()+pdt2.getQteProdCom().intValue();
+                    //pdt.setQteProdCom(new SimpleIntegerProperty(pdt.getQteProdCom().intValue()+ pdt2.getQteProdCom().intValue() ));
+                    System.out.println("pdt bn: "+pdt.getLibProd()+" qte "+pdt.getQteProdCom().intValue());
+                    //produitListVentCaissierFiltre.add(pdt);
+                }
+            }
+            pdt.setQteProdCom(new SimpleIntegerProperty(qte));
+            produitListVentCaissierFiltre.add(pdt);
+        }
+        System.out.println("fltr: "+produitListVentCaissierFiltre);*/
+    }
+    
+    
     private void loadListDetailVente() {
         
          
         ObservableList<VenteR> vtList = CaissierVenteTable.getItems();
         for(VenteR vt : vtList){
-            loadVenteCaissierDetail(vt);
+            
+            loadVenteCaissierDetailList(vt);
+            //tableDetailCaissier.getItems().clear();
         }
+        
+        //for(Produit pdt)
         
     }
     
@@ -882,12 +1000,7 @@ public class BilanPaneController implements Initializable {
         produitListVentCaissier = tableDetailCaissier.getItems();
     }
     
-    private void loadingPr(Process rt){
-        while(rt.isAlive()){
-            scriptIndicator.setVisible(false);
-        }
-        
-    }
+   
     
     private HSSFFont createFont(short fontColor, short fontHeight, boolean fontBold) {
 

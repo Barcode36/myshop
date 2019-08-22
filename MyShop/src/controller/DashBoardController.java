@@ -227,30 +227,43 @@ public class DashBoardController implements Initializable {
             }
         });
         // loadTable();
-        for (Produit p : listProduit()) {
-            List<ContenirVente> list = contenirVenteService.listParVente(p);
-            int tot = 0;
-            for (ContenirVente cv : list) {
-                tot += cv.getQteVen();
+        List <Produit> allProduct = listProduit();
+        
+        if(allProduct!=null && allProduct.size()>0){
+            for (Produit p : listProduit()) {
+                List<ContenirVente> list = contenirVenteService.listParVente(p);
+                int tot = 0;
+                if(list!=null && list.size()>0){
+                    for (ContenirVente cv : list) {
+                        tot += cv.getQteVen();
+                    }
+                    obVent.add(new ProduitR(p, tot));
+                    obPro.add(new ProduitR(p, p.getQteIniProd()));
+                    databar.add(p.getLibProd());
+                }
+                
             }
-            obVent.add(new ProduitR(p, tot));
-            obPro.add(new ProduitR(p, p.getQteIniProd()));
-            databar.add(p.getLibProd());
-        }
 
-        Comparator<ProduitR> c = Comparator.comparingInt(ProduitR::getTo);
+            Comparator<ProduitR> c = Comparator.comparingInt(ProduitR::getTo);
+            System.out.println("ov"+obVent.size());
+            
+            if(obVent!=null && obVent.size()>=10 && obPro!=null && obPro.size()>=10 ){
+                FXCollections.sort(obVent, c.reversed());
+                FXCollections.sort(obPro, c);
+                for (int i = 0; i < 10; i++) {
+                datas.add(new PieChart.Data(obVent.get(i).getLibProd().getValue(), obVent.get(i).getTo()));
+                series.getData().add(new XYChart.Data<>(obPro.get(i).getLibProd().getValue(), obPro.get(i).getTo()));
+                //System.out.println("datas 1: "+datas.toString());
 
-        FXCollections.sort(obVent, c.reversed());
-        FXCollections.sort(obPro, c);
-        for (int i = 0; i < 10; i++) {
-            datas.add(new PieChart.Data(obVent.get(i).getLibProd().getValue(), obVent.get(i).getTo()));
-            series.getData().add(new XYChart.Data<>(obPro.get(i).getLibProd().getValue(), obPro.get(i).getTo()));
-            //System.out.println("datas 1: "+datas.toString());   
+
+                }
+                pieChart.setData(datas);
+                barCode.getData().addAll(series);
+                listProdEnFin = series.getData() ;
+                listMieuxVen = datas;
+            }
+        
         }
-        pieChart.setData(datas);
-        barCode.getData().addAll(series);
-        listProdEnFin = series.getData() ;
-        listMieuxVen = datas;
         
     }
 

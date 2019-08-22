@@ -156,7 +156,7 @@ public class CRUDCompteController implements Initializable {
     private void saveProd(ActionEvent event) {
 //       
         if(txtNomComp.getText().isEmpty() || txtPrenomComp.getText().isEmpty() || txtPseudoComp.getText().isEmpty() || 
-                txtPassword.getText().isEmpty()){
+                txtPassword.getText().isEmpty()||typeCompteCombo.getSelectionModel().isEmpty()){
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
             notification.setTray("MyShop", "Veuillez remplir tous les champs ", NotificationType.ERROR);
@@ -173,7 +173,7 @@ public class CRUDCompteController implements Initializable {
             compteService.ajouter(compte);
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
-            notification.setTray("MyShop", "Veuillez remplir tous les champs ", NotificationType.ERROR);
+            notification.setTray("MyShop", "Ajout Effectué avec succès ", NotificationType.SUCCESS);
             notification.showAndDismiss(Duration.seconds(1));
         } else {
             saveUp.setText("Modifier");
