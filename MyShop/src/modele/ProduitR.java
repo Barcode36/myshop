@@ -50,7 +50,7 @@ public class ProduitR {
 
     public ProduitR(Produit produit, Vente vente, ContenirVente contenirVente) {
         this.idProd = new SimpleIntegerProperty(produit.getIdProd());
-        DateFormat dateFormat = new SimpleDateFormat("d-MM-yyy");
+        DateFormat dateFormat = new SimpleDateFormat("d-MM-yyy HH:mm:ss");
         String dateh = dateFormat.format(vente.getDateVen()).toString();
         this.dateVen = new SimpleStringProperty(dateh);
         this.libProd = new SimpleStringProperty(produit.getLibProd());
@@ -63,7 +63,7 @@ public class ProduitR {
     public ProduitR(Produit produit, Vente vente, ContenirVente contenirVente, Client c) {
         this.cltAch = new SimpleStringProperty(c.getNomClt());
         this.idProd = new SimpleIntegerProperty(produit.getIdProd());
-        DateFormat dateFormat = new SimpleDateFormat("d-MM-yyy");
+        DateFormat dateFormat = new SimpleDateFormat("d-MM-yyy HH:mm:ss");
         String dateh = dateFormat.format(vente.getDateVen()).toString();
         this.dateVen = new SimpleStringProperty(dateh);
         this.libProd = new SimpleStringProperty(produit.getLibProd());

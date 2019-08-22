@@ -34,6 +34,7 @@
                         <Font size="36.0" />
                      </font>
                   </Label>
+                  <Label fx:id="Client" layoutX="27.0" layoutY="13.0" />
                </children>
             </Pane>
             <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">

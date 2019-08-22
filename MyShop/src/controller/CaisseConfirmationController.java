@@ -5,6 +5,7 @@
  */
 package controller;
 
+import Utils.Constants;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import entites.Compte;
@@ -12,10 +13,13 @@ import entites.ContenirVente;
 import entites.Vente;
 import entites.ContenirVentePK;
 import entites.Produit;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -23,7 +27,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -31,6 +37,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -84,6 +91,8 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     Compte compteActif = new Compte();
     ClientR clientR = new ClientR();
     private boolean corr = true;
+    @FXML
+    private Label Client;
 
     /**
      * Initializes the controller class.
@@ -99,6 +108,9 @@ public class CaisseConfirmationController extends Traitement implements Initiali
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
+                Client.setText("Vente au client: " + clientR.getNomClt().getValue().toUpperCase()
+                        + " (" + clientR.getNumClt().getValue() + ")");
+
                 txtMontCllt.setFocusTraversable(true);
                 txtMontCllt.requestFocus();
             }
@@ -161,6 +173,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 notification.showAndDismiss(Duration.seconds(1.5));
                 Stage stage = (Stage) btnClose.getScene().getWindow();
                 stage.close();
+                switchPane(Constants.Caisse);
             } else {
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
@@ -174,6 +187,21 @@ public class CaisseConfirmationController extends Traitement implements Initiali
             notification.showAndDismiss(Duration.seconds(1.5));
         }
 
+    }
+
+    private void switchPane(String pane) {
+        try {
+            MainViewController.temporaryPane.getChildren().clear();
+            StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
+            ObservableList<Node> elements = stackPane.getChildren();
+
+            MainViewController.temporaryPane.getChildren().setAll(elements);
+
+            MainViewController.drawerTmp.close();
+            // MainViewController.hamburgerTmp = new JFXHamburger();
+        } catch (IOException ex) {
+            Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

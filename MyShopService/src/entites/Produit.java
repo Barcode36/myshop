@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Produit.findByCodeProd", query = "SELECT p FROM Produit p WHERE p.codeProd = :codeProd AND p.etatProd='actif'")
     , @NamedQuery(name = "Produit.findByLibProd", query = "SELECT p FROM Produit p WHERE p.libProd = :libProd")
     , @NamedQuery(name = "Produit.findByLibProdLike", query = "SELECT p FROM Produit p WHERE p.etatProd='actif' AND (p.libProd LIKE :libProd OR p.codeProd LIKE :libProd)")
+    , @NamedQuery(name = "Produit.findByLibProdLike2", query = "SELECT p FROM Produit p WHERE p.etatProd='actif' AND (p.libProd = :libProd OR p.codeProd = :libProd)")
     , @NamedQuery(name = "Produit.findByPrixUniProd", query = "SELECT p FROM Produit p WHERE p.prixUniProd = :prixUniProd")
     , @NamedQuery(name = "Produit.findByQteIniProd", query = "SELECT p FROM Produit p WHERE p.qteIniProd = :qteIniProd")})
 public class Produit implements Serializable {

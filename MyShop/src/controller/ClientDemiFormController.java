@@ -7,6 +7,7 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import static controller.CaissePaneController.clientNew;
 import entites.Client;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -73,6 +74,7 @@ public class ClientDemiFormController implements Initializable {
             clientService.ajouter(c);
             ClientR cr = new ClientR(c);
             CaissePaneController.clientNew = cr;
+            CaissePaneController.txtCltV.setText(clientNew.getNomClt().getValue() + " (" + clientNew.getNumClt().getValue() + ")");
         }
         CaissePaneController.newClt = true;
         Stage s = (Stage) saveUp.getScene().getWindow();

@@ -6,11 +6,14 @@
 package controller;
 
 import entites.Produit;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -31,10 +34,20 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javax.swing.SwingUtilities;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.ClientAnchor;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Drawing;
+import org.apache.poi.ss.usermodel.Picture;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.krysalis.barcode4j.impl.code128.Code128Bean;
+import org.krysalis.barcode4j.output.bitmap.BitmapCanvasProvider;
 import service.IProduitService;
 import service.imp.CompteService;
 import service.imp.ProduitService;
@@ -119,11 +132,10 @@ public class ReglagePaneController implements Initializable {
                     p.setEtatProd("actif");
                     try {
                         produit = produitService.findByCode(p);
-                        // Addition + produit.getQteIniProd()
                         produit.setQteIniProd(p.getQteIniProd());
                         produitService.modifier(produit);
                     } catch (Exception e) {
-                         produitService.ajouter(p);
+                        produitService.ajouter(p);
                         //e.printStackTrace();
                     }
                 }
@@ -194,6 +206,106 @@ public class ReglagePaneController implements Initializable {
         notification.setAnimationType(AnimationType.POPUP);
         notification.setTray("MyShop", "Exportation terminée", NotificationType.SUCCESS);
         notification.showAndDismiss(Duration.seconds(1.5));
+    }
+
+    @FXML
+    private void catalogue(ActionEvent event) {
+        try {
+            stage = (Stage) anchorPane.getScene().getWindow();
+            file = fileChooser.showSaveDialog(stage);
+            FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + ".xlsx");
+            XSSFWorkbook wb = new XSSFWorkbook();
+            XSSFSheet sheet = wb.createSheet("Inventaire");
+            XSSFRow header = sheet.createRow(0);
+            header.createCell(0).setCellValue("Code Produit");
+            header.createCell(1).setCellValue("Produit");
+            header.createCell(2).setCellValue("Prix Unitaire");
+            header.createCell(3).setCellValue("Quantité");
+            header.createCell(3).setCellValue("Code barre");
+            sheet.autoSizeColumn(0);
+            sheet.setColumnWidth(0, 256 * 25);
+            sheet.setColumnWidth(1, 256 * 25);
+            sheet.setColumnWidth(2, 256 * 25);
+            sheet.setColumnWidth(3, 256 * 25);
+            sheet.setColumnWidth(4, 256 * 25);
+            sheet.setDefaultRowHeight(Short.parseShort("800"));
+            int index = 1;
+            int i = 1;
+            for (Produit produit : listProduit()) {
+                try {
+                    XSSFRow row = sheet.createRow(index);
+
+                    Code128Bean code128 = new Code128Bean();
+                    code128.setHeight(15f);
+                    code128.setModuleWidth(0.3);
+                    code128.setQuietZone(10);
+                    code128.doQuietZone(true);
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    BitmapCanvasProvider canvas = new BitmapCanvasProvider(baos, "image/x-png", 400, BufferedImage.TYPE_BYTE_BINARY, false, 0);
+                    code128.generateBarcode(canvas, produit.getCodeProd());
+                    canvas.finish();
+
+                    try (//write to png file
+                            FileOutputStream foss = new FileOutputStream("barcode.png")) {
+                        foss.write(baos.toByteArray());
+                        foss.flush();
+                    }
+                    row.createCell(0).setCellValue(produit.getCodeProd());
+                    row.createCell(1).setCellValue(produit.getLibProd());
+                    row.createCell(2).setCellValue(produit.getPrixUniProd());
+                    //row.createCell(3).setCellValue(produit.getQteIniProd());
+                    InputStream inputStream = new FileInputStream("barcode.png");
+                    //Get the contents of an InputStream as a byte[].
+                    byte[] bytes = IOUtils.toByteArray(inputStream);
+                    //Adds a picture to the workbook
+                    int pictureIdx = wb.addPicture(bytes, Workbook.PICTURE_TYPE_PNG);
+                    //close the input stream
+                    inputStream.close();
+                    //Returns an object that handles instantiating concrete classes
+                    CreationHelper helper = wb.getCreationHelper();
+                    //Creates the top-level drawing patriarch.
+                    Drawing drawing = sheet.createDrawingPatriarch();
+
+                    //Create an anchor that is attached to the worksheet
+                    ClientAnchor anchor = helper.createClientAnchor();
+
+                    //create an anchor with upper left cell _and_ bottom right cell
+                    anchor.setCol1(3); //Column B
+                    anchor.setRow1(i); //Row 3
+                    anchor.setCol2(4); //Column C
+                    anchor.setRow2(i + 1); //Row 4
+
+                    //Creates a picture
+                    Picture pict = drawing.createPicture(anchor, pictureIdx);
+
+                    //Reset the image to the original size
+                    //pict.resize(); //don't do that. Let the anchor resize the image!
+                    //Create the Cell B3
+                    index++;
+                    i++;
+                } catch (IOException ex) {
+                    Logger.getLogger(ReglagePaneController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            wb.write(fos);
+            fos.close();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MainPrincipalController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(MainPrincipalController.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
+        TrayNotification notification = new TrayNotification();
+        notification.setAnimationType(AnimationType.POPUP);
+        notification.setTray("MyShop", "Exportation terminée", NotificationType.SUCCESS);
+        notification.showAndDismiss(Duration.seconds(1.5));
+
     }
 
 }

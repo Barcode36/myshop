@@ -27,4 +27,6 @@ public interface IProduitService {
     public List<Produit> produitList();
 
     public List<Produit> recherche(String s);
+
+    public List<Produit> recherche2(String s);
 }
