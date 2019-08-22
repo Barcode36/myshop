@@ -106,7 +106,9 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        
+        // check if there is a client with id=1
+      List<Client> allClient = clientService.findAll();
+      if (!(allClient != null && allClient.size()>0)) {
         Client client = new Client();
         client.setNomClt("Defaut");
         try {
@@ -121,6 +123,7 @@ public class MainViewController implements Initializable {
             ClientR cr = new ClientR(client);
             CaissePaneController.clientNew = cr;
         }
+      }
 
         if (listTypeCompte().size() == 0) {
             TypeCompte tc = new TypeCompte();

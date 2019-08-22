@@ -19,7 +19,9 @@
       <property name="javax.persistence.jdbc.password" value=""/>
       <property name="javax.persistence.schema-generation.database.action" value="create" />
       
-      
+<!--       <property name = "javax.persistence.schema-generation.create-source" value = "script" />
+      <property name="javax.persistence.sql-load-script-source" value="META-INF/script3.sql"/>
+ -->
 
     </properties>
   </persistence-unit>

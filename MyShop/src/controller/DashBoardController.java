@@ -245,8 +245,7 @@ public class DashBoardController implements Initializable {
         for (int i = 0; i < 10; i++) {
             datas.add(new PieChart.Data(obVent.get(i).getLibProd().getValue(), obVent.get(i).getTo()));
             series.getData().add(new XYChart.Data<>(obPro.get(i).getLibProd().getValue(), obPro.get(i).getTo()));
-            //System.out.println("datas 1: "+datas.toString());
-            
+            //System.out.println("datas 1: "+datas.toString());   
         }
         pieChart.setData(datas);
         barCode.getData().addAll(series);
