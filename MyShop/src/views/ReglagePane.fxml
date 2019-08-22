@@ -1,25 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReglagePaneController">
+<StackPane prefHeight="700.0" prefWidth="1024.0" stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ReglagePaneController">
    <children>
-      <AnchorPane id="AnchorPane" fx:id="anchorPane" prefHeight="600.0" prefWidth="1240.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0">
          <children>
-            <TitledPane fx:id="cont" animated="false" layoutX="277.0" layoutY="84.0" prefHeight="432.0" prefWidth="578.0" styleClass="card" text="Operation de reglage" AnchorPane.bottomAnchor="84.0" AnchorPane.leftAnchor="277.0" AnchorPane.rightAnchor="277.0" AnchorPane.topAnchor="84.0">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="card">
+            <BorderPane layoutX="23.0" layoutY="49.0" prefHeight="631.0" prefWidth="986.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="23.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="49.0">
+               <top>
+                  <HBox alignment="CENTER" prefHeight="626.0" prefWidth="986.0" BorderPane.alignment="CENTER">
                      <children>
-                        <JFXButton layoutX="111.0" layoutY="161.0" onAction="#importInventaire" prefHeight="71.0" prefWidth="198.0" styleClass="save-del" text="Importation" />
-                        <JFXButton layoutX="408.0" layoutY="161.0" onAction="#exportInventaire" prefHeight="71.0" prefWidth="197.0" styleClass="save-del" text="Exportation" />
+                        <AnchorPane fx:id="anchorPane" prefHeight="576.0" prefWidth="986.0">
+                           <children>
+                              <JFXButton layoutX="421.0" layoutY="54.0" onAction="#catalogue" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Catalogue">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXButton>
+                              <TitledPane fx:id="cont" animated="false" layoutX="148.0" layoutY="110.0" prefHeight="433.0" prefWidth="682.0" text="Operation de Reglage">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="card">
+                                       <children>
+                                          <JFXButton layoutX="91.0" layoutY="67.0" onAction="#importInventaire" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Importation" />
+                                          <JFXButton layoutX="444.0" layoutY="67.0" onAction="#exportInventaire" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Exportation" />
+                                          <JFXTextField fx:id="txtCoeffParam" onAction="#getCoefficient" labelFloat="true" layoutX="91.0" layoutY="158.0" prefHeight="52.0" prefWidth="334.0" promptText="Coefficient des Points des clients" unFocusColor="#301afc">
+                                             <styleClass>
+                                                <String fx:value="card" />
+                                                <String fx:value="lab" />
+                                             </styleClass></JFXTextField>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </TitledPane>
+                           </children>
+                        </AnchorPane>
                      </children>
-                  </AnchorPane>
-              </content>
-            </TitledPane>
-            <JFXButton layoutX="584.0" layoutY="30.0" onAction="#catalogue" prefHeight="71.0" prefWidth="198.0" styleClass="save-del" text="Catalogue" />
+                  </HBox>
+               </top>
+            </BorderPane>
          </children>
       </AnchorPane>
    </children>

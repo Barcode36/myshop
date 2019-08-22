@@ -20,6 +20,9 @@ import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import javafx.application.Platform;
@@ -112,6 +115,8 @@ public class JavaFXApplication3 extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+           
+        
             Parent root = FXMLLoader.load(getClass().getResource("/views/essssss.fxml"));
 //        
             Scene scene = new Scene(root);
@@ -121,11 +126,23 @@ public class JavaFXApplication3 extends Application {
             primaryStage.setResizable(false);
             primaryStage.setTitle("MyShop");
             primaryStage.show();
-
+            //primaryStage.setMaximized(true);
+            //System.out.println("suis-je passé? oui ou non?");
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
 
     }
+    
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+       launch(args);
+        System.out.println(" mainnn ");
+    }
+    
+    
 
 }

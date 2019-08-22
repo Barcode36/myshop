@@ -9,9 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import static controller.MainViewController.clientService;
 import entites.Client;
-import entites.Compte;
 import entites.Produit;
 import entites.TypeCompte;
 import java.io.IOException;
@@ -32,7 +30,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,8 +38,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -63,9 +60,10 @@ import tray.notification.TrayNotification;
 public class CaissePaneController implements Initializable {
 
     @FXML
-    private AnchorPane pane;
+    private BorderPane pane;
     @FXML
     private JFXTextField txtCodeProdCaisse;
+    
     @FXML
     private JFXTextField txtNomProdCaisse;
     @FXML
@@ -73,7 +71,9 @@ public class CaissePaneController implements Initializable {
     @FXML
     private JFXTextField txtPrixUnitCaisse;
     @FXML
-    private VBox pane2;
+    private JFXTextField txtQteProd;
+    @FXML
+    private HBox pane2;
     @FXML
     private TableView<ProduitR> produitCaisseTable;
     @FXML
@@ -89,11 +89,12 @@ public class CaissePaneController implements Initializable {
     @FXML
     private JFXButton saveUp;
 
+    ObservableList<ClientR> clientList = FXCollections.observableArrayList(); 
     private Produit produitVente = new Produit();
     private StringBuffer barcode = new StringBuffer();
     public static boolean vente = false;
     public static boolean newClt = false;
-
+    public static JFXTextField txtQteProdComm;
     public static ProduitR produitChoisi;
     public static ClientR clientNew;
 
@@ -102,12 +103,12 @@ public class CaissePaneController implements Initializable {
     private ObservableList<ClientR> listC = FXCollections.observableArrayList();
     ObservableList<ProduitR> produitListVent = FXCollections.observableArrayList();
     @FXML
-    private GridPane cont;
+    private AnchorPane cont;
     @FXML
     private JFXTextField txtClt;
 
     public static JFXTextField txtCltV;
-
+    ProduitR pm;
     /**
      * Initializes the controller class.
      */
@@ -129,9 +130,9 @@ public class CaissePaneController implements Initializable {
                 } else {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                pane.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 87);
-                System.out.println(s.isMaximized());
+                //pane.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
+               // cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 87);
+               // System.out.println(s.isMaximized());
             }
         });
         System.out.println(MainViewController.temporaryPaneTot.getPrefWidth());
@@ -144,7 +145,7 @@ public class CaissePaneController implements Initializable {
             }
 
         });
-
+        
         txtCodeProdCaisse.setOnKeyPressed((event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 Produit p = new Produit();
@@ -172,12 +173,34 @@ public class CaissePaneController implements Initializable {
                             notification.setTray("MyShop", "Produit en rupture de stock", NotificationType.ERROR);
                             notification.showAndDismiss(Duration.seconds(1));
                         } else {
-                            produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable, 1));
+                            //produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable,
+                            //       1 ));
+                            
+                            
+                            
+                            txtQteProd.setDisable(false);
+                            txtQteProd.setText("1");
+                            txtQteProd.setFocusTraversable(true);
+                            txtQteProd.requestFocus();
+                            
+                            txtQteProd.setOnAction((event2) -> {
+                                 produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable,
+                                   Integer.parseInt(txtQteProd.getText()) ));
+                                 txtQteProd.clear();
+                                 txtQteProd.setDisable(true);
+                                 txtCodeProdCaisse.setFocusTraversable(true);
+                                 txtCodeProdCaisse.requestFocus();
+                            });
+                            
+                            
                             barcode = new StringBuffer();
+                         
                         }
+                            
 
                     } else if (find == true) {
-                        ProduitR pm = produitListVent.get(e);
+                         pm = produitListVent.get(e);
+                        
                         if (produitVente.getQteIniProd() <= Integer.parseInt(pm.getQteCom().getText())) {
                             TrayNotification notification = new TrayNotification();
                             notification.setAnimationType(AnimationType.POPUP);
@@ -198,8 +221,10 @@ public class CaissePaneController implements Initializable {
                     actionColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXCheckBox>("suppression"));
                     totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
                     produitCaisseTable.setItems(produitListVent);
+                    
+                    //txtQteProd.setDisable(true);
                     txtCodeProdCaisse.clear();
-
+                    
                     //System.out.println(produitListVent);
                 } catch (Exception e) {
                 }
@@ -215,16 +240,19 @@ public class CaissePaneController implements Initializable {
 
                     barcode.delete(0, barcode.length());
                 } else {
-                    barcode.append(event.getCharacter());
+                    barcode.append(event.getCharacter().toUpperCase());
                 }
                 //  barcode.append(event.getCharacter());
                 //b = b + event.getCharacter();
                 System.out.println(barcode);
 
                 caisseProduitInfo(barcode);
-
+                txtQteProd.setFocusTraversable(true);
+                txtQteProd.requestFocus();
+                
                 //event.consume();
             }
+            
 
         });
         txtCltV = txtClt;
@@ -241,8 +269,25 @@ public class CaissePaneController implements Initializable {
                 txtCodeProdCaisse.requestFocus();
             }
         });
+        
+        MainViewController.temporaryPaneTot.setFocusTraversable(true);
+        MainViewController.temporaryPaneTot.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+            public void handle(KeyEvent t) {
+                if(t.getCode()==KeyCode.SHIFT.V){
+                    
+                        //System.out.println("cest boooonnnn");
+                        txtCodeProdCaisse.clear();
+                        saveVente(t);
+                        
+                    
+                }
+                
+            }
+        });
 
     }
+    
 
     private void caisseProduitInfo(StringBuffer b) {
         Produit p = new Produit();
@@ -344,7 +389,7 @@ public class CaissePaneController implements Initializable {
         if (tC.getLibTyp().equals("Administrateur")) {
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
-            notification.setTray("MyShop", "Le type de votre compte ne vous permez pas de vendre", NotificationType.ERROR);
+            notification.setTray("MyShop", "Le type de votre compte ne vous permet pas de vendre", NotificationType.ERROR);
             notification.showAndDismiss(Duration.seconds(1));
         } else {
             if (!txtClt.getText().isEmpty()) {
@@ -359,6 +404,89 @@ public class CaissePaneController implements Initializable {
                     stage.setScene(scene);
                     stage.initStyle(StageStyle.UTILITY);
                     stage.show();
+                    
+                   // txtQteProd.setDisable(false);
+                   // txtQteProd.setFocusTraversable(true);
+                   // txtQteProd.requestFocus();
+
+                    stage.setOnHidden(e -> {
+                        if (this.vente == true) {
+                            produitListVent.clear();
+                            txtCodeProdCaisse.clear();
+                            txtNomProdCaisse.clear();
+                            txtQteProdCaisse.clear();
+                            txtPrixUnitCaisse.clear();
+                            txtClt.clear();
+                            this.vente = false;
+                            txtCodeProdCaisse.setFocusTraversable(true);
+                            txtCodeProdCaisse.requestFocus();
+                            Client client = new Client();
+                            client.setNomClt("Defaut");
+                            client = clientService.findByNom(client);
+                            clientNew = new ClientR(client);
+                            txtCltV.setText(clientNew.getNomClt().getValue() + " (" + clientNew.getNumClt().getValue() + ")");
+                        }
+
+                    });
+
+                } catch (IOException ex) {
+                    Logger.getLogger(MainPrincipalController.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Choississez un client", NotificationType.ERROR);
+                notification.showAndDismiss(Duration.seconds(1));
+            }
+
+        }
+
+    }
+    
+    private void saveVente(KeyEvent event) {
+        for (ProduitR pr : produitListVent) {
+            Produit p = new Produit(pr.getIdProd().getValue());
+            Produit produit = produitService.findById(p);
+            if (produit.getQteIniProd() < Integer.parseInt(pr.getQteCom().getText())) {
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "La quantite de " + produit.getLibProd() + " en stock est inferieur à \n celle commandée", NotificationType.ERROR);
+                notification.showAndDismiss(Duration.seconds(1));
+                produitListVent.remove(pr);
+                produitListVent.add(new ProduitR(produit, produitListVent, produitCaisseTable, produit.getQteIniProd()));
+                produitCaisseTable.setItems(produitListVent);
+                return;
+            }
+        }
+        Stage stage = new Stage();
+        Parent root;
+        FXMLLoader loader = new FXMLLoader();
+        TypeCompte typeCompte = new TypeCompte(MainViewController.typeCompteActif.getIdTyp());
+        TypeCompte tC = MainViewController.typeServiceD.findById(typeCompte);
+
+        if (tC.getLibTyp().equals("Administrateur")) {
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Le type de votre compte ne vous permet pas de vendre", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1));
+        } else {
+            if (!txtClt.getText().isEmpty()) {
+                try {
+                    root = loader.load(getClass().getResource("/views/CaisseConfirmation.fxml").openStream());
+
+                    CaisseConfirmationController caisseConfirmationController = (CaisseConfirmationController) loader.getController();
+                    caisseConfirmationController.setListProd(produitListVent, MainViewController.compteActif, clientNew);
+                    Scene scene = new Scene(root);
+                    stage.getIcons().add(new Image(CaissePaneController.class.getResourceAsStream("/img/afnacos.ico")));
+                    scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
+                    stage.setScene(scene);
+                    stage.initStyle(StageStyle.UTILITY);
+                    stage.show();
+                    
+                   // txtQteProd.setDisable(false);
+                   // txtQteProd.setFocusTraversable(true);
+                   // txtQteProd.requestFocus();
 
                     stage.setOnHidden(e -> {
                         if (this.vente == true) {
@@ -430,8 +558,10 @@ public class CaissePaneController implements Initializable {
             stage.show();
 
             stage.setOnHidden(ex -> {
-                txtCodeProdCaisse.setFocusTraversable(true);
-                txtCodeProdCaisse.requestFocus();
+//                txtQteProd.setDisable(false);
+              //  txtQteProd.setFocusTraversable(true);
+               // txtQteProd.requestFocus();
+                
                 Produit p = new Produit(produitChoisi.getIdProd().getValue());
                 Produit pC = produitService.findById(p);
 
@@ -454,7 +584,27 @@ public class CaissePaneController implements Initializable {
                         notification.setTray("MyShop", "Produit en rupture de stock", NotificationType.ERROR);
                         notification.showAndDismiss(Duration.seconds(1));
                     } else {
-                        produitListVent.add(new ProduitR(pC, produitListVent, produitCaisseTable, 1));
+                        //produitListVent.add(new ProduitR(pC, produitListVent, produitCaisseTable, 1));
+                        
+                            txtQteProd.setDisable(false);
+                            txtQteProd.setText("1");
+                            txtQteProd.setFocusTraversable(true);
+                            txtQteProd.requestFocus();
+                            
+                            txtQteProd.setOnAction((event2) -> {
+                                 produitListVent.add(new ProduitR(pC, produitListVent, produitCaisseTable,
+                                   Integer.parseInt(txtQteProd.getText()) ));
+                                 txtQteProd.clear();
+                                 txtQteProd.setDisable(true);
+                                 txtCodeProdCaisse.setFocusTraversable(true);
+                                 txtCodeProdCaisse.requestFocus();
+                            });
+                            
+                            txtNomProdCaisse.clear();
+                            txtQteProdCaisse.clear();
+                            txtPrixUnitCaisse.clear();
+                            
+                            
                     }
                 } else if (find == true) {
                     ProduitR pm = produitListVent.get(e);
@@ -486,6 +636,9 @@ public class CaissePaneController implements Initializable {
             Logger.getLogger(MainPrincipalController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        
+        //txtCodeProdCaisse.setFocusTraversable(true);
+       // txtCodeProdCaisse.requestFocus();
     }
 
     @FXML
@@ -500,7 +653,7 @@ public class CaissePaneController implements Initializable {
             scene.getStylesheets().add(getClass().getResource("/css/essai.css").toExternalForm());
             stage.getIcons().add(new Image(CaissePaneController.class.getResourceAsStream("/img/afnacos.ico")));
             stage.setScene(scene);
-            stage.initStyle(StageStyle.UNIFIED);
+            stage.initStyle(StageStyle.UTILITY);
             stage.setResizable(false);
             stage.show();
 
@@ -538,8 +691,9 @@ public class CaissePaneController implements Initializable {
             txtCltV.clear();
             stage.setOnHidden(ex -> {
                 try {
-                    txtCodeProdCaisse.setFocusTraversable(true);
-                    txtCodeProdCaisse.requestFocus();
+                   // txtQteProd.setDisable(false);
+                 //   txtQteProd.setFocusTraversable(true);
+                 //   txtQteProd.requestFocus();
                     txtClt.setText(clientNew.getNomClt().getValue() + " (" + clientNew.getNumClt().getValue() + ")");
                 } catch (Exception e) {
                 }
@@ -550,6 +704,10 @@ public class CaissePaneController implements Initializable {
             Logger.getLogger(MainPrincipalController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+        
+        txtCodeProdCaisse.setFocusTraversable(true);
+        txtCodeProdCaisse.requestFocus();
     }
-
+   
+   
 }

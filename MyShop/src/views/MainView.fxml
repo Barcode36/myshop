@@ -5,21 +5,35 @@
 <?import com.jfoenix.controls.JFXToolbar?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane prefWidth="1240.0" stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
+<StackPane prefHeight="700.0" prefWidth="1025.0" stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainViewController">
    <children>
-      <AnchorPane id="AnchorPane" fx:id="stageTot" prefHeight="669.0" prefWidth="1240.0">
+      <AnchorPane fx:id="stageTot" prefHeight="700.0" prefWidth="1024.0" StackPane.alignment="CENTER">
          <children>
-            <JFXToolbar fx:id="toolbar" prefHeight="60.0" prefWidth="1240.0" styleClass="toolbar" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ImageView fitHeight="756.0" fitWidth="223.0" opacity="0.79" pickOnBounds="true" AnchorPane.bottomAnchor="-39.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1010.0" AnchorPane.topAnchor="0.0">
+               <image>
+                  <Image url="@../css/shop_light_side.jpg" />
+               </image></ImageView>
+            <ImageView fx:id="iv" fitHeight="717.0" fitWidth="1233.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../css/shop_light.jpg" />
+               </image>
+               <effect>
+                  <Glow />
+               </effect>
+            </ImageView>
+            <Pane fx:id="dashPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="197.0" style="-fx-background-color: black ;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <JFXToolbar fx:id="toolbar" layoutX="196.0" prefHeight="60.0" prefWidth="828.0" styleClass="toolbar" visible="false" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="0.0">
                <left>
-                  <JFXHamburger fx:id="hamburger" prefHeight="60.0" prefWidth="107.0" styleClass="jfx-hamburger-icon" BorderPane.alignment="CENTER" />
+                  <JFXHamburger fx:id="hamburger" prefHeight="60.0" prefWidth="107.0" styleClass="jfx-hamburger-icon" visible="false" BorderPane.alignment="CENTER" />
                </left>
                <center>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -27,23 +41,14 @@
                         <Label fx:id="maiCss" onMouseClicked="#Acceuil" styleClass="maiCss" text="Myshop Management" textFill="WHITE" visible="false">
                            <padding>
                               <Insets left="10.0" right="10.0" />
-                           </padding></Label>
+                           </padding>
+                        </Label>
                      </children>
                   </HBox>
                </center>
             </JFXToolbar>
-            <GridPane alignment="CENTER" layoutX="-1.0" layoutY="59.0" prefHeight="620.0" prefWidth="1240.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <AnchorPane fx:id="contentPane" prefHeight="620.0" prefWidth="1240.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-               </children>
-            </GridPane>
-            <JFXDrawer fx:id="drawer" defaultDrawerSize="200.0" layoutX="2.0" layoutY="58.0" prefHeight="620.0" prefWidth="150.0" AnchorPane.leftAnchor="2.0" />
+            <AnchorPane fx:id="contentPane" layoutX="196.0" prefHeight="700.0" prefWidth="829.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <JFXDrawer fx:id="drawer" defaultDrawerSize="200.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="667.0" prefWidth="197.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="30.0" />
          </children>
       </AnchorPane>
    </children>

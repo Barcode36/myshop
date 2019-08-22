@@ -6,6 +6,7 @@
 package modele;
 
 import entites.Client;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -19,6 +20,8 @@ public class ClientR {
     private SimpleStringProperty nomClt;
     private SimpleStringProperty adrClt;
     private SimpleStringProperty numClt;
+     //ajout du nbre de points - bes
+    private SimpleDoubleProperty nbPoints;
 
     public ClientR() {
     }
@@ -28,6 +31,8 @@ public class ClientR {
         this.nomClt = new SimpleStringProperty(c.getNomClt());
         this.adrClt = new SimpleStringProperty(c.getAdrClt());
         this.numClt = new SimpleStringProperty(c.getNumClt());
+         //ajout du nbre de points - bes
+        this.nbPoints = new SimpleDoubleProperty(c.getNbPoints());
     }
 
     public SimpleIntegerProperty getIdClt() {
@@ -62,6 +67,16 @@ public class ClientR {
         this.adrClt = adrClt;
     }
 
+    //ajout du nbre de points - bes
+    public SimpleDoubleProperty getNbPoints() {
+        return nbPoints;
+    }
+
+    public void setNbPoints(SimpleDoubleProperty nbPoints) {
+        this.nbPoints = nbPoints;
+    }
+
+    
     @Override
     public String toString() {
         return nomClt.getValue();

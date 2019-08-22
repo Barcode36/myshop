@@ -30,9 +30,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javax.swing.SwingUtilities;
 import modele.CompteR;
 import modele.TypeCompteR;
@@ -41,6 +43,9 @@ import service.ITypeService;
 import service.imp.CompteService;
 import service.imp.ProduitService;
 import service.imp.TypeService;
+import tray.animations.AnimationType;
+import tray.notification.NotificationType;
+import tray.notification.TrayNotification;
 
 /**
  * FXML Controller class
@@ -87,13 +92,35 @@ public class CRUDCompteController implements Initializable {
     private AnchorPane stage;
     @FXML
     private GridPane cont;
-
+    @FXML
+    private ColumnConstraints consCol1;
+    @FXML
+    private ColumnConstraints consCol2;
+    
     /**
      * Initializes the controller class.
      */
+    private boolean ok = false;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        /*MainViewController.temporaryPaneTot.widthProperty().addListener((obs, oldVal, newVal)->{
+            if( (Double) newVal <= (Double) oldVal){
+                
+                    if(!ok){
+                       consCol1.setMaxWidth(500);
+                       consCol2.setMaxWidth(435);
+                       ok=true;
+                    }else{
+                        cont.setMaxWidth(cont.getMaxWidth()-7);
+                         consCol1.setMaxWidth(consCol1.getMaxWidth()-3);
+                         consCol2.setMaxWidth(consCol1.getMaxWidth()-3);
+                    }  
+            }
+            
+        });*/
+        
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
@@ -109,11 +136,11 @@ public class CRUDCompteController implements Initializable {
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 41);
+                //stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
+//                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 41);
             }
         });
-        System.out.println(MainViewController.temporaryPaneTot.getWidth());
+        /*System.out.println(MainViewController.temporaryPaneTot.getWidth());
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -121,14 +148,21 @@ public class CRUDCompteController implements Initializable {
                 cont.setPrefWidth(newValue.doubleValue() - 41);
             }
 
-        });
+        });*/
 
     }
 
     @FXML
     private void saveProd(ActionEvent event) {
-//        
-        if (saveUp.getText().equals("ENREGISTRER")) {
+//       
+        if(txtNomComp.getText().isEmpty() || txtPrenomComp.getText().isEmpty() || txtPseudoComp.getText().isEmpty() || 
+                txtPassword.getText().isEmpty()){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Veuillez remplir tous les champs ", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1));
+        } else
+        if (saveUp.getText().equals("Ajouter")) {
             Compte compte = new Compte();
             compte.setMdpComp(txtPassword.getText());
             compte.setNomComp(txtNomComp.getText());
@@ -137,13 +171,24 @@ public class CRUDCompteController implements Initializable {
             compte.setEtatComp("actif");
             compte.setIdTypComp(typeCompteCombo.getSelectionModel().getSelectedItem().getIdTyp().getValue());
             compteService.ajouter(compte);
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Veuillez remplir tous les champs ", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1));
         } else {
+            saveUp.setText("Modifier");
             compteModif.setMdpComp(txtPassword.getText());
             compteModif.setNomComp(txtNomComp.getText());
             compteModif.setPrenomComp(txtPrenomComp.getText());
             compteModif.setPseudoComp(txtPseudoComp.getText());
+            compteModif.setIdTypComp(typeCompteCombo.getSelectionModel().getSelectedItem().getIdTyp().getValue());
             compteService.modifier(compteModif);
-            saveUp.setText("Ajouter");
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Modiffication effectuée", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1));
+            
+            
         }
         loadCompteGrid();
         clearCompteTxt();
@@ -173,6 +218,7 @@ public class CRUDCompteController implements Initializable {
         txtPassword.clear();
         typeCompteCombo.setValue(null);
         typeCompteCombo.getEditor().clear();
+        saveUp.setText("Ajouter");
     }
 
     public void loadTypeCompteCombo() {
@@ -195,7 +241,7 @@ public class CRUDCompteController implements Initializable {
     @FXML
     private void suppProduit(ActionEvent event) {
         compteService.supprimer(compteModif);
-        saveUp.setText("ENREGISTRER");
+        
         loadCompteGrid();
         clearCompteTxt();
     }
@@ -208,21 +254,25 @@ public class CRUDCompteController implements Initializable {
             compteModif = compteService.findById(c);
             TypeCompte tc = new TypeCompte(compteModif.getIdTypComp());
             TypeCompte typeCompte = typeService.findById(tc);
+            //System.out.println("idCpte: "+tc);
             typeCompteCombo.setValue(new TypeCompteR(typeCompte));
             txtNomComp.setText(compteModif.getNomComp());
             txtPrenomComp.setText(compteModif.getPrenomComp());
             txtPseudoComp.setText(compteModif.getPseudoComp());
             txtPassword.setText(compteModif.getMdpComp());
             saveUp.setText("Modifier");
+             //clearCompteTxt();
+            
         } catch (Exception e) {
         }
-
+        
+       
     }
 
     @FXML
     private void vider(ActionEvent event) {
         clearCompteTxt();
-        saveUp.setText("ENREGISTRER");
+        //saveUp.setText("Ajouter");
     }
 
 }

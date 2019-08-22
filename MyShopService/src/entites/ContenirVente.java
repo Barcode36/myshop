@@ -6,6 +6,7 @@
 package entites;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -50,6 +51,11 @@ public class ContenirVente implements Serializable {
     @Basic(optional = false)
     @Column(name = "prixProd")
     private int prixProd;
+    @Basic(optional = false)
+    @Column(name = "montVente")
+    private double montVente;
+    @Column(name = "dtVente",columnDefinition = "Date")
+    private Date dtVente;
 
     public ContenirVente() {
     }
@@ -98,5 +104,23 @@ public class ContenirVente implements Serializable {
     public void setPrixProd(int prixProd) {
         this.prixProd = prixProd;
     }
+
+    public double getMontVente() {
+        return montVente;
+    }
+
+    public void setMontVente(double montVente) {
+        this.montVente = montVente;
+    }
+
+    public Date getDtVente() {
+        return dtVente;
+    }
+
+    public void setDtVente(Date dtVente) {
+        this.dtVente = dtVente;
+    }
+    
+    
 
 }

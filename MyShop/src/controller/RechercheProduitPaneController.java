@@ -53,7 +53,7 @@ public class RechercheProduitPaneController implements Initializable {
     @FXML
     private AnchorPane stage;
     @FXML
-    private GridPane cont;
+    private AnchorPane cont;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
@@ -74,9 +74,26 @@ public class RechercheProduitPaneController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    boolean ok = false;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+         MainViewController.temporaryPaneTot.widthProperty().addListener((obs, oldVal, newVal)->{
+            if( (Double) newVal <= (Double) oldVal){
+                
+                    if(!ok){
+                       produitTable.setMaxWidth(730);
+                       ok=true;
+                    }else{
+                         produitTable.setMaxWidth(produitTable.getWidth()-5);
+                    }  
+            }
+            
+        });
+        
+        
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
@@ -92,18 +109,19 @@ public class RechercheProduitPaneController implements Initializable {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                     System.out.println(s.getWidth());
                 }
-                stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 135);
+                //stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
+                //cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 135);
             }
         });
-        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
+        
+        /*MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 stage.setPrefWidth(newValue.doubleValue());
                 cont.setPrefWidth(newValue.doubleValue() - 135);
             }
 
-        });
+        });*/
     }
 
     @FXML

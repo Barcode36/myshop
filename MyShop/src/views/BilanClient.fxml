@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
-
-<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BilanClientController">
+<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.BilanClientController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0">
          <children>
@@ -19,6 +18,7 @@
                         <TableColumn fx:id="ProduitCaissier" prefWidth="75.0" text="Produit" />
                         <TableColumn fx:id="QteCaissierCol" prefWidth="75.0" text="Quantité" />
                         <TableColumn fx:id="PuCaissierCol" prefWidth="75.0" text="PU" />
+                        <TableColumn fx:id="totPointsCol" prefWidth="75.0" text="Points" />
                         <TableColumn fx:id="totDetCaissierCol" prefWidth="75.0" text="Total" />
                      </columns>
                      <columnResizePolicy>

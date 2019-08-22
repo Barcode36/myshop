@@ -12,6 +12,7 @@ import entites.Produit;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -42,11 +44,11 @@ public class ClientPaneController implements Initializable {
     @FXML
     private AnchorPane stage;
     @FXML
-    private Group gp;
+    private BorderPane gp;
     @FXML
-    private GridPane cont;
+    private AnchorPane cont;
     @FXML
-    private GridPane pane1;
+    private AnchorPane pane1;
     @FXML
     private JFXTextField txtNomClt;
     @FXML
@@ -54,7 +56,7 @@ public class ClientPaneController implements Initializable {
     @FXML
     private JFXButton saveUp;
     @FXML
-    private VBox pane2;
+    private AnchorPane pane2;
     @FXML
     private TableView<ClientR> ClientTable;
     @FXML
@@ -63,6 +65,8 @@ public class ClientPaneController implements Initializable {
     private TableColumn<ClientR, String> adrCltCol;
     @FXML
     private TableColumn<ClientR, String> adrNumCol;
+    @FXML
+    private TableColumn<ClientR, Double> nbPointsCol;
     @FXML
     private Label ent;
     
@@ -95,48 +99,60 @@ public class ClientPaneController implements Initializable {
         nomCltCol.setCellValueFactory(celldate -> celldate.getValue().getNomClt());
         adrNumCol.setCellValueFactory(celldate -> celldate.getValue().getNumClt());
         adrCltCol.setCellValueFactory(celldate -> celldate.getValue().getAdrClt());
-        
+        nbPointsCol.setCellValueFactory(celldate -> celldate.getValue().getNbPoints().asObject() );
         ClientTable.setItems(listC);
     }
     
     @FXML
     private void saveProd(ActionEvent event) {
-        
-        if (saveUp.getText().equals("ENREGISTRER")) {
-            
-            Client c = new Client();
-            c.setNomClt(txtNomClt.getText());
-            c.setAdrClt(txtAdrClt.getText());
-            c.setNumClt(txtNumClt.getText());
-            c.setEtatClt("actif");
-            try {
-                Client clt = clientService.findByNom(c);
+        if(txtNomClt.getText().isEmpty() || txtAdrClt.getText().isEmpty() || txtNumClt.getText().isEmpty()){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Veuillez remplir tous les champs ", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1));
+        } else 
+            if (saveUp.getText().equals("Ajouter")) {
+
+                Client c = new Client();
+                c.setNomClt(txtNomClt.getText());
+                c.setAdrClt(txtAdrClt.getText());
+                c.setNumClt(txtNumClt.getText());
+                c.setNbPoints(0.0);
+                c.setEtatClt("actif");
+                try {
+                    Client clt = clientService.findByNom(c);
+                    TrayNotification notification = new TrayNotification();
+                    notification.setAnimationType(AnimationType.POPUP);
+                    notification.setTray("MyShop", "Ce Client existe déjà", NotificationType.WARNING);
+                    notification.showAndDismiss(Duration.seconds(1));
+                } catch (Exception e) {
+                    c.setNbPoints(0.0);
+                    c.setEtatClt("actif");
+                    clientService.ajouter(c);
+                    clearTxt();
+                    txtNomClt.setFocusTraversable(true);
+                    txtNomClt.requestFocus();
+                    TrayNotification notification = new TrayNotification();
+                    notification.setAnimationType(AnimationType.POPUP);
+                    notification.setTray("MyShop", "Enregistrement effectué", NotificationType.SUCCESS);
+                    notification.showAndDismiss(Duration.seconds(1));
+
+                }
+
+            } else {
+                cltModif.setAdrClt(txtAdrClt.getText());
+                cltModif.setNomClt(txtNomClt.getText());
+                cltModif.setNumClt(txtNumClt.getText());
+                clientService.modifier(cltModif);
+                saveUp.setText("Modifier");
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
-                notification.setTray("MyShop", "Ce Client existe déjà", NotificationType.WARNING);
+                notification.setTray("MyShop", "Modiffication effectuée", NotificationType.SUCCESS);
                 notification.showAndDismiss(Duration.seconds(1));
-            } catch (Exception e) {
-                clientService.ajouter(c);
-                clearTxt();
                 txtNomClt.setFocusTraversable(true);
                 txtNomClt.requestFocus();
-                TrayNotification notification = new TrayNotification();
-                notification.setAnimationType(AnimationType.POPUP);
-                notification.setTray("MyShop", "Enregistrement effectué", NotificationType.SUCCESS);
-                notification.showAndDismiss(Duration.seconds(1));
-                
+                clearTxt();
             }
-            
-        } else {
-            cltModif.setAdrClt(txtAdrClt.getText());
-            cltModif.setNomClt(txtNomClt.getText());
-            cltModif.setNumClt(txtNumClt.getText());
-            clientService.modifier(cltModif);
-            saveUp.setText("ENREGISTRER");
-            txtNomClt.setFocusTraversable(true);
-            txtNomClt.requestFocus();
-            clearTxt();
-        }
         loadClient();
         
     }
@@ -145,13 +161,14 @@ public class ClientPaneController implements Initializable {
         txtAdrClt.clear();
         txtNomClt.clear();
         txtNumClt.clear();
+        saveUp.setText("Ajouter");
     }
     
     @FXML
     private void suppProduit(ActionEvent event) {
         cltModif.setEtatClt("inactif");
         clientService.modifier(cltModif);
-        saveUp.setText("ENREGISTRER");
+        saveUp.setText("Ajouter");
         loadClient();
         clearTxt();
     }
@@ -168,7 +185,8 @@ public class ClientPaneController implements Initializable {
         txtAdrClt.setText(cltModif.getAdrClt());
         txtNomClt.setText(cltModif.getNomClt());
         txtNumClt.setText(cltModif.getNumClt());
-        saveUp.setText("MODIFIER");
+        
+        saveUp.setText("Modifier");
     }
     
 }

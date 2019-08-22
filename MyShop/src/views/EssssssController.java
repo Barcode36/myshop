@@ -6,25 +6,20 @@
 package views;
 
 import Utils.Constants;
-import com.jfoenix.controls.JFXProgressBar;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafxapplication3.JavaFXApplication3;
 import javax.swing.JOptionPane;
-import service.ITypeService;
-import service.imp.TypeService;
 
 /**
  * FXML Controller class
@@ -56,35 +51,18 @@ public class EssssssController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Task task = taskWorker(100);
-        //progres.progressProperty().unbind();
         progres.progressProperty().bind(task.progressProperty());
         task.setOnSucceeded(e -> {
             try {
                 Stage primaryStage = new Stage();
                 Parent root = FXMLLoader.load(getClass().getResource(Constants.MainView));
-//        root.setOnMousePressed(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                xOffset = event.getSceneX();
-//                yOffset = event.getSceneY();
-//            }
-//
-//        });
-//
-//        root.setOnMouseDragged(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {//
-//                primaryStage.setX(event.getScreenX() - xOffset);
-//                primaryStage.setY(event.getScreenY() - yOffset);
-//            }
-//
-//        });
+
                 Scene scene = new Scene(root);
-              //  scene.getStylesheets().add(getClass().getResource("/css/MainPrincipalCss.css").toExternalForm());
                 primaryStage.setScene(scene);
                 primaryStage.getIcons().add(new Image(JavaFXApplication3.class.getResourceAsStream("/img/afnacos.ico")));
                 primaryStage.setTitle("MyShop");
-                primaryStage.setMaximized(true);
+                primaryStage.setMaximized(false);
+                //System.out.println("suis-je passé? oui ou non????");
                 primaryStage.show();
 
                 primaryStage.setOnHiding(((event) -> {

@@ -9,10 +9,8 @@ import Utils.Constants;
 import com.jfoenix.controls.JFXDrawer;
 import com.jfoenix.controls.JFXHamburger;
 import com.jfoenix.controls.JFXToolbar;
-import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import entites.Client;
 import entites.Compte;
-import entites.Produit;
 import entites.TypeCompte;
 import java.io.IOException;
 import java.net.URL;
@@ -20,15 +18,18 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -53,14 +54,25 @@ import service.imp.VenteService;
  */
 public class MainViewController implements Initializable {
 
-    @FXML
-    private JFXToolbar toolbar;
+   
     @FXML
     private JFXHamburger hamburger;
     @FXML
     private AnchorPane contentPane;
     @FXML
+    private Pane dashPane;
+    @FXML
     private JFXDrawer drawer;
+    @FXML
+    private AnchorPane stageTot;
+    @FXML
+    private Label maiCss;
+    @FXML
+    private ImageView iv;
+    @FXML
+    private JFXToolbar toolbar;
+    
+    public static ImageView img;
     public static JFXDrawer drawerTmp;
     public static AnchorPane temporaryPane;
     public static AnchorPane temporaryPaneTot;
@@ -74,16 +86,15 @@ public class MainViewController implements Initializable {
     public static Compte compteActif = new Compte();
     public static TypeCompte typeCompteActif = new TypeCompte();
     public static Boolean initialise = false;
-    public static VBox menuL = null;
+  //  public static VBox menuL = null;
     public static Label mainCss;
-
+    public static Pane dshPane;
+    
+   
     ITypeService typeService = new TypeService();
     ICompteService compteService = compteServiceD;
 
-    @FXML
-    private AnchorPane stageTot;
-    @FXML
-    private Label maiCss;
+    
 
     public List<TypeCompte> listTypeCompte() {
         return typeService.typeCmopteList();
@@ -94,6 +105,8 @@ public class MainViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
         Client client = new Client();
         client.setNomClt("Defaut");
         try {
@@ -130,22 +143,17 @@ public class MainViewController implements Initializable {
             clt.setNumClt("Inconnu");
             clientService.ajouter(clt);
         }
-//        for (int i = 1; i < 500; i++) {
-//            Produit p = new Produit();
-//            p.setCodeProd(String.valueOf(i));
-//            p.setEtatProd("actif");
-//            p.setLibProd(String.valueOf(i));
-//            p.setPrixUniProd(String.valueOf(i));
-//            p.setQteIniProd(i);
-//            produitService.ajouter(p);
-//        }
 
         temporaryPane = contentPane;
         temporaryPaneTot = stageTot;
+        
         drawerTmp = drawer;
         hamburgerTmp = hamburger;
         mainCss = maiCss;
-
+        dshPane = dashPane;
+        img = iv;
+       
+       
         initDrawer();
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
@@ -153,37 +161,50 @@ public class MainViewController implements Initializable {
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
 
+        
+       
     }
 
     private void initDrawer() {
         try {
+            
+            drawer.setVisible(false);
+            
+           
             VBox menu = null;
             menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
-
+            
+            dshPane.getChildren().add(menu);
             drawer.setSidePane(menu);
-            HamburgerBackArrowBasicTransition transition = new HamburgerBackArrowBasicTransition(hamburger);
-            transition.setRate(-1);
-            hamburger.addEventHandler(MouseEvent.MOUSE_CLICKED, (Event event) -> {
-                //transition.setRate(transition.getRate() * -1);
-                //transition.play();
-                if (drawer.isShown()) {
+            dshPane.setVisible(false);
+            hamburger.setVisible(false);
+            
+            if (hamburger.isVisible()) {
                     drawer.close();
+                    
                 } else {
-                    drawer.open();
+                    dshPane.setVisible(false);
+                    drawer.setVisible(true);
+                    
                 }
-            });
+            
         } catch (IOException ex) {
             Logger.getLogger(MainViewController.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
     }
 
     private void switchPane(String pane) {
+        
         try {
+            
             MainViewController.temporaryPane.getChildren().clear();
             StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
             ObservableList<Node> elements = stackPane.getChildren();
             MainViewController.temporaryPane.getChildren().setAll(elements);
-            MainViewController.drawerTmp.close();
+            MainViewController.drawerTmp.open();
+            
+            
             if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
                 DashBoardController.btnComp.setVisible(false);
                 DashBoardController.btnInvent.setVisible(false);
@@ -191,15 +212,16 @@ public class MainViewController implements Initializable {
             } else {
 
             }
-            // MainViewController.hamburgerTmp = new JFXHamburger();
 
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
 
     @FXML
     private void Acceuil(MouseEvent event) {
+       
         if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
             DashBoardController.btnComp.setVisible(false);
             DashBoardController.btnInvent.setVisible(false);
@@ -207,6 +229,7 @@ public class MainViewController implements Initializable {
         } else {
 
         }
+        
         switchPane(Constants.DashBoard);
     }
 

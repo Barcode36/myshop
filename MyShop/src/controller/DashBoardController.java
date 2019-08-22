@@ -6,15 +6,14 @@
 package controller;
 
 import Utils.Constants;
+
+
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.transitions.JFXFillTransition;
-import static controller.MainViewController.hamburgerTmp;
-import static controller.MainViewController.mainCss;
 import entites.ContenirVente;
 import entites.Produit;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -32,15 +31,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -61,8 +67,10 @@ public class DashBoardController implements Initializable {
 
     IProduitService produitService = MainViewController.produitService;
     IContenirVente contenirVenteService = MainViewController.contenirVenteService;
+    
     @FXML
     private BarChart<String, Integer> barCode;
+    
     @FXML
     private CategoryAxis x;
     @FXML
@@ -81,23 +89,40 @@ public class DashBoardController implements Initializable {
     private JFXButton btnRec;
     @FXML
     private JFXButton btnCOmpte;
+    @FXML
+    private HBox hbox1;
+    @FXML
+    private HBox hbox2;
+    
+    public static HBox contHbox1;
+    public static HBox contHbox2;
 
+    public static JFXButton btnRe;
     public static JFXButton btnComp;
     public static JFXButton btnInvent;
     public static JFXButton btnBil;
+     public static JFXButton btnReg;
+    public static JFXButton btnAid;
+    public static JFXButton btnDec;
     @FXML
-    private AnchorPane stage;
+    private StackPane ec;
     @FXML
-    private GridPane cont;
+    private AnchorPane cont;
     @FXML
     private JFXButton btnDeconnexion;
     @FXML
     private JFXButton btnClient;
-
+  
+    
+    
+    
+    
     ObservableList<PieChart.Data> datas = FXCollections.observableArrayList();
     ObservableList<ProduitR> obVent = FXCollections.observableArrayList();
     ObservableList<ProduitR> obPro = FXCollections.observableArrayList();
     ObservableList<String> databar = FXCollections.observableArrayList();
+    public static ObservableList<XYChart.Data> listProdEnFin = null ;
+    public static ObservableList<PieChart.Data> listMieuxVen = null;
     XYChart.Series series = new XYChart.Series<>();
     Random random = new Random();
 
@@ -108,36 +133,87 @@ public class DashBoardController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    //boolean done;
+    ArrayList<Double> tabDim = new ArrayList<>() ;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-
+        //System.out.println("ec max: "+ec.getMinWidth());
+       
+        
+        
+        btnRe = btnRec;
         btnComp = btnCOmpte;
         btnInvent = btnInventaire;
         btnBil = btnBilan;
-
-        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
+        btnReg = btnReglage;
+        btnAid=btnAide;
+        btnDec=btnDeconnexion;
+        
+        contHbox1 = hbox1;
+        contHbox2 = hbox2;
+        
+        MainViewController.drawerTmp.setVisible(true);
+        MainViewController.drawerTmp.open();
+        
+        /*MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 stage.setPrefWidth(newValue.doubleValue());
                 cont.setPrefWidth(newValue.doubleValue() - 45);
             }
 
+        });*/
+         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+               
+               
+                MainViewController.dshPane.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable0, Number oldValue0, Number newValue0) {
+                        
+                        MainViewController.img.setFitHeight(MainViewController.dshPane.getHeight());
+                    }
+                });
+                
+                if( (Double) oldValue < (Double) newValue){
+                    
+                    MainViewController.img.setTranslateX(MainViewController.dshPane.getWidth());
+                    MainViewController.dshPane.setTranslateX(0);
+                    
+                }
+                
+                if( (Double) oldValue > (Double) newValue){
+                    MainViewController.img.setTranslateX(0);
+                    MainViewController.dshPane.setTranslateX(0);
+                    
+                }
+                
+            }
+      
         });
+        
+        
 
         if (MainViewController.initialise == true) {
             if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                this.btnComp.setVisible(false);
-                this.btnInvent.setVisible(false);
-                this.btnBil.setVisible(false);
+                contHbox1.getChildren().removeAll(btnComp,
+                            btnInvent,btnBil);
+                    
+                    contHbox1.getChildren().addAll(btnAid,
+                            btnReg,btnDec);
+                    
+                    contHbox2.getChildren().clear();
 
             }
         }
+        
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
+        
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -145,8 +221,9 @@ public class DashBoardController implements Initializable {
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 45);
+                
+               // stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
+               // cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 45);*/
             }
         });
         // loadTable();
@@ -168,13 +245,18 @@ public class DashBoardController implements Initializable {
         for (int i = 0; i < 10; i++) {
             datas.add(new PieChart.Data(obVent.get(i).getLibProd().getValue(), obVent.get(i).getTo()));
             series.getData().add(new XYChart.Data<>(obPro.get(i).getLibProd().getValue(), obPro.get(i).getTo()));
-
-            System.out.println(series);
+            //System.out.println("datas 1: "+datas.toString());
+            
         }
         pieChart.setData(datas);
         barCode.getData().addAll(series);
+        listProdEnFin = series.getData() ;
+        listMieuxVen = datas;
+        
     }
 
+    
+    
     private void loadTable() {
         Service<Void> loadTableS = new Service<Void>() {
             @Override
@@ -202,7 +284,7 @@ public class DashBoardController implements Initializable {
                             datas.add(new PieChart.Data(obVent.get(i).getLibProd().getValue(), obVent.get(i).getTo()));
                             series.getData().add(new XYChart.Data<>(obPro.get(i).getLibProd().getValue(), obPro.get(i).getTo()));
 
-                            System.out.println(series);
+                            //System.out.println("seriiies: "+series.getData().toString());
                         }
 
                         Platform.runLater(new Runnable() {
@@ -280,6 +362,22 @@ public class DashBoardController implements Initializable {
             VBox menu = null;
             menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateral));
             MainViewController.drawerTmp.setSidePane(menu);
+            MainViewController.drawerTmp.setVisible(false);
+            MainViewController.dshPane.setVisible(false);
+            /*MainViewController.img.setTranslateX(0);
+            if(MainViewController.temporaryPaneTot.getWidth()>1300){
+                MainViewController.img.setFitWidth(1366);
+                MainViewController.img.setFitHeight(745);
+                System.out.println("decc 1");
+            }
+            
+            /*if(MainViewController.temporaryPaneTot.getWidth()<=1300){
+                
+                MainViewController.img.setFitWidth(1233);
+                MainViewController.img.setFitHeight(717);
+                MainViewController.img.setTranslateX(0);
+                System.out.println("decc 2");
+            }*/
         } catch (IOException ex) {
             Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -293,8 +391,7 @@ public class DashBoardController implements Initializable {
 
             MainViewController.temporaryPane.getChildren().setAll(elements);
 
-            MainViewController.drawerTmp.close();
-            // MainViewController.hamburgerTmp = new JFXHamburger();
+            MainViewController.drawerTmp.setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
