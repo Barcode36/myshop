@@ -63,6 +63,7 @@ public class ClientDemiFormController implements Initializable {
         c.setAdrClt(txtAdrClt.getText());
         c.setNomClt(txtNomClt.getText());
         c.setNumClt(txtNumClt.getText());
+        c.setNbPoints(0.0);
         c.setEtatClt("actif");
         try {
             clientService.findByNom(c);

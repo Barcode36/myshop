@@ -6,17 +6,19 @@
 package controller;
 
 import Utils.Constants;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXTextField;
+import entites.Client;
 import entites.Compte;
 import entites.ContenirVente;
 import entites.Vente;
-import entites.ContenirVentePK;
 import entites.Produit;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +37,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
@@ -43,6 +44,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import modele.ClientR;
 import modele.ProduitR;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import service.IClientService;
 import service.ICompteService;
 import service.IContenirVente;
 import service.IProduitService;
@@ -79,6 +84,10 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     @FXML
     private TextField txtRemise;
     @FXML
+    private TextField txtPtActu;
+    @FXML
+    private TextField txtCoeff;
+    @FXML
     private Button btnClose;
 
     ObservableList<ProduitR> produitListVent = FXCollections.observableArrayList();
@@ -94,6 +103,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     @FXML
     private Label Client;
 
+     private File file;
     /**
      * Initializes the controller class.
      */
@@ -110,11 +120,50 @@ public class CaisseConfirmationController extends Traitement implements Initiali
             public void run() {
                 Client.setText("Vente au client: " + clientR.getNomClt().getValue().toUpperCase()
                         + " (" + clientR.getNumClt().getValue() + ")");
-
+                txtPtActu.setText(clientR.getNbPoints().getValue()+" Points");
+                
                 txtMontCllt.setFocusTraversable(true);
                 txtMontCllt.requestFocus();
+                
+                
             }
         });
+        
+        try{
+               
+               
+                 file = new File("Ressources/coeff.xls");
+                 
+                if (file != null) {
+                    try {
+                        FileInputStream fis = new FileInputStream(file);
+                        XSSFWorkbook wb = new XSSFWorkbook(fis);
+                        XSSFSheet sheet = wb.getSheetAt(0);
+                        Row row;
+                        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                            row = sheet.getRow(i);
+                            System.out.println(""+row.getCell(0).getStringCellValue());
+                            txtCoeff.setText(row.getCell(0).getStringCellValue());
+                        }
+                        wb.close();
+                        fis.close();
+                    } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainPrincipalController.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
+                    } 
+                }
+                
+            } catch (IOException e) { 
+                System.out.println(""+e);
+               // e.printStackTrace(); 
+            } 
+        
+        txtCoeff.setStyle("-fx-font-size: 25px;");
+        txtPtActu.setStyle("-fx-font-size: 25px;");
+        //Client c = new Client(clientR.getIdClt().getValue());
+        //Client clt = clientService.findById(c);
+        
     }
 
     @FXML
@@ -143,6 +192,8 @@ public class CaisseConfirmationController extends Traitement implements Initiali
         //     new PropertyValueFactory<ProduitR, JFXTextField>("qteCom")
     }
 
+    private IClientService clientService = MainViewController.clientService;
+    
     @FXML
     private void Valider(ActionEvent event) {
         Boolean txtNumber = textFieldTypeNumber(txtMontCllt);
@@ -151,6 +202,12 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 Vente vente = new Vente();
                 vente.setDateVen(new Date());
                 vente.setIdClt(clientR.getIdClt().getValue());
+                //ClientR cr = new ClientR();
+                //cr.setIdClt(clientR.getIdClt().getValue());
+                Client c = new Client(clientR.getIdClt().getValue());
+                Client clt = clientService.findById(c);
+                clt.setNbPoints(clt.getNbPoints()+ Double.parseDouble(lblTot.getText()) *  Double.parseDouble(txtCoeff.getText())/100 );
+                clientService.modifier(clt);
                 vente.setIdComp(compteActif.getIdComp());
                 venteService.ajouter(vente);
                 for (ProduitR pr : produitListVent) {
@@ -159,6 +216,11 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     contenirVente.setIdVen(vente.getIdVen());
                     contenirVente.setIdProd(pr.getIdProd().getValue());
                     contenirVente.setPrixProd(Integer.parseInt(pr.getPrixUniProd().getValue()));
+                    //System.out.println("lblTot.getText "+Double.parseDouble(lblTot.getText()));
+                    contenirVente.setMontVente(Double.parseDouble(lblTot.getText()));
+                    contenirVente.setDtVente(new Date());
+                    
+                    //contenirVente.set
                     contenirVenteService.ajouterContenirVente(contenirVente);
                     Produit p = new Produit(pr.getIdProd().getValue());
                     Produit produit = produitService.findById(p);
@@ -197,7 +259,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
 
             MainViewController.temporaryPane.getChildren().setAll(elements);
 
-            MainViewController.drawerTmp.close();
+            MainViewController.drawerTmp.setVisible(true);
             // MainViewController.hamburgerTmp = new JFXHamburger();
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
@@ -211,17 +273,26 @@ public class CaisseConfirmationController extends Traitement implements Initiali
             try {
                 rem = Integer.parseInt(txtMontCllt.getText()) - Integer.parseInt(lblTot.getText());
                 txtRemise.setText(String.valueOf(rem));
+                
+                
+                if( Double.parseDouble( txtMontCllt.getText()) > Double.parseDouble(lblTot.getText()) ){
+                     txtMontCllt.setStyle("Background-color: lightgreen;");
+                }
+                
             } catch (Exception e) {
             }
 
         } else {
             txtRemise.clear();
         }
-        if (rem < 0) {
+        if (rem < 0 || txtRemise.getText().equals("") ) {
             corr = false;
+            txtMontCllt.setStyle(" -fx-background-color: red; "); ;
         } else {
             corr = true;
+            txtMontCllt.setStyle("-fx-background-color: lightgreen;");
         }
+        
     }
 
 }

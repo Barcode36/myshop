@@ -5,15 +5,23 @@
  */
 package controller;
 
+import com.jfoenix.controls.JFXTextField;
 import entites.Produit;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -73,7 +81,10 @@ public class ReglagePaneController implements Initializable {
     IProduitService produitService = MainViewController.produitService;
     @FXML
     private TitledPane cont;
-
+    @FXML
+    private JFXTextField txtCoeffParam;
+    
+    public static  Integer coeffClient;
     /**
      * Initializes the controller class.
      */
@@ -88,7 +99,8 @@ public class ReglagePaneController implements Initializable {
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All files", "*.*"),
                 new FileChooser.ExtensionFilter("Excel files", "*.xlsx"));
-
+        
+        
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -97,18 +109,52 @@ public class ReglagePaneController implements Initializable {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                     System.out.println(s.getWidth());
                 }
-                anchorPane.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 487);
+               //anchorPane.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
+                //cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 487);
             }
         });
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                anchorPane.setPrefWidth(newValue.doubleValue());
-                cont.setPrefWidth(newValue.doubleValue() - 159);
+                //anchorPane.setPrefWidth(newValue.doubleValue());
+               // cont.setPrefWidth(newValue.doubleValue() - 159);
             }
 
         });
+      
+            try{
+               
+               
+                 file = new File("Ressources/coeff.xls");
+                 
+                if (file != null) {
+                    try {
+                        InputStream fis = new FileInputStream(file);
+                        XSSFWorkbook wb = new XSSFWorkbook(fis);
+                        XSSFSheet sheet = wb.getSheetAt(0);
+                        Row row;
+                        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                            row = sheet.getRow(i);
+                            //System.out.println(""+row.getCell(0).getStringCellValue());
+                            txtCoeffParam.setText(row.getCell(0).getStringCellValue());
+                        }
+                        wb.close();
+                        fis.close();
+                    } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MainPrincipalController.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
+                    } 
+                }
+                
+            } catch (IOException e) { 
+                System.out.println(""+e);
+               // e.printStackTrace(); 
+            }
+            
+            if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                txtCoeffParam.setEditable(false);
+            }
     }
 
     @FXML
@@ -189,7 +235,7 @@ public class ReglagePaneController implements Initializable {
         try {
             stage = (Stage) anchorPane.getScene().getWindow();
             file = fileChooser.showSaveDialog(stage);
-            FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + ".xlsx");
+            FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + ".xls");
             wb.write(fos);
             fos.close();
 
@@ -213,7 +259,7 @@ public class ReglagePaneController implements Initializable {
         try {
             stage = (Stage) anchorPane.getScene().getWindow();
             file = fileChooser.showSaveDialog(stage);
-            FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + ".xlsx");
+            FileOutputStream fos = new FileOutputStream(file.getAbsolutePath() + ".xls");
             XSSFWorkbook wb = new XSSFWorkbook();
             XSSFSheet sheet = wb.createSheet("Inventaire");
             XSSFRow header = sheet.createRow(0);
@@ -306,6 +352,52 @@ public class ReglagePaneController implements Initializable {
         notification.setTray("MyShop", "Exportation terminée", NotificationType.SUCCESS);
         notification.showAndDismiss(Duration.seconds(1.5));
 
+    }
+    
+    @FXML
+    private void getCoefficient(){
+        
+        
+        if (MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                if(txtCoeffParam.getText().isEmpty()){
+                    coeffClient = 0;
+
+                }else {
+                 coeffClient = Integer.parseInt(txtCoeffParam.getText());
+                }
+
+                XSSFWorkbook wb = new XSSFWorkbook();
+                XSSFSheet sheet = wb.createSheet("Coefficient");
+                int index = 1;
+                
+            
+                XSSFRow row = sheet.createRow(index);
+                
+                row.createCell(0).setCellValue(txtCoeffParam.getText());
+               
+            
+            try {
+                file = new File("Ressources/coeff.xls");
+                OutputStream fos = new FileOutputStream(file.getAbsolutePath());
+                wb.write(fos);
+                fos.close();
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Coefficient défini avec succès", NotificationType.SUCCESS);
+                notification.showAndDismiss(Duration.seconds(1.5));
+
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(MainPrincipalController.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
+            } catch (IOException ex) {
+                Logger.getLogger(MainPrincipalController.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
+                txtCoeffParam.setText("");
+
+            } 
+       
     }
 
 }

@@ -2,13 +2,42 @@
 
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AidePaneController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane id="AnchorPane" prefHeight="629.0" prefWidth="1240.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0">
          <children>
-            <Label layoutX="325.0" layoutY="278.0" prefHeight="74.0" prefWidth="590.0" text="Une solution qui vous permez de gérer simplement et efficacement la caisse de votre boutique." textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="277.0" AnchorPane.leftAnchor="325.0" AnchorPane.rightAnchor="325.0" AnchorPane.topAnchor="278.0" />
+            <BorderPane layoutX="25.0" layoutY="31.0" prefHeight="649.0" prefWidth="986.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="31.0">
+               <top>
+                  <HBox alignment="CENTER" prefHeight="643.0" prefWidth="986.0" BorderPane.alignment="CENTER">
+                     <children>
+                        <AnchorPane prefHeight="655.0" prefWidth="986.0" styleClass="linear_gradient_red_inverse">
+                           <children>
+                              <Label alignment="CENTER" layoutX="60.0" layoutY="45.0" prefHeight="124.0" prefWidth="867.0" stylesheets="@../css/essai.css" text="MyShop est une solution qui vous permet de gérer simplement et efficacement la caisse de votre boutique." textAlignment="CENTER" textFill="WHITE" wrapText="true" AnchorPane.bottomAnchor="474.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="59.0" AnchorPane.topAnchor="45.0">
+                                 <font>
+                                    <Font name="Bell MT Bold" size="26.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" layoutX="75.0" layoutY="166.0" prefHeight="174.0" prefWidth="867.0" stylesheets="@../css/essai.css" text="Avec ses multiples fonctionnalités, relatives aux différents titres de vos employés, la gestion de votre boutique devient plus facile. Ne vous souciez plus des fuites de votre boutique. Laissez MyShop tout gérer pour vous. Enjoy it!!!" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font name="Bell MT Bold" size="26.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" layoutX="87.0" layoutY="343.0" prefHeight="179.0" prefWidth="840.0" stylesheets="@../css/essai.css" text="Pour toutes informations complémentaires, veuillez nous  contacter au +228 90628725." textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font name="Bell MT Bold" size="26.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+               </top>
+            </BorderPane>
          </children>
       </AnchorPane>
    </children>

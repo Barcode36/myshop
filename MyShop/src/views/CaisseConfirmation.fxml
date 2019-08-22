@@ -12,29 +12,58 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CaisseConfirmationController">
+<StackPane stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CaisseConfirmationController">
    <children>
       <AnchorPane id="AnchorPane" prefHeight="503.0" prefWidth="706.0">
          <children>
             <Pane prefHeight="503.0" prefWidth="706.0" styleClass="card">
                <children>
-                  <Label alignment="CENTER_RIGHT" layoutX="248.0" layoutY="338.0" prefHeight="44.0" prefWidth="115.0" style="-fx-background-color: linear-gradient(to top, #c0c0aa, #1cefff);;" text="Donné:" textAlignment="JUSTIFY">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-                  <Label alignment="CENTER_RIGHT" layoutX="248.0" layoutY="391.0" prefHeight="44.0" prefWidth="115.0" style="-fx-background-color: linear-gradient(to top, #2193b0, #6dd5ed);;" text="Rendu:" textAlignment="JUSTIFY" textFill="WHITE">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
-                  <JFXButton fx:id="btnClose" defaultButton="true" layoutX="448.0" layoutY="449.0" onAction="#Valider" styleClass="save-buton" text="VALIDER" />
-                  <Label alignment="CENTER_RIGHT" layoutX="248.0" layoutY="285.0" prefHeight="53.0" prefWidth="115.0" style="-fx-background-color: linear-gradient(to top, #fd746c, #ff9068);" text="Total:" textAlignment="JUSTIFY" textFill="WHITE">
-                     <font>
-                        <Font size="36.0" />
-                     </font>
-                  </Label>
                   <Label fx:id="Client" layoutX="27.0" layoutY="13.0" />
+                  <Pane layoutX="27.0" layoutY="289.0" prefHeight="203.0" prefWidth="648.0" styleClass="card">
+                     <children>
+                        <Label alignment="CENTER" layoutX="14.0" layoutY="75.0" prefHeight="53.0" prefWidth="132.0" style="-fx-background-radius: 15;" styleClass="toolbar" text="Donné:" textAlignment="JUSTIFY" textFill="WHITE">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="14.0" layoutY="144.0" prefHeight="44.0" prefWidth="132.0" style="-fx-background-radius: 15;" styleClass="toolbar" text="Rendu:" textAlignment="JUSTIFY" textFill="WHITE">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="btnClose" defaultButton="true" layoutX="433.0" layoutY="148.0" onAction="#Valider" prefHeight="68.0" prefWidth="158.0" style="-fx-background-radius: 15;" styleClass="save-buton" text="VALIDER" />
+                        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="53.0" prefWidth="132.0" style="-fx-background-radius: 15;" styleClass="toolbar" text="Total:" textAlignment="JUSTIFY" textFill="WHITE">
+                           <font>
+                              <Font size="30.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="lblTot" alignment="CENTER" layoutX="176.0" layoutY="14.0" prefHeight="53.0" prefWidth="216.0">
+                           <font>
+                              <Font name="Times New Roman Bold" size="36.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="txtRemise" editable="false" layoutX="176.0" layoutY="145.0" prefHeight="38.0" prefWidth="216.0">
+                           <font>
+                              <Font name="Times New Roman Bold" size="24.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="txtMontCllt" layoutX="176.0" layoutY="80.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="216.0">
+                           <font>
+                              <Font name="Times New Roman" size="24.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="txtCoeff" editable="false" layoutX="408.0" layoutY="80.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="231.0" promptText="Coefficient des Points des clients">
+                           <font>
+                              <Font name="Times New Roman" size="15.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="txtPtActu" editable="false" layoutX="408.0" layoutY="20.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="231.0" promptText="Points actuels du client">
+                           <font>
+                              <Font name="Times New Roman" size="15.0" />
+                           </font>
+                        </TextField>
+                     </children>
+                  </Pane>
                </children>
             </Pane>
             <TableView fx:id="produitCaisseTable" editable="true" layoutX="24.0" layoutY="49.0" prefHeight="230.0" prefWidth="648.0">
@@ -55,21 +84,6 @@
                   </ContextMenu>
                </contextMenu>
             </TableView>
-            <TextField fx:id="txtMontCllt" layoutX="377.0" layoutY="344.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="216.0">
-               <font>
-                  <Font name="Times New Roman" size="24.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="txtRemise" editable="false" layoutX="377.0" layoutY="397.0" prefHeight="38.0" prefWidth="216.0">
-               <font>
-                  <Font name="Times New Roman Bold" size="24.0" />
-               </font>
-            </TextField>
-            <Label fx:id="lblTot" layoutX="377.0" layoutY="288.0" prefHeight="53.0" prefWidth="295.0">
-               <font>
-                  <Font name="Times New Roman Bold" size="36.0" />
-               </font>
-            </Label>
          </children>
       </AnchorPane>
    </children>

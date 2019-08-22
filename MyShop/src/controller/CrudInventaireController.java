@@ -10,24 +10,14 @@ import com.jfoenix.controls.JFXTextField;
 import entites.Produit;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -35,16 +25,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
-import javax.swing.SwingUtilities;
 import modele.ProduitR;
 import service.IProduitService;
-import service.imp.ProduitService;
 import tray.animations.AnimationType;
 import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
@@ -74,6 +63,8 @@ public class CrudInventaireController implements Initializable {
     private JFXTextField txtPrixProd;
     @FXML
     private JFXTextField txtQteProd;
+    @FXML
+    private JFXTextField txtQteAug;
 
     IProduitService produitService = MainViewController.produitService;
 
@@ -83,13 +74,13 @@ public class CrudInventaireController implements Initializable {
     @FXML
     private JFXButton saveUp = new JFXButton();
     @FXML
-    private GridPane pane1;
+    private Pane pane1;
     @FXML
-    private VBox pane2;
+    private Pane pane2;
     @FXML
     private AnchorPane stage;
     @FXML
-    private GridPane cont;
+    private AnchorPane cont;
     @FXML
     private Label ent;
     @FXML
@@ -97,17 +88,30 @@ public class CrudInventaireController implements Initializable {
     private Label label;
     @FXML
     private JFXTextField txtRec;
+    @FXML
+    private ColumnConstraints consCol1;
+    @FXML
+    private ColumnConstraints consCol2;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
     }
 
+    private AnchorPane stagePane;
+     
     /**
      * Initializes the controller class.
      */
+    boolean ok = false;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        stagePane = stage;
+        //txtCode.setFocusTraversable(true);
+        //txtCode.requestFocus();
+        
+                
         loadInventairegrid();
 
         Platform.runLater(new Runnable() {
@@ -118,30 +122,11 @@ public class CrudInventaireController implements Initializable {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
 
                 }
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 170);
             }
         });
 
-        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                double val = newValue.doubleValue() / 4;
-                ent.setLayoutX(val);
-                cont.setPrefWidth(newValue.doubleValue() - 170);
-                pane1.widthProperty().addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
-                        ent.setPrefWidth(newValue.doubleValue() - 15);
-                    }
-                });
-
-            }
-
-        });
-
-//        
-        txtQteProd.setOnKeyPressed((event) -> {
+     
+        /*txtQteProd.setOnKeyPressed((event) -> {
             if (event.getCode() == KeyCode.ENTER) {
                 save();
             }
@@ -160,7 +145,9 @@ public class CrudInventaireController implements Initializable {
             if (event.getCode() == KeyCode.ENTER) {
                 save();
             }
-        });
+        });*/
+        
+        txtQteAug.setText("0");
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
@@ -191,6 +178,9 @@ public class CrudInventaireController implements Initializable {
         txtLibProd.setText(produitModif.getLibProd());
         txtPrixProd.setText(String.valueOf(produitModif.getPrixUniProd()));
         txtQteProd.setText(String.valueOf(produitModif.getQteIniProd()));
+        txtQteProd.setEditable(false);
+        txtQteAug.setDisable(false);
+        txtQteAug.setText("0");
         saveUp.setText("Modifier");
     }
 
@@ -200,29 +190,39 @@ public class CrudInventaireController implements Initializable {
     }
 
     private void save() {
-        if (saveUp.getText().equals("ENREGISTRER")) {
-
+        if(txtCode.getText().isEmpty() || txtLibProd.getText().isEmpty() || txtPrixProd.getText().isEmpty()
+                || txtQteProd.getText().isEmpty()){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Veuillez remplir tous les champs ", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1));
+        } else 
+            if (saveUp.getText().equals("Ajouter")) {
+            //clearProduitText();
             Produit produit = new Produit();
             produit.setCodeProd(txtCode.getText());
             produit.setLibProd(txtLibProd.getText());
             produit.setPrixUniProd(txtPrixProd.getText());
+            //txtQteProd.setEditable(true);
+            //System.out.println("qte prod: "+txtQteProd.getText());
             produit.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
             produit.setEtatProd("actif");
             try {
+                
                 Produit p = produitService.findByCode(produit);
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
                 notification.setTray("MyShop", "Ce produit existe déjà", NotificationType.WARNING);
                 notification.showAndDismiss(Duration.seconds(1));
             } catch (Exception e) {
-
+                
                 produitService.ajouter(produit);
                 clearProduitText();
                 txtCode.setFocusTraversable(true);
                 txtCode.requestFocus();
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
-                notification.setTray("MyShop", "Enregistrement effectué", NotificationType.SUCCESS);
+                notification.setTray("MyShop", "Ajout effectué", NotificationType.SUCCESS);
                 notification.showAndDismiss(Duration.seconds(1));
 
             }
@@ -233,14 +233,24 @@ public class CrudInventaireController implements Initializable {
             produitModif.setPrixUniProd(txtPrixProd.getText());
             produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
             produitService.modifier(produitModif);
-            saveUp.setText("ENREGISTRER");
+            //txtQteAug.setText("0");
+            txtQteAug.setDisable(true);
+            saveUp.setText("Modifier");
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Modiffication effectuée", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1));
+                
             txtCode.setFocusTraversable(true);
             txtCode.requestFocus();
+            
             clearProduitText();
         }
 
         loadInventairegrid();
-
+        txtCode.setFocusTraversable(true);
+        txtQteAug.setFocusTraversable(true);
+        txtCode.requestFocus();
     }
 
     private void clearProduitText() {
@@ -248,6 +258,11 @@ public class CrudInventaireController implements Initializable {
         txtLibProd.clear();
         txtPrixProd.clear();
         txtQteProd.clear();
+        txtQteAug.setText("0");
+        txtQteAug.setDisable(true);
+        saveUp.setText("Ajouter");
+        txtCode.setFocusTraversable(true);
+        txtCode.requestFocus();
     }
 
     @FXML
@@ -255,18 +270,22 @@ public class CrudInventaireController implements Initializable {
         produitService.supprimer(produitModif);
         loadInventairegrid();
         clearProduitText();
-        saveUp.setText("ENREGISTRER");
+        saveUp.setText("Ajouter");
         TrayNotification notification = new TrayNotification();
         notification.setAnimationType(AnimationType.POPUP);
         notification.setTray("MyShop", "Suppression effectué", NotificationType.SUCCESS);
         notification.showAndDismiss(Duration.seconds(1));
         clearProduitText();
+        txtCode.setFocusTraversable(true);
+        txtCode.requestFocus();
     }
 
     @FXML
     private void vider(ActionEvent event) {
         clearProduitText();
-        saveUp.setText("ENREGISTRER");
+        saveUp.setText("Ajouter");
+        txtCode.setFocusTraversable(true);
+        txtCode.requestFocus();
     }
 
     @FXML
@@ -310,6 +329,17 @@ public class CrudInventaireController implements Initializable {
         txtRec.clear();
         txtRec.setFocusTraversable(true);
         txtRec.requestFocus();
+    }
+    
+    @FXML
+    private void calculQte(){
+       //txtQteProd.setDisable(true);
+       txtQteProd.setText( String.valueOf(Integer.parseInt(txtQteProd.getText())  + Integer.parseInt(txtQteAug.getText())));
+       txtQteProd.setFocusTraversable(true);
+       txtQteProd.requestFocus();
+       txtQteAug.setText("0");
+       txtQteAug.setDisable(true);
+      
     }
 
 }

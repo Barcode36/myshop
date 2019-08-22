@@ -6,57 +6,74 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="620.0" prefWidth="200.0" styleClass="slide-menu" stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.102" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuLateraleCController">
+<VBox alignment="CENTER" prefHeight="491.0" prefWidth="190.0" styleClass="slide-menu" stylesheets="@../css/essai.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MenuLateraleCController">
    <children>
-      <Pane prefHeight="133.0" prefWidth="200.0">
+      <Pane prefHeight="174.0" prefWidth="179.0">
          <children>
-            <ImageView fitHeight="100.0" fitWidth="132.0" layoutX="23.0" layoutY="17.0" pickOnBounds="true">
+            <ImageView fitHeight="124.0" fitWidth="140.0" layoutX="25.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/icon.jpg" />
-               </image></ImageView>
+               </image>
+            </ImageView>
          </children>
       </Pane>
-      <Separator opacity="0.43" prefWidth="200.0" />
-      <JFXButton fx:id="btnAccueil" onAction="#openAccueil" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Accueil" textFill="WHITE">
+      <Separator prefHeight="13.0" prefWidth="190.0" />
+      <JFXButton fx:id="btnAccueil" onAction="#openAccueil" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Accueil" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
          <graphic>
-            <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="37.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/icons8_Home_96px.png" />
                </image>
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnRec" onAction="#openRecherche" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Recherche " textFill="WHITE">
+      <JFXButton fx:id="btnRec" layoutX="10.0" layoutY="184.0" onAction="#openRecherche" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Recherche" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
          <graphic>
-            <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/icons8_Search_104px.png" />
                </image>
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnCaisse" onAction="#openCaisse" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Caisse" textFill="WHITE">
+      <JFXButton fx:id="btnCaisse" layoutX="10.0" layoutY="230.0" onAction="#openCaisse" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Caisse" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
          <graphic>
-            <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="39.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/icons8_Increase_104px.png" />
                </image>
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnReglage" onAction="#openReglage" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Reglage" textFill="WHITE">
+      <JFXButton fx:id="btnReglage" layoutX="10.0" layoutY="276.0" onAction="#openReglage" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Reglage" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
          <graphic>
-            <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/icons8_Slider__96px.png" />
                </image>
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnAide" onAction="#openAide" prefHeight="97.0" prefWidth="200.0" styleClass="slide-menu-button" text="Aide" textFill="WHITE">
+      <JFXButton fx:id="btnAide" layoutX="10.0" layoutY="322.0" onAction="#openAide" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Aide" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
          <graphic>
-            <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="35.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/icons8_BuySellAds_100px.png" />
                </image>
@@ -64,9 +81,12 @@
          </graphic>
       </JFXButton>
       <Separator prefWidth="200.0" />
-      <JFXButton fx:id="btnQuitter" onAction="#openClose" prefHeight="44.0" prefWidth="200.0" styleClass="slide-menu-button" text="Quitter" textFill="WHITE">
+      <JFXButton fx:id="btnQuitter" onAction="#openClose" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Quitter" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
          <graphic>
-            <ImageView fitHeight="39.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="38.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../img/icons8_Shutdown_52px.png" />
                </image>

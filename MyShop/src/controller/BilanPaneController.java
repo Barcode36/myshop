@@ -6,26 +6,32 @@
 package controller;
 
 import com.jfoenix.controls.JFXDatePicker;
-import static controller.CaissePaneController.clientNew;
+import static controller.DashBoardController.listProdEnFin;
 import entites.Client;
 import entites.Compte;
 import entites.ContenirVente;
 import entites.Produit;
 import entites.Vente;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,28 +40,44 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafxapplication3.JavaFXApplication3;
-import javax.swing.SwingUtilities;
+import javafx.util.Duration;
 import modele.ProduitR;
 import modele.VenteR;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import service.ICompteService;
 import service.IContenirVente;
 import service.IProduitService;
 import service.IVenteService;
+import tray.animations.AnimationType;
+import tray.notification.NotificationType;
+import tray.notification.TrayNotification;
 
 /**
  * FXML Controller class
@@ -104,6 +126,8 @@ public class BilanPaneController implements Initializable {
     private JFXDatePicker datePiker2;
     @FXML
     private Button btnDeuxDateSearch;
+     @FXML
+    private Button btnExport;
 
     IVenteService venteService = MainViewController.venteService;
     IContenirVente contenirVenteService = MainViewController.contenirVenteService;
@@ -112,27 +136,48 @@ public class BilanPaneController implements Initializable {
 
     ObservableList<VenteR> venteList = FXCollections.observableArrayList();
     ObservableList<ProduitR> produitListVentCaissier = FXCollections.observableArrayList();
+     ObservableList<ProduitR> produitListVentCaissierFiltre = FXCollections.observableArrayList();
     ObservableList<String> listMois = FXCollections.observableArrayList();
     @FXML
     private AnchorPane stage;
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private AnchorPane cont;
     private Pane band;
     @FXML
     private Button btnCLient;
+    @FXML
+    private ColumnConstraints consCol1;
+    @FXML
+    private ColumnConstraints consCol2;
+    @FXML
+    private Label lblMontTotBil;
+    @FXML
+    private ImageView
+            scriptIndicator;
+
 
     /**
      * Initializes the controller class.
      */
+    boolean ok = false;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-ExtraBold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         mois();
+        
+        fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All files", "*.*"),
+                new FileChooser.ExtensionFilter("Excel files", "*.xlsx"));
+        
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -142,12 +187,12 @@ public class BilanPaneController implements Initializable {
                 } else {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                System.out.println(s.isMaximized());
-                stage.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
-                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 71);
+                //System.out.println(s.isMaximized());
+                //stage.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
+                //cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 71);
             }
         });
-        System.out.println(MainViewController.temporaryPaneTot.getPrefWidth());
+       /* System.out.println(MainViewController.temporaryPaneTot.getPrefWidth());
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -156,15 +201,22 @@ public class BilanPaneController implements Initializable {
                 band.setPrefWidth(cont.getPrefWidth() - 300);
             }
 
-        });
-
+        });*/
+       scriptIndicator.setVisible(false);
+        
     }
 
-    public void loadVenteCaissierDetail(VenteR venteR) {
+    public void loadVenteCaissierDetail(VenteR venteR)  {
         produitListVentCaissier.clear();
         Compte c = new Compte(venteR.getidCompte().getValue());
         Compte compte = compteService.findById(c);
         List<Vente> list = venteService.ventesParCaissier(compte);
+        /*if(rbMois.isSelected()){
+             list = venteService.ventesParCaissierMois(compte,moisCombo.getValue());
+        } else if(rbDeuxDate.isSelected()){
+             list = venteService.ventesEntreDeuxDate(datePiker1.getPromptText(),datePiker2.getPromptText(),compte);
+        }*/
+        //List<Vente> list = venteService.ventesParCaissier(compte);
         for (Vente v : list) {
             Client cl = new Client(v.getIdClt());
             Client clt = MainViewController.clientService.findById(cl);
@@ -178,15 +230,74 @@ public class BilanPaneController implements Initializable {
                 }
             }
         }
+         produitListVentCaissierFiltre.clear();
+        for(ProduitR prod:produitListVentCaissier){
+            if(rbMoisCours.isSelected()){
+               
+                 LocalDate dateDuJour = LocalDate.now();
+                 
+                 String dateAsString[] = prod.getDateVen().getValue().split("-");
+                 String mois = dateAsString[1];
+                 //System.out.println("ms"+mois);
+                 
+                 if(Integer.parseInt(mois)==(dateDuJour.getMonthValue())){
+                     try {
+                         
+                        produitListVentCaissierFiltre.add(prod);
+                    } catch (Exception e) {
+                         System.out.println(""+e);
+                    }
+                     
+                 }
+                
+             } else if(rbMois.isSelected()){
+                 System.out.println("ms: "+moisCombo.getSelectionModel().getSelectedIndex());
+                 String dateAsString[] = prod.getDateVen().getValue().split("-");
+                 String mois = dateAsString[1];
+                 if(moisCombo.getSelectionModel().getSelectedIndex()+1 == Integer.parseInt(mois) ){
+                     try {
+                         
+                        produitListVentCaissierFiltre.add(prod);
+                    } catch (Exception e) {
+                         System.out.println(""+e);
+                    }
+                     
+                 }
+             } else if (rbDeuxDate.isSelected()){
+                 String dateAsString[] = prod.getDateVen().getValue().split("-");
+                 String datePiker1Split[] = datePiker1.getValue().toString().split("-");
+                 String datePiker2Split[] = datePiker2.getValue().toString().split("-");
+                 String mois = dateAsString[1];
+                 System.out.println("mw: "+mois);
+                 System.out.println(""+datePiker1Split[1]);
+                 System.out.println(""+datePiker2Split[1]);
+                 if(Integer.parseInt(mois)>= Integer.parseInt(datePiker1Split[1])
+                         && Integer.parseInt(mois)<= Integer.parseInt(datePiker2Split[1]) ){
+                     try {
+                         
+                        produitListVentCaissierFiltre.add(prod);
+                    } catch (Exception e) {
+                         System.out.println(""+e);
+                    }
+                     
+                 }
+                }
+            
+        }
 
+       
 //        
+        
+        
         totDetCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getTotal());
         PuCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
         QteCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getQteProdCom().asObject());
+       
         DateCaissier.setCellValueFactory(cellData -> cellData.getValue().getDateVen());
         ProduitCaissier.setCellValueFactory(cellData -> cellData.getValue().getLibProd());
         cltCol.setCellValueFactory(cellData -> cellData.getValue().getCltAch());
-        tableDetailCaissier.setItems(produitListVentCaissier);
+        
+        tableDetailCaissier.setItems(produitListVentCaissierFiltre);
     }
 
     @FXML
@@ -455,7 +566,19 @@ public class BilanPaneController implements Initializable {
         caissierColVente.setCellValueFactory(cellData -> cellData.getValue().getCaissier());
         totCaissierColVente.setCellValueFactory(cellData -> cellData.getValue().getTotalCaissier().asObject());
         CaissierVenteTable.setItems(venteList);
-//       
+//      
+        //venteList = CaissierVenteTable.getItems();
+        Integer total = 0;
+        for(VenteR vt : venteList){
+            total = Integer.parseInt(vt.getTotalCaissier().getValue()+"") + total;
+            lblMontTotBil.setText( "TOTAL: "+ total);
+            lblMontTotBil.setStyle("-fx-background-color: lightgreen;"
+                    + "-fx-font-size: 30px;");
+            
+            
+        }
+        loadListDetailVente();
+        
     }
 
     @FXML
@@ -478,6 +601,326 @@ public class BilanPaneController implements Initializable {
             Logger.getLogger(MainPrincipalController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void loadListDetailVente() {
+        
+         
+        ObservableList<VenteR> vtList = CaissierVenteTable.getItems();
+        for(VenteR vt : vtList){
+            loadVenteCaissierDetail(vt);
+        }
+        
+    }
+    
+    private FileChooser fileChooser;
+    private File file;
+    private Stage stge;
+    // Excel work book
+    private HSSFWorkbook wb;
+
+    // Fonts
+    private HSSFFont headerFont;
+    private HSSFFont contentFont;
+
+    // Styles
+    private HSSFCellStyle headerStyle;
+    private HSSFCellStyle oddRowStyle;
+    private HSSFCellStyle evenRowStyle;
+    
+    
+    
+    
+   @FXML
+    private void exportBilan(ActionEvent ev){
+        boolean ok = false;
+        TrayNotification notification = new TrayNotification();
+                        
+        
+       //javax.swing.JOptionPane.showMessageDialog(null,"exec de exportBilan"); 
+        wb = new HSSFWorkbook();
+        HSSFSheet sheet = wb.createSheet("Bilan ");
+       
+        headerFont  = createFont(HSSFColor.WHITE.index, (short)15, true);
+	contentFont = createFont(HSSFColor.BLACK.index, (short)12, false);
+        
+        headerStyle  = createStyle(headerFont,  HSSFCellStyle.ALIGN_CENTER, HSSFColor.BLUE_GREY.index,       true, HSSFColor.WHITE.index);
+        oddRowStyle  = createStyle(contentFont, HSSFCellStyle.ALIGN_LEFT,   HSSFColor.GREY_25_PERCENT.index, true, HSSFColor.GREY_80_PERCENT.index);
+	evenRowStyle = createStyle(contentFont, HSSFCellStyle.ALIGN_LEFT,   HSSFColor.GREY_40_PERCENT.index, true, HSSFColor.GREY_80_PERCENT.index);
+		
+        venteList = CaissierVenteTable.getItems();
+        int indexCaiVte = 2;
+        int rowIndex = 0;
+        HSSFRow header = null;
+        HSSFRow row = null;
+        HSSFCell headerCell = null;
+        
+        sheet.setColumnWidth(0, 450 * 25);
+        header = sheet.createRow(0);
+        headerCell = header.createCell(0);
+        
+        if(rbMoisCours.isSelected()){
+            String format = "dd/MM/yy"; 
+            java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat( format); 
+            java.util.Date date = new java.util.Date(); 
+            formater.format( date ) ;
+
+          System.out.println("Periode: Du 1er au "+date);  
+          headerCell.setCellValue("Periode: Du 1er au "+date);
+        }
+        if(rbMois.isSelected()){
+          System.out.println("Periode: "+moisCombo.getValue());
+          headerCell.setCellValue("Periode: "+moisCombo.getValue());
+        }
+        if(rbDeuxDate.isSelected()){
+             headerCell.setCellValue("Periode: "+datePiker1.getValue().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG))
+                + " au "+datePiker2.getValue().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)));
+        
+        }
+       headerCell.setCellStyle(headerStyle);
+               
+       
+        header = sheet.createRow(1);
+        headerCell = header.createCell(0);
+        headerCell.setCellValue("CAISSIER: ");
+        headerCell.setCellStyle(headerStyle);
+        
+        sheet.setColumnWidth(1, 400 * 25);
+        headerCell =header.createCell(1);
+        headerCell.setCellValue("TOTAL: ");
+        headerCell.setCellStyle(headerStyle);
+         
+        for(VenteR  vt : venteList){
+            row = sheet.createRow(indexCaiVte);//row 48
+            headerCell=row.createCell(0);
+            headerCell.setCellValue(vt.getCaissier().getValue()+"");
+            headerCell.setCellStyle( rowIndex % 2 == 0 ? oddRowStyle : evenRowStyle );
+            headerCell= row.createCell(1);
+            headerCell.setCellValue(Integer.parseInt(vt.getTotalCaissier().getValue()+""));
+            headerCell.setCellStyle( rowIndex % 2 == 0 ? oddRowStyle : evenRowStyle );
+            rowIndex++;
+            indexCaiVte++;
+        }
+        indexCaiVte+=2;
+        
+        //sheet.setColumnWidth(0, 256 * 25);
+        header = sheet.createRow(indexCaiVte);//row53
+        headerCell=header.createCell(0);
+        headerCell.setCellValue("Produits en rupture de stock: ");
+        headerCell.setCellStyle(headerStyle);
+                
+            
+        header = sheet.createRow(indexCaiVte+1);//row 55
+        headerCell = header.createCell(0);
+        headerCell.setCellValue("Produit ");
+        headerCell.setCellStyle(headerStyle);
+        headerCell = header.createCell(1);
+        headerCell.setCellValue("Quantité ");
+        headerCell.setCellStyle(headerStyle);
+            
+        indexCaiVte = indexCaiVte + 2; //48
+            
+            for(XYChart.Data dt : listProdEnFin){
+                row = sheet.createRow(indexCaiVte);//row 48
+                headerCell=row.createCell(0);
+                headerCell.setCellValue(dt.getXValue()+"");
+                headerCell.setCellStyle( rowIndex % 2 == 0 ? oddRowStyle : evenRowStyle );
+                headerCell= row.createCell(1);
+                headerCell.setCellValue(Integer.parseInt(dt.getYValue()+""));
+                headerCell.setCellStyle( rowIndex % 2 == 0 ? oddRowStyle : evenRowStyle );
+                rowIndex++;
+               indexCaiVte++;
+            }
+    
+        indexCaiVte+=2;
+        
+        header = sheet.createRow(indexCaiVte);//row68
+        headerCell = header.createCell(0);
+        headerCell.setCellValue("Produits les mieux vendus: ");
+        headerCell.setCellStyle(headerStyle);
+          
+        header = sheet.createRow(indexCaiVte+1);//row 55
+        headerCell = header.createCell(0);
+        headerCell.setCellValue("Produit ");
+        headerCell.setCellStyle(headerStyle);
+        
+        headerCell = header.createCell(1);
+        headerCell.setCellValue("Quantité Vendue");
+        headerCell.setCellStyle(headerStyle);
+            
+        indexCaiVte = indexCaiVte + 2; //48
+        
+        for(ProduitR dt : produitListVentCaissierFiltre ){
+            row = sheet.createRow(indexCaiVte);//row 48
+            headerCell=row.createCell(0);
+            headerCell.setCellValue(dt.getLibProd().getValue()+"");
+            headerCell.setCellStyle( rowIndex % 2 == 0 ? oddRowStyle : evenRowStyle );
+            headerCell= row.createCell(1);
+            headerCell.setCellValue(Double.parseDouble(dt.getQteProdCom().getValue()+""));
+            headerCell.setCellStyle( rowIndex % 2 == 0 ? oddRowStyle : evenRowStyle );
+            rowIndex++;
+           indexCaiVte++;
+        }
+          
+        try {
+           // stge = (Stage) stage.getScene().getWindow();
+            file = new File("Ressources/bilan.xls");
+            OutputStream fos = new FileOutputStream(file.getAbsolutePath());
+            
+            wb.write(fos);
+            
+            fos.close();
+            
+            try { 
+                  
+                    file = new File("Ressources/Cam.vbs");
+                    
+                    InputStream fis = new FileInputStream(file);
+                    
+                   
+                    Process rt = Runtime.getRuntime().exec(new String[] {
+                                        "wscript.exe", file.getAbsolutePath()
+                                        });
+                    //bool yem = true;
+                    boolean endScr = rt.isAlive();
+                  // scriptIndicator.setVisible(true);
+                   Stage stage2 = new Stage();
+                    /*if(endScr){
+                    try {
+                            StackPane root;
+                            FXMLLoader loader = new FXMLLoader();
+                            root = loader.load(getClass().getResource("/views/ExecScriptPane.fxml").openStream());
+
+                            //Stage stage = new Stage();
+                            Scene scene = new Scene(root);
+
+                            stage2.getIcons().add(new Image(CaissePaneController.class.getResourceAsStream("/img/afnacos.ico")));
+                            stage2.initStyle(StageStyle.UNDECORATED);
+                            stage2.setScene(scene);
+                            //stage.initStyle(StageStyle.UNIFIED);
+                            stage2.setResizable(false);
+                            stage2.show();
+
+
+
+                        } catch (IOException ex) {
+                            System.out.println(""+ex);
+                            //Logger.getLogger(MainPrincipalController.class
+                             //       .getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                    }
+                    
+                        */
+                     int i =0;
+                     
+                    while(rt.isAlive()){
+                      if(i==100){
+                          
+                      }
+                      i++;
+                    }
+                    
+                   //stage2.hide();
+                    
+                   //loadingPr(rt);
+                    
+                    File src = new File("Ressources/bilan.xls");
+                    File dst;// = new File("src/bilan.xls");
+                   try {
+                    stge = (Stage) anchorPane.getScene().getWindow();
+                    dst = fileChooser.showSaveDialog(stge);
+                    Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                    } catch (FileNotFoundException ex) {
+                        System.out.println(""+ex);
+                        Logger.getLogger(MainPrincipalController.class
+                                .getName()).log(Level.SEVERE, null, ex);
+
+                    }
+                    
+                     
+                     endScr = rt.isAlive();
+                    // System.out.println("alii"+endScr);
+                    if(endScr == false){
+                        //scriptIndicator.setVisible(false);
+                        btnExport.setDisable(false);
+                        System.out.println("finished");
+                         notification = new TrayNotification();
+                        notification.setAnimationType(AnimationType.POPUP);
+                        notification.setTray("MyShop", "Exportation terminée", NotificationType.SUCCESS);
+                        notification.showAndDismiss(Duration.seconds(1.5));
+                    }
+                       // scriptIndicator.setDisable(true);
+                    
+
+                    
+                    
+                    // Runtime.getRuntime().exec("wscript "+fis.getChannel()+".vbs");
+                    //System.out.println("reussie");
+                    //javax.swing.JOptionPane.showMessageDialog(null,"exec finished "); 
+                    
+                   
+
+                } catch (IOException e) {
+                    //System.out.println(e);
+                    javax.swing.JOptionPane.showMessageDialog(null,e); 
+                    //System.exit(0);
+                }   
+             
+           
+        } catch (FileNotFoundException ex) {
+            System.out.println("erreur: "+ex);
+            javax.swing.JOptionPane.showMessageDialog(null,ex); 
+
+        } catch (IOException ex) {
+             System.out.println("erreur2: "+ex);
+            javax.swing.JOptionPane.showMessageDialog(null,ex); 
+        }
+ 
+        venteList = CaissierVenteTable.getItems();
+        produitListVentCaissier = tableDetailCaissier.getItems();
+    }
+    
+    private void loadingPr(Process rt){
+        while(rt.isAlive()){
+            scriptIndicator.setVisible(false);
+        }
+        
+    }
+    
+    private HSSFFont createFont(short fontColor, short fontHeight, boolean fontBold) {
+
+        HSSFFont font = wb.createFont();
+        font.setBold(fontBold);
+        font.setColor(fontColor);
+        font.setFontName("Arial");
+        font.setFontHeightInPoints(fontHeight);
+
+        return font;
+    }
+    
+    private HSSFCellStyle createStyle(HSSFFont font, short cellAlign, short cellColor, boolean cellBorder, short cellBorderColor) {
+
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setFont(font);
+        style.setAlignment(cellAlign);
+        style.setFillForegroundColor(cellColor);
+        style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+
+        if (cellBorder) {
+            style.setBorderTop(HSSFCellStyle.BORDER_THIN);
+            style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+            style.setBorderRight(HSSFCellStyle.BORDER_THIN);
+            style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+
+            style.setTopBorderColor(cellBorderColor);
+            style.setLeftBorderColor(cellBorderColor);
+            style.setRightBorderColor(cellBorderColor);
+            style.setBottomBorderColor(cellBorderColor);
+        }
+
+        return style;
     }
 
 }

@@ -22,13 +22,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import modele.CompteR;
 import tray.animations.AnimationType;
 import tray.notification.NotificationType;
 import tray.notification.TrayNotification;
@@ -47,7 +47,7 @@ public class FrmConnnexionController implements Initializable {
 
     ObservableList<String> compteList = FXCollections.observableArrayList();
     @FXML
-    private GridPane cont;
+    private AnchorPane cont;
 
     /**
      * Initializes the controller class.
@@ -63,9 +63,12 @@ public class FrmConnnexionController implements Initializable {
         }
         txtPseudoCennect.setItems(compteList);
     }
+    
+     boolean ok;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
         MainViewController.hamburgerTmp.setVisible(false);
         MainViewController.mainCss.setVisible(false);
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
@@ -74,32 +77,56 @@ public class FrmConnnexionController implements Initializable {
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Regular.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         fillCompteCombo();
-        Platform.runLater(new Runnable() {
+        
+        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+               //MainViewController.img.setFitWidth(MainViewController.temporaryPaneTot.getWidth());
+               // System.out.println("ov "+oldValue+" nv "+newValue);
+                MainViewController.dshPane.heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override
+                    public void changed(ObservableValue<? extends Number> observable0, Number oldValue0, Number newValue0) {
+                        //System.out.println("dsh height: "+MainViewController.dshPane.getHeight());
+                        MainViewController.img.setFitHeight(MainViewController.dshPane.getHeight());
+                    }
+                });
+                
+                if( (Double) oldValue < (Double) newValue){
+                    
+                    MainViewController.img.setTranslateX(MainViewController.dshPane.getWidth());
+                    //MainViewController.dshPane.setTranslateX(0);
+                   // MainViewController.img.setFitWidth(MainViewController.temporaryPaneTot.getWidth());
+                    //System.out.println("inhinFm");
+                }
+                
+                if( (Double) oldValue > (Double) newValue){
+                    MainViewController.img.setTranslateX(0);
+                    MainViewController.dshPane.setTranslateX(0);
+                    
+                   // System.out.println("unhunFm");
+                }
+                
+            }
+      
+        });        
+        /*Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 Stage s = (Stage) cont.getScene().getWindow();
+                MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
                 double val = s.getWidth() / 2;
                 double val2 = cont.getPrefWidth() / 2;
 
-                cont.setLayoutX(val - val2);
+                //cont.setLayoutX(val - val2);
 
             }
         });
-
-        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                double val = newValue.doubleValue() / 2;
-                double val2 = cont.getPrefWidth() / 2;
-
-                cont.setLayoutX(val - val2);
-
-            }
-
-        });
+       ok = true;
+       */
+        
     }
 
     @FXML
@@ -115,29 +142,56 @@ public class FrmConnnexionController implements Initializable {
 
         c.setMdpComp(txtPassConnect.getText());
         try {
+            
+            
             MainViewController.compteActif = MainViewController.compteServiceD.Connexion(c);
-            //System.out.println(MainViewController.compteActif.getIdComp());
             TypeCompte compte = new TypeCompte(MainViewController.compteActif.getIdTypComp());
             MainViewController.typeCompteActif = MainViewController.typeServiceD.findById(compte);
             MainViewController.temporaryPane.getChildren().clear();
-            StackPane dashBoard = FXMLLoader.load(getClass().getResource(Constants.DashBoard));
+            
+            FXMLLoader fxmlLoader  = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource(Constants.DashBoard));
+            StackPane dashBoard = fxmlLoader.load();
+            
             MainViewController.temporaryPane.getChildren().setAll(dashBoard);
-            MainViewController.hamburgerTmp.setVisible(true);
-            MainViewController.mainCss.setVisible(true);
+            
+            MainViewController.hamburgerTmp.setVisible(false);
+            MainViewController.mainCss.setVisible(false);
+            MainViewController.dshPane.setVisible(true);
+           
             
                 if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+                    /*
                     DashBoardController.btnComp.setVisible(false);
                     DashBoardController.btnInvent.setVisible(false);
-                    DashBoardController.btnBil.setVisible(false);
+                    DashBoardController.btnBil.setVisible(false);*/
+                    
+                    DashBoardController.contHbox1.getChildren().removeAll(DashBoardController.btnComp,
+                            DashBoardController.btnInvent,DashBoardController.btnBil);
+                    
+                    DashBoardController.contHbox1.getChildren().addAll(DashBoardController.btnAid,
+                            DashBoardController.btnReg,DashBoardController.btnDec);
+                    
+                    DashBoardController.contHbox2.getChildren().clear();
                     VBox menu = null;
                     menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateralC));
                     MainViewController.drawerTmp.setSidePane(menu);
                 }else{
                     
                 }
-            
+             MainViewController.dshPane.setVisible(true);
+             
+             if(MainViewController.temporaryPaneTot.getWidth()<1300){
+                MainViewController.img.setFitWidth(1233);
+                MainViewController.img.setTranslateX(0);
+                MainViewController.img.setFitHeight(717);
+                // System.out.println("recadrage connect ok");
+            }
+             
         } catch (Exception e) {
-           //  e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println(" "+e);
+            e.printStackTrace();
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
             notification.setTray("MyShop", "Pseudo ou Mot de passe incorrect", NotificationType.ERROR);

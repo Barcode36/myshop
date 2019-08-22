@@ -50,7 +50,13 @@ public class FrmChoixClientController implements Initializable {
     private TableColumn<ClientR, String> colAdr;
     @FXML
     private TableColumn<ClientR, String> colNum;
-
+    
+    
+    public static TableView<ClientR> cltTble;
+    public static TableColumn<ClientR, String> cNom;
+    public static TableColumn<ClientR, String> cAdr;
+    public static TableColumn<ClientR, String> cNum;
+    
     IClientService clientService = MainViewController.clientService;
 
     ObservableList<ClientR> obClienR = FXCollections.observableArrayList();
@@ -59,7 +65,7 @@ public class FrmChoixClientController implements Initializable {
         return clientService.findAll();
     }
 
-    private void loadTable() {
+    protected void loadTable() {
         obClienR.clear();
         for (Client c : lClient()) {
             obClienR.add(new ClientR(c));
@@ -77,8 +83,10 @@ public class FrmChoixClientController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         loadTable();
+       
     }
 
+     
     @FXML
     private void recherche(KeyEvent event) {
         obClienR.clear();

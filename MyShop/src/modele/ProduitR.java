@@ -7,6 +7,7 @@ package modele;
 
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
+import controller.CaissePaneController;
 import entites.Client;
 import entites.ContenirVente;
 import entites.Produit;
@@ -19,6 +20,8 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyEvent;
+import service.IProduitService;
+import service.imp.ProduitService;
 
 /**
  *
@@ -37,7 +40,10 @@ public class ProduitR {
     private JFXCheckBox Suppression;
     private SimpleStringProperty total;
     private JFXTextField qteCom;
+    public static JFXTextField qteComm;
     private Integer to;
+    
+    private Vente Vte;
 
     public ProduitR(Produit produit) {
         this.idProd = new SimpleIntegerProperty(produit.getIdProd());
@@ -70,6 +76,21 @@ public class ProduitR {
         this.prixUniProd = new SimpleStringProperty(String.valueOf(contenirVente.getPrixProd()));
         this.qteProdCom = new SimpleIntegerProperty(contenirVente.getQteVen());
         this.codeProd = new SimpleStringProperty(produit.getCodeProd());
+        this.total = new SimpleStringProperty(String.valueOf(Integer.parseInt(produit.getPrixUniProd()) * contenirVente.getQteVen()));
+    }
+    
+    public ProduitR( Vente vente, ContenirVente contenirVente, Client c) {
+        this.cltAch = new SimpleStringProperty(c.getNomClt());
+        this.idProd = new SimpleIntegerProperty(contenirVente.getIdProd());
+        DateFormat dateFormat = new SimpleDateFormat("d-MM-yyy HH:mm:ss");
+        String dateh = dateFormat.format(vente.getDateVen()).toString();
+        this.dateVen = new SimpleStringProperty(dateh);
+        this.Vte = vente;
+        this.prixUniProd = new SimpleStringProperty(String.valueOf(contenirVente.getPrixProd()));
+        this.qteProdCom = new SimpleIntegerProperty(contenirVente.getQteVen());
+        Produit p = new Produit(contenirVente.getIdProd());
+        IProduitService produitService = new ProduitService();
+        Produit produit = produitService.findById(p);
         this.total = new SimpleStringProperty(String.valueOf(Integer.parseInt(produit.getPrixUniProd()) * contenirVente.getQteVen()));
     }
 
@@ -121,12 +142,22 @@ public class ProduitR {
 //            }
 //
 //        });
+        //qteComm.setText(String.valueOf(com));
         this.qteCom.setText(String.valueOf(com));
-
+        
+        //qteCom.setFocusTraversable(true);
+        //qteCom.requestFocus();
+        //this.qteCom = qteComm;
+       // this.qteComm.setEditable(false);
+        //this.qteCom.setText(CaissePaneController.txtQteProdComm.getText());
     }
 
     public Integer getTo() {
         return to;
+    }
+    
+    public SimpleStringProperty getVte() {
+        return  new SimpleStringProperty(this.Vte.getIdVen()+"")   ;
     }
 
     public void setTo(Integer to) {
@@ -226,4 +257,5 @@ public class ProduitR {
         return libProd.getValue();
     }
 
+    
 }

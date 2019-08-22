@@ -43,7 +43,10 @@ public class Client implements Serializable {
     private String etatClt;
     @Column(name = "numClt")
     private String numClt;
-
+     //ajout du nbre de points - bes
+    @Column(name = "nbPoints")
+    private Double nbPoints;
+    
     public Client() {
     }
 
@@ -97,6 +100,16 @@ public class Client implements Serializable {
     public void setAdrClt(String adrClt) {
         this.adrClt = adrClt;
     }
+     //ajout du nbre de points - bes
+    public Double getNbPoints() {
+        return nbPoints;
+    }
+
+    public void setNbPoints(Double nbPoints) {
+        this.nbPoints = nbPoints;
+    }
+    
+    
 
     @Override
     public boolean equals(Object object) {

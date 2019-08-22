@@ -1,0 +1,24 @@
+
+*********************************************
+*			ETAPES D'INSTALLATION			*
+*********************************************
+
+1- Double-cliquer sur le fichier .exe de l'application.
+
+2- A la fin de l'installation, aller dans le dossier d'installation du programme MyShop:
+	* clic droit sur le raccourci de l'icone de l'application
+	* selectionner ouvri l'emplacement du fichier
+
+3- Copier le dossier Ressources associé à l'application et le coller dans le dossier app du dossier de l'installation
+
+4- Donner tous les droits au dossier en faisant:
+	* Clic droit sur le dossier Ressources
+	* selectionner propriété
+	* decocher l'onglet lecture seule
+	* dans l'onglet securité en haut, selectionner modifier et donner tous les droits aux differents utilisateurs presents
+	* Appliquer les modifications puis ok
+
+5- Enjoy it!!!
+
+copyright @jimscom 2019
+	

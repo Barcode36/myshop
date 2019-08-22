@@ -53,6 +53,8 @@ public class BilanClientController implements Initializable {
     @FXML
     private TableColumn<ProduitR, String> totDetCaissierCol;
     @FXML
+    private TableColumn<ClientR, Double> totPointsCol;
+    @FXML
     private JFXComboBox<ClientR> cltCombo;
 
     ObservableList<VenteR> venteList = FXCollections.observableArrayList();
@@ -115,7 +117,8 @@ public class BilanClientController implements Initializable {
             }
         }
 
-//        
+//       
+        totPointsCol.setCellValueFactory(cellData -> cellData.getValue().getNbPoints().asObject());
         totDetCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getTotal());
         PuCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getPrixUniProd());
         QteCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getQteProdCom().asObject());

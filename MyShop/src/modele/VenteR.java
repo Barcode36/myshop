@@ -5,9 +5,12 @@
  */
 package modele;
 
+import entites.Client;
 import entites.Compte;
 import entites.Produit;
 import entites.Vente;
+import java.util.Date;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -21,6 +24,9 @@ public class VenteR {
     private SimpleIntegerProperty totalCaissier;
     private SimpleIntegerProperty idCompte;
     private SimpleIntegerProperty idVen;
+    private SimpleDoubleProperty montVente;
+    private SimpleStringProperty client;
+     private SimpleStringProperty dtVte;
 
     public VenteR(Compte compte,Vente vente, Integer totVent) {
         this.caissier = new SimpleStringProperty(compte.getNomComp() + compte.getPrenomComp());
@@ -28,12 +34,29 @@ public class VenteR {
         this.idCompte = new SimpleIntegerProperty(compte.getIdComp());
         this.idVen = new SimpleIntegerProperty(vente.getIdVen());
     }
+    
+    public VenteR(Compte compte,Vente vente, Double montVente,Client c, Date dte) {
+        this.caissier = new SimpleStringProperty(compte.getNomComp() + compte.getPrenomComp());
+        this.totalCaissier = new SimpleIntegerProperty(0);
+        this.idCompte = new SimpleIntegerProperty(compte.getIdComp());
+        this.idVen = new SimpleIntegerProperty(vente.getIdVen());
+        this.montVente = new SimpleDoubleProperty(montVente);
+        this.client = new SimpleStringProperty(c.getNomClt());
+        this.dtVte = new SimpleStringProperty(dte.toString());
+    }
+    
     public VenteR(Compte compte, Integer totVent) {
         this.caissier = new SimpleStringProperty(compte.getNomComp()+" "
                 + "" + compte.getPrenomComp());
         this.totalCaissier = new SimpleIntegerProperty(totVent);
         this.idCompte = new SimpleIntegerProperty(compte.getIdComp());
     }
+    
+    
+
+    /*public VenteR(Vente vt) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }*/
 
     public SimpleStringProperty getCaissier() {
         return caissier;
@@ -75,4 +98,30 @@ public class VenteR {
         this.idCompte = idCompte;
     }
 
+    public SimpleDoubleProperty getMontVente() {
+        return montVente;
+    }
+
+    public void setMontVente(SimpleDoubleProperty montVente) {
+        this.montVente = montVente;
+    }
+
+    public SimpleStringProperty getClient() {
+        return client;
+    }
+
+    public void setClient(SimpleStringProperty client) {
+        this.client = client;
+    }
+
+    public SimpleStringProperty getDtVte() {
+        return dtVte;
+    }
+
+    public void setDtVte(SimpleStringProperty dtVte) {
+        this.dtVte = dtVte;
+    }
+
+    
+    
 }

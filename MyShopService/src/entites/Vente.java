@@ -7,6 +7,7 @@ package entites;
 
 import java.io.Serializable;
 import java.util.Date;
+import javafx.beans.property.SimpleStringProperty;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -123,6 +124,7 @@ public class Vente implements Serializable {
 
     public void setIdClt(Integer idClt) {
         this.idClt = idClt;
+        
     }
 
     public Date getDateVen() {
@@ -166,4 +168,6 @@ public class Vente implements Serializable {
         return "entites.Vente[ idVen=" + idVen + " ]";
     }
 
+   // public SimpleStringProperty 
+    
 }
