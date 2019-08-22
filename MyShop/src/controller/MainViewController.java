@@ -107,20 +107,25 @@ public class MainViewController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         
-        Client client = new Client();
-        client.setNomClt("Defaut");
-        try {
-            client = clientService.findByNom(client);
-            ClientR cr = new ClientR(client);
-            CaissePaneController.clientNew = cr;
-        } catch (Exception e) {
-            client.setEtatClt("actif");
-            client.setAdrClt("Defaut");
-            client.setNumClt("Defaut");
-            clientService.ajouter(client);
-            ClientR cr = new ClientR(client);
-            CaissePaneController.clientNew = cr;
+        List < Client > allClient = clientService.findAll();
+        if( !(allClient!=null  && allClient.size()>0)){
+            Client client = new Client();
+            client.setNomClt("Defaut");
+            try {
+                client = clientService.findByNom(client);
+                ClientR cr = new ClientR(client);
+                CaissePaneController.clientNew = cr;
+            } catch (Exception e) {
+                client.setEtatClt("actif");
+                client.setAdrClt("Defaut");
+                client.setNumClt("Defaut");
+                client.setNbPoints(0.0);
+                clientService.ajouter(client);
+                ClientR cr = new ClientR(client);
+                CaissePaneController.clientNew = cr;
+            }
         }
+        
 
         if (listTypeCompte().size() == 0) {
             TypeCompte tc = new TypeCompte();

@@ -259,6 +259,7 @@ public class CaissePaneController implements Initializable {
         Client client = new Client();
         client.setNomClt("Defaut");
         client = clientService.findByNom(client);
+        clientNew = new ClientR(client);
         txtCltV.setText(clientNew.getNomClt().getValue() + " (" + clientNew.getNumClt().getValue() + ")");
         txtCltV.setFocusTraversable(false);
         txtCltV.requestFocus();
