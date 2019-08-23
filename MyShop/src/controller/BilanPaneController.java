@@ -22,16 +22,24 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Date;
+//import java.sql.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -52,6 +60,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -65,6 +74,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javafx.util.converter.LocalDateTimeStringConverter;
 import modele.ProduitR;
 import modele.VenteR;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -92,11 +102,11 @@ public class BilanPaneController implements Initializable {
     @FXML
     private GridPane gridBilan;
     @FXML
-    private TableColumn<VenteR, String> caissierColVente;
+    TableColumn<List<SimpleStringProperty>, String> caissierColVente;
     @FXML
-    private TableColumn<VenteR, Integer> totCaissierColVente;
+    private TableColumn<List<IntegerProperty>, Integer> totCaissierColVente;
     @FXML
-    private TableView<VenteR> CaissierVenteTable;
+    private TableView<List<SimpleStringProperty>> CaissierVenteTable;
     @FXML
     private TableColumn<ProduitR, String> DateCaissier;
     @FXML
@@ -141,6 +151,11 @@ public class BilanPaneController implements Initializable {
     ObservableList<ProduitR> produitListVentCaissier = FXCollections.observableArrayList();
      ObservableList<ProduitR> produitListVentCaissierFiltre = FXCollections.observableArrayList();
      ObservableList<ProduitR> lTmp = FXCollections.observableArrayList();
+     
+     ObservableList<String> caissierListNom = FXCollections.observableArrayList();
+     ObservableList<String> caissierListPrenom = FXCollections.observableArrayList();
+    ObservableList<Double> caissierListMontant = FXCollections.observableArrayList();
+     List<Object[]> listVParCaissier = FXCollections.observableArrayList();
      
     ObservableList<String> listMois = FXCollections.observableArrayList();
     @FXML
@@ -289,7 +304,8 @@ public class BilanPaneController implements Initializable {
                 }
             
         }
-
+        
+        
        
 //        
         
@@ -307,8 +323,8 @@ public class BilanPaneController implements Initializable {
 
     @FXML
     private void getCaissier(MouseEvent event) {
-        VenteR venteR = CaissierVenteTable.getSelectionModel().getSelectedItem();
-        loadVenteCaissierDetail(venteR);
+//        VenteR venteR = CaissierVenteTable.getSelectionModel().getSelectedItem();
+//        loadVenteCaissierDetail(venteR);
     }
 
     @FXML
@@ -542,35 +558,115 @@ public class BilanPaneController implements Initializable {
     }
 
     public void loadVenteCaissier(String typeDem, String mois, String d, String d2) {
-        venteList.clear();
+        /*venteList.clear();
         List<Compte> listc = compteService.compteList();
         for (Compte c : listc) {
-            List<Vente> listVParCaissier = null;
-            if (typeDem.equals("mois")) {
-                listVParCaissier = venteService.ventesParCaissierMois(c, mois);
-            } else if (typeDem.equals("date")) {
-                listVParCaissier = venteService.ventesEntreDeuxDate(d, d2, c);
-            }
-            int totVent = 0;
-            for (Vente vente : listVParCaissier) {
-
-                List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
-                //System.out.println(listCon);
-                for (ContenirVente cv : listCon) {
-//                    Produit p = new Produit(cv.getIdProd());
-//                    Produit produit = produitService.findById(p);
-                    int totPro = cv.getPrixProd() * cv.getQteVen();
-                    totVent += totPro;
-                }
-
-            }
-            if (!listVParCaissier.isEmpty()) {
-                venteList.add(new VenteR(c, totVent));
+        List<Vente> listVParCaissier = null;
+        if (typeDem.equals("mois")) {
+        listVParCaissier = venteService.ventesParCaissierMois(c, mois);
+        } else if (typeDem.equals("date")) {
+        listVParCaissier = venteService.ventesEntreDeuxDate(d, d2, c);
+        }
+        int totVent = 0;
+        for (Vente vente : listVParCaissier) {
+        
+        List<ContenirVente> listCon = contenirVenteService.listParVente(vente);
+        //System.out.println(listCon);
+        for (ContenirVente cv : listCon) {
+        //                    Produit p = new Produit(cv.getIdProd());
+        //                    Produit produit = produitService.findById(p);
+        int totPro = cv.getPrixProd() * cv.getQteVen();
+        totVent += totPro;
+        }
+        
+        }
+        if (!listVParCaissier.isEmpty()) {
+        venteList.add(new VenteR(c, totVent));
+        }
+         List<Object[]> }*/
+            listVParCaissier.clear();
+            List<Object[]> lvte = null;
+        if (rbMoisCours.isSelected()) {
+            
+             
+           
+             LocalDate today = LocalDateTime.now().toLocalDate();
+             LocalDate firstDay = LocalDateTime.of(today.getYear(), today.getMonthValue(), 1, 0, 0).toLocalDate();
+             
+             long todayLong = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+             long firstDayLong = firstDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+             
+           java.sql.Date dt1 =  new java.sql.Date(new Timestamp( firstDayLong *1000  ).getTime());
+           java.sql.Date dt2 =  new java.sql.Date(new Timestamp(todayLong*1000).getTime());
+            
+            lvte = contenirVenteService.findTotVteEffectueByTwoPeriode (dt1,dt2);
+            
+            
+        } else if(rbMois.isSelected()){
+            
+                LocalDate today = LocalDateTime.now().toLocalDate();
+                
+             LocalDate firstDay = LocalDateTime.of(today.getYear(), moisCombo.getSelectionModel().getSelectedIndex()+1, 1, 0, 0).toLocalDate();
+             LocalDate secondDay = LocalDateTime.of(today.getYear(), moisCombo.getSelectionModel().getSelectedIndex()+1, firstDay.lengthOfMonth() , 0, 0).toLocalDate();
+             long todayLong = firstDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+             long firstDayLong = secondDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+             
+           java.sql.Date dt1 =  new java.sql.Date(new Timestamp( firstDayLong *1000  ).getTime());
+           java.sql.Date dt2 =  new java.sql.Date(new Timestamp(todayLong*1000).getTime());
+            
+            lvte = contenirVenteService.findTotVteEffectueByTwoPeriode (dt1,dt2);
+          } else if (rbDeuxDate.isSelected()) {
+             
+            LocalDate d3 = datePiker1.getValue();
+            LocalDate firstDay = LocalDateTime.of(d3.getYear(),d3.getMonthValue(),d3.getDayOfMonth(),0,0).toLocalDate();
+            
+             d3 = datePiker2.getValue();
+            LocalDate secondDay = LocalDateTime.of(d3.getYear(),d3.getMonthValue(),d3.getDayOfMonth(),0,0).toLocalDate();
+            long todayLong = firstDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+            long firstDayLong = secondDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+            java.sql.Date dt1 = new java.sql.Date(new Timestamp( todayLong *1000   ).getTime());
+            java.sql.Date dt2 = new java.sql.Date(new Timestamp(  firstDayLong*1000  ).getTime());
+            
+            lvte = contenirVenteService.findTotVteEffectueByTwoPeriode( dt1 ,  dt2);
+        }
+        System.out.println("listVParCaissier "+lvte);
+         ObservableList<List<SimpleStringProperty>> data = FXCollections.observableArrayList();
+        List<SimpleStringProperty> firstRow = new ArrayList<>();
+        firstRow.add(0, new SimpleStringProperty("Andrew"));
+        firstRow.add(1, new SimpleStringProperty("Smith"));
+        if(lvte!=null){
+            for(Object[] o : lvte){
+                firstRow.add(0,  new SimpleStringProperty (o[1]+"") );
+                firstRow.add(1, new SimpleStringProperty (o[2]+""));
+                firstRow.add(2, new SimpleStringProperty (o[3]+""));
+                //caissierColVente.setCellValueFactory( cellData -> cellData.getValue().o[1]) ;
             }
         }
-        caissierColVente.setCellValueFactory(cellData -> cellData.getValue().getCaissier());
-        totCaissierColVente.setCellValueFactory(cellData -> cellData.getValue().getTotalCaissier().asObject());
-        CaissierVenteTable.setItems(venteList);
+        
+        
+        data.add(firstRow);
+        
+        int tle = caissierListNom.size();
+        for(int i =0; i< tle;i++){
+            System.out.println("nom "+caissierListNom.get(i));
+        }
+        //caissierColVente. setText("toto");
+        
+        
+                
+                 
+        caissierColVente.setCellValueFactory(cdata -> cdata.getValue().get(0) );
+        totCaissierColVente.setCellValueFactory(cdata -> cdata.getValue().get(2).asObject());
+        CaissierVenteTable.setItems(data);
+        /*caissierColVente.setCellValueFactory( cellData -> cellData.getValue().) ;
+        totCaissierColVente.setCellValueFactory( cellData-> new Object("toto")) );
+        //CaissierVenteTable.getColumns().add(caissierColVente);
+        
+       /* caissierColVente.   setCellValueFactory((param) -> {
+            return "totto"; //To change body of generated lambdas, choose Tools | Templates.
+        });
+        //totCaissierColVente.setCellValueFactory(cellData -> cellData.getValue().getTotalCaissier().asObject());
+       /* CaissierVenteTable.setItems(venteList);
 //      
         //venteList = CaissierVenteTable.getItems();
         Integer total = 0;
@@ -584,7 +680,7 @@ public class BilanPaneController implements Initializable {
         }
         produitListVentCaissierFiltre.clear();
         loadListDetailVente();
-        
+        */
     }
 
     @FXML
@@ -692,8 +788,20 @@ public class BilanPaneController implements Initializable {
          lTmp.clear();
            lTmp.setAll(produitListVentCaissierFiltre);
            //Comparable <ProduitR> cp;
-        List<ProduitR> lTmp2 = produitListVentCaissierFiltre.sorted();
-        System.out.println("tmp2 "+lTmp2);
+        List<ProduitR> lTmp2 = null;
+        lTmp2.add(lTmp.get(0));
+        boolean existe;
+        //int tle= lTmp.size();
+        for(int j=0; j<lTmp.size();j++){
+            for(int k =0;k<lTmp2.size();k++ ){
+                if(!(lTmp.get(j).getIdProd().intValue() == lTmp2.get(k).getIdProd().intValue())){
+                    lTmp2.add(lTmp.get(j));
+                }
+            }
+            
+        }
+        System.out.println("ltmp2 "+lTmp2);
+        //System.out.println("tmp2 "+lTmp2);
         //lTmp.addAll(produitListVentCaissierFiltre.)
         //System.out.println("ltmp "+lTmp);
         produitListVentCaissierFiltre.clear();
@@ -720,12 +828,12 @@ public class BilanPaneController implements Initializable {
     private void loadListDetailVente() {
         
          
-        ObservableList<VenteR> vtList = CaissierVenteTable.getItems();
-        for(VenteR vt : vtList){
+//        ObservableList<VenteR> vtList = CaissierVenteTable.getItems();
+//        for(VenteR vt : vtList){
             
-            loadVenteCaissierDetailList(vt);
+    //        loadVenteCaissierDetailList(vt);
             //tableDetailCaissier.getItems().clear();
-        }
+   //     }
         
         //for(Produit pdt)
         
@@ -766,7 +874,7 @@ public class BilanPaneController implements Initializable {
         oddRowStyle  = createStyle(contentFont, HSSFCellStyle.ALIGN_LEFT,   HSSFColor.GREY_25_PERCENT.index, true, HSSFColor.GREY_80_PERCENT.index);
 	evenRowStyle = createStyle(contentFont, HSSFCellStyle.ALIGN_LEFT,   HSSFColor.GREY_40_PERCENT.index, true, HSSFColor.GREY_80_PERCENT.index);
 		
-        venteList = CaissierVenteTable.getItems();
+//        venteList = CaissierVenteTable.getItems();
         int indexCaiVte = 2;
         int rowIndex = 0;
         HSSFRow header = null;
@@ -996,7 +1104,7 @@ public class BilanPaneController implements Initializable {
             javax.swing.JOptionPane.showMessageDialog(null,ex); 
         }
  
-        venteList = CaissierVenteTable.getItems();
+//        venteList = CaissierVenteTable.getItems();
         produitListVentCaissier = tableDetailCaissier.getItems();
     }
     

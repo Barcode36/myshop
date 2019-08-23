@@ -97,6 +97,7 @@ public class MainViewController implements Initializable {
     
 
     public List<TypeCompte> listTypeCompte() {
+        
         return typeService.typeCmopteList();
     }
 
