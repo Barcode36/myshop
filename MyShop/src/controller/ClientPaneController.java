@@ -113,12 +113,13 @@ public class ClientPaneController implements Initializable {
         } else 
             if (saveUp.getText().equals("Ajouter")) {
 
-                Client c = new Client();
-                c.setNomClt(txtNomClt.getText());
-                c.setAdrClt(txtAdrClt.getText());
-                c.setNumClt(txtNumClt.getText());
-                c.setNbPoints(0.0);
-                c.setEtatClt("actif");
+                Client c = new Client(
+                    txtNomClt.getText(),
+                    txtAdrClt.getText(),
+                    txtNumClt.getText(),
+                    "actif",
+                    0.0
+                );
                 try {
                     Client clt = clientService.findByNom(c);
                     TrayNotification notification = new TrayNotification();
@@ -126,8 +127,8 @@ public class ClientPaneController implements Initializable {
                     notification.setTray("MyShop", "Ce Client existe déjà", NotificationType.WARNING);
                     notification.showAndDismiss(Duration.seconds(1));
                 } catch (Exception e) {
-                    c.setNbPoints(0.0);
-                    c.setEtatClt("actif");
+                    //c.setNbPoints(0.0);
+                    //c.setEtatClt();
                     clientService.ajouter(c);
                     clearTxt();
                     txtNomClt.setFocusTraversable(true);
