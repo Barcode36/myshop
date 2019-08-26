@@ -186,6 +186,7 @@ public class BilanPaneController implements Initializable {
     /**
      * Initializes the controller class.
      */
+    Integer total;
     boolean ok = false;
     
     @Override
@@ -277,19 +278,7 @@ public class BilanPaneController implements Initializable {
             lVteDet = contenirVenteService.historiqueVente(dt1 ,  dt2,idCompte);
         }
            SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-         /* 
-       
-        Date oneDate = null;// = new Date(new java.util.Date().getTime());  
-         System.out.println(df.format(new Date()));
-         DateFormat dateFormat = new SimpleDateFormat(
-            "dd-MM-yyyy", Locale.FRENCH);
-        
-        System.out.println(dateFormat.format(new Date(1557841773174l)));
-          //lCompte.clear();
-           oneDate = new Date(new Date( Long.parseLong(o[4]+"")).getTime()); 
-                 System.out.println("ondeDAte "+oneDate);
-                 System.out.println("sdsfes "+df.format(oneDate));
-                 */
+         
         if(lVteDet!=null){
             for(Object[] o : lVteDet){
                Date dt = (Date) o[4]; 
@@ -631,7 +620,7 @@ public class BilanPaneController implements Initializable {
         totCaissierColVente.setCellValueFactory(cdata -> cdata.getValue().getResultInt());
         CaissierVenteTable.setItems(listVParCaissier);
          
-        Integer total = 0;
+         total = 0;
         int tle = montRow.size();
         if(tle > 0){
              for(int i =0; i< tle;i++){
@@ -852,14 +841,13 @@ public class BilanPaneController implements Initializable {
         headerCell = header.createCell(0);
         String periode = "";
         if(rbMoisCours.isSelected()){
-            String format = "dd/MM/yy"; 
-            java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat( format); 
-            java.util.Date date = new java.util.Date(); 
-            formater.format( date ) ;
-            periode = date+"";
-
-         // System.out.println("Periode: Du 1er au "+date);  
-          headerCell.setCellValue("Periode: Du 1er au "+date);
+             SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+            Date date = new Date(); 
+            df.format( new Date(date.getTime()));
+            LocalDate today = LocalDateTime.now().toLocalDate();
+            periode = today.getMonth()+"";
+            
+            headerCell.setCellValue("Periode: Du 1er au "+df.format( new Date(date.getTime())));
         }
         if(rbMois.isSelected()){
           //System.out.println("Periode: "+moisCombo.getValue());
@@ -908,6 +896,19 @@ public class BilanPaneController implements Initializable {
         
         //sheet.setColumnWidth(0, 256 * 25);
         header = sheet.createRow(indexCaiVte);//row53
+        
+        // header = sheet.createRow(indexCaiVte);//row53
+        headerCell=header.createCell(0);
+        headerCell.setCellValue("Total Vendu: ");
+        headerCell.setCellStyle(headerStyle);
+        
+         headerCell=header.createCell(1);
+        headerCell.setCellValue(total);
+        headerCell.setCellStyle(headerStyle);
+        
+        indexCaiVte+=2;
+        
+        header = sheet.createRow(indexCaiVte);
         headerCell=header.createCell(0);
         headerCell.setCellValue("Produits en rupture de stock: ");
         headerCell.setCellStyle(headerStyle);

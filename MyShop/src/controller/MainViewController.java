@@ -215,6 +215,7 @@ public class MainViewController implements Initializable {
                 DashBoardController.btnComp.setVisible(false);
                 DashBoardController.btnInvent.setVisible(false);
                 DashBoardController.btnBil.setVisible(false);
+                DashBoardController.btnReg.setVisible(false);
             } else {
 
             }
@@ -232,6 +233,7 @@ public class MainViewController implements Initializable {
             DashBoardController.btnComp.setVisible(false);
             DashBoardController.btnInvent.setVisible(false);
             DashBoardController.btnBil.setVisible(false);
+            DashBoardController.btnReg.setVisible(false);
         } else {
 
         }

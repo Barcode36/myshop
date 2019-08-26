@@ -161,14 +161,7 @@ public class DashBoardController implements Initializable {
         MainViewController.drawerTmp.setVisible(true);
         MainViewController.drawerTmp.open();
         
-        /*MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                stage.setPrefWidth(newValue.doubleValue());
-                cont.setPrefWidth(newValue.doubleValue() - 45);
-            }
-
-        });*/
+        
          MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -204,12 +197,8 @@ public class DashBoardController implements Initializable {
         if (MainViewController.initialise == true) {
             if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
                 contHbox1.getChildren().removeAll(btnComp,
-                            btnInvent,btnBil);
+                            btnInvent,btnBil,btnReg);
                     
-                    contHbox1.getChildren().addAll(btnAid,
-                            btnReg,btnDec);
-                    
-                    contHbox2.getChildren().clear();
 
             }
         }
@@ -234,19 +223,10 @@ public class DashBoardController implements Initializable {
         });
         // loadTable();
         List <Produit> allProduct = listProduit();
-        /*   List <ContenirVente> listMieuxVen = contenirVenteService.listMieuxVen();
-        if(listMieuxVen!=null && listMieuxVen.size()>0){
-        for(ContenirVente cv : listMieuxVen){
-        Produit p = new Produit(cv.getIdProd());
-        obVent.add(new ProduitR(p, cv.getQteVen()));
-        obPro.add(new ProduitR(p, p.getQteIniProd()));
-        databar.add(p.getLibProd());
-        }
         
-        }*/
         List <Object []> listMieuxVen = contenirVenteService.listMieuxVen();
-        System.out.println("avant");
-        List <Object []> findByPeriode = contenirVenteService.findVenteByPeriode( new Date(new Timestamp(1566317373197l).getTime()) );
+       // System.out.println("avant");
+       // List <Object []> findByPeriode = contenirVenteService.findVenteByPeriode( new Date(new Timestamp(1566317373197l).getTime()) );
         if(listMieuxVen!=null && listMieuxVen.size()>0){
         for(Object[] o : listMieuxVen){
                 obVentNom.add(  o[0].toString());
@@ -263,37 +243,22 @@ public class DashBoardController implements Initializable {
             }
             
         }
-        /*for (int i = 0; i < 5; i++) {
-            System.out.println("nom "+obProFiniNom.get(i)+" "+obProFini.get(i)+" ");
-            //System.out.println("lis "+listEnFini.get(i). toString());
-        }*/
- 
-            //Comparator<Double> c = Comparator.comparingDouble(o[3]);
-           // System.out.println("ov"+obVent.size());
+       
             
             if(obVentNom!=null && obVentNom.size()>=10 && obProFini!=null && obProFini.size()>=10 ){
-              //  FXCollections.sort(obVent, c.reversed());
-              //  FXCollections.sort(obPro, c);
+             
                 for (int i = 0; i < 10; i++) {
-                datas.add(new PieChart.Data(obVentNom.get(i), Double.parseDouble(obVentMont.get(i)+"")));
-                    
-                         series.getData().add(new XYChart.Data<>(obProFiniNom.get(i), obProFini.get(i)));
-                    
-                   
-                    //System.out.println("datas 1: "+datas.toString());
+                    datas.add(new PieChart.Data(obVentNom.get(i), Double.parseDouble(obVentMont.get(i)+"")));
+                    series.getData().add(new XYChart.Data<>(obProFiniNom.get(i), obProFini.get(i)));
+
                 }
-                //int tle = obProFini.size();
-               // System.out.println("tle "+tle);
-               /* for (int i = tle; i > tle - 10; i--) {
-                    series.getData().add(new XYChart.Data<>(obVentNom.get(i), obProFini.get(i)));
-                }*/
+                
                 pieChart.setData(datas);
                 barCode.getData().addAll(series);
                 listProdEnFin = series.getData() ;
-                //listMieuxVen = datas;
+                
             }
-            
-        
+          
         }
         
     
@@ -407,20 +372,7 @@ public class DashBoardController implements Initializable {
             MainViewController.drawerTmp.setSidePane(menu);
             MainViewController.drawerTmp.setVisible(false);
             MainViewController.dshPane.setVisible(false);
-            /*MainViewController.img.setTranslateX(0);
-            if(MainViewController.temporaryPaneTot.getWidth()>1300){
-                MainViewController.img.setFitWidth(1366);
-                MainViewController.img.setFitHeight(745);
-                System.out.println("decc 1");
-            }
             
-            /*if(MainViewController.temporaryPaneTot.getWidth()<=1300){
-                
-                MainViewController.img.setFitWidth(1233);
-                MainViewController.img.setFitHeight(717);
-                MainViewController.img.setTranslateX(0);
-                System.out.println("decc 2");
-            }*/
         } catch (IOException ex) {
             Logger.getLogger(DashBoardController.class.getName()).log(Level.SEVERE, null, ex);
         }

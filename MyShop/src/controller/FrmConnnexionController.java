@@ -109,24 +109,7 @@ public class FrmConnnexionController implements Initializable {
             }
       
         });        
-        /*Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Stage s = (Stage) cont.getScene().getWindow();
-                MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
-                if (s.isMaximized()) {
-                    MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
-                }
-                double val = s.getWidth() / 2;
-                double val2 = cont.getPrefWidth() / 2;
-
-                //cont.setLayoutX(val - val2);
-
-            }
-        });
-       ok = true;
-       */
-        
+       
     }
 
     @FXML
@@ -167,10 +150,10 @@ public class FrmConnnexionController implements Initializable {
                     DashBoardController.btnBil.setVisible(false);*/
                     
                     DashBoardController.contHbox1.getChildren().removeAll(DashBoardController.btnComp,
-                            DashBoardController.btnInvent,DashBoardController.btnBil);
+                            DashBoardController.btnInvent,DashBoardController.btnBil,DashBoardController.btnReg);
                     
                     DashBoardController.contHbox1.getChildren().addAll(DashBoardController.btnAid,
-                            DashBoardController.btnReg,DashBoardController.btnDec);
+                            DashBoardController.btnDec);
                     
                     DashBoardController.contHbox2.getChildren().clear();
                     VBox menu = null;
