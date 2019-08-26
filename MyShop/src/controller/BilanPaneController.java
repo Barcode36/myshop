@@ -871,7 +871,7 @@ public class BilanPaneController implements Initializable {
         headerCell =header.createCell(1);
         headerCell.setCellValue("TOTAL: ");
         headerCell.setCellStyle(headerStyle);
-        sheet.setColumnWidth(2, 10 * 25);
+        sheet.setColumnWidth(2, 1 * 25);
         sheet.setColumnWidth(3, 400 * 25);
         headerCell = header.createCell(3);
         headerCell.setCellValue("PRODUITS VENDUS: ");
