@@ -630,9 +630,9 @@ public class CaissePaneController implements Initializable {
                                  txtCodeProdCaisse.requestFocus();
                             });
                             
-                            txtNomProdCaisse.clear();
-                            txtQteProdCaisse.clear();
-                            txtPrixUnitCaisse.clear();
+                            txtNomProdCaisse.setText(pC.getLibProd()+"");
+                            txtQteProdCaisse.setText(pC.getQteIniProd()+"");
+                            txtPrixUnitCaisse.setText(pC.getPrixUniProd()+"");
                             
                             
                     }

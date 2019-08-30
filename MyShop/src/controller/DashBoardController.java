@@ -161,38 +161,6 @@ public class DashBoardController implements Initializable {
         MainViewController.drawerTmp.setVisible(true);
         MainViewController.drawerTmp.open();
         
-        
-         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-               
-               
-                MainViewController.dshPane.heightProperty().addListener(new ChangeListener<Number>() {
-                    @Override
-                    public void changed(ObservableValue<? extends Number> observable0, Number oldValue0, Number newValue0) {
-                        
-                        MainViewController.img.setFitHeight(MainViewController.dshPane.getHeight());
-                    }
-                });
-                
-                if( (Double) oldValue < (Double) newValue){
-                    
-                    MainViewController.img.setTranslateX(MainViewController.dshPane.getWidth());
-                    MainViewController.dshPane.setTranslateX(0);
-                    
-                }
-                
-                if( (Double) oldValue > (Double) newValue){
-                    MainViewController.img.setTranslateX(0);
-                    MainViewController.dshPane.setTranslateX(0);
-                    
-                }
-                
-            }
-      
-        });
-        
-        
 
         if (MainViewController.initialise == true) {
             if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {

@@ -81,6 +81,7 @@ public class CaisseChoixProdController implements Initializable {
                     return;
                 }
                 CaissePaneController.produitChoisi = prChoi;
+                //CaissePaneController.
                 Stage s = (Stage) txtRec.getScene().getWindow();
                 s.close();
             } catch (Exception e) {
