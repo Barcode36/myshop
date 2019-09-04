@@ -9,6 +9,7 @@ import entites.ContenirVente;
 import entites.Produit;
 import entites.Vente;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -152,4 +153,68 @@ public class ContenirVenteJpaController implements Serializable {
         return query.getResultList();
     }
     
+    public List<Object[] > listMieuxVen() {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[] >) em.createNamedQuery("ContenirVente.listMieuxVen");
+        //query.setParameter("idProd", produit.getIdProd());
+        return query.getResultList();
+    }
+    
+    public List<Object[] > listMieuxVenByDate(Date dt1, Date dt2) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[] >) em.createNamedQuery("ContenirVente.listMieuxVenByDate");
+         query.setParameter("dateVen", dt1);
+        query.setParameter("dateVen2", dt2);
+        return query.getResultList();
+    }
+    
+    public List<Object[]> findVenteByPeriode(Date dt) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findVenteByPeriode");
+        query.setParameter("dateVen", dt);
+        return query.getResultList();
+    }
+    
+    public List<Object[]> listEnFinition() {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.listEnFinition");
+        //query.setParameter("dateVen", dt);
+        return query.getResultList();
+    }
+    
+    
+    
+    public List<Object[]> historiqueVente(Date dt1, Date dt2,int idCompte) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.historiqueVente");
+        query.setParameter("dateVen", dt1);
+        query.setParameter("dateVen2", dt2);
+        query.setParameter("idComp", idCompte);
+        return query.getResultList();
+    }
+    
+    public List<Object[]> findTotVteEffectueByPeriode(Date dt) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findTotVteEffectueByPeriode");
+        query.setParameter("dateVen", dt);
+        return query.getResultList();
+    }
+    
+     public List<Object[]> findTotQteVendueByTwoPeriode(Date dt1, Date dt2, int idComp) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findTotQteVendueByTwoPeriode");
+        query.setParameter("dateVen1", dt1);
+        query.setParameter("dateVen2", dt2);
+        query.setParameter("idComp", idComp);
+        return query.getResultList();
+    }
+    
+    
+     public List<Object[]> findTotVteEffectueByTwoPeriode(Date dt1, Date dt2) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findTotVteEffectueByTwoPeriode");
+        query.setParameter("dateVen1", dt1);
+        query.setParameter("dateVen2", dt2);
+        return query.getResultList();
+    }
 }

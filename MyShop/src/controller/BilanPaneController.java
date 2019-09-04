@@ -178,9 +178,8 @@ public class BilanPaneController implements Initializable {
     private ColumnConstraints consCol2;
     @FXML
     private Label lblMontTotBil;
-    @FXML
-    private ImageView
-            scriptIndicator;
+   
+            
 
 
     /**
@@ -213,22 +212,10 @@ public class BilanPaneController implements Initializable {
                 } else {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                //System.out.println(s.isMaximized());
-                //stage.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
-                //cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 71);
+               
             }
         });
-       /* System.out.println(MainViewController.temporaryPaneTot.getPrefWidth());
-        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                stage.setPrefWidth(newValue.doubleValue());
-                cont.setPrefWidth(newValue.doubleValue() - 71);
-                band.setPrefWidth(cont.getPrefWidth() - 300);
-            }
-
-        });*/
-       scriptIndicator.setVisible(false);
+       
         
     }
 
@@ -282,8 +269,6 @@ public class BilanPaneController implements Initializable {
         if(lVteDet!=null){
             for(Object[] o : lVteDet){
                Date dt = (Date) o[4]; 
-                 //System.out.println("o[4] "+ dt.getTime() );
-                // System.out.println(""+df.format( new Date(dt.getTime())));
                 if(o[2]!=null){
                     produitListVentCaissierFiltre.add(new ResultatsReq(
                         new SimpleStringProperty(o[0]+""),
@@ -302,7 +287,6 @@ public class BilanPaneController implements Initializable {
         }
         
         totDetCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getMtVte());
-        //if(produitListVentCaissierFiltre.)
         PuCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getPrixProd());
         QteCaissierCol.setCellValueFactory(cellData -> cellData.getValue().getResultInt());
         DateCaissier.setCellValueFactory(cellData -> cellData.getValue().getDateVen());
@@ -316,9 +300,7 @@ public class BilanPaneController implements Initializable {
     private void getCaissier(MouseEvent event) {
        int idCompte  ;
         idCompte = Integer.parseInt(CaissierVenteTable.getSelectionModel().getSelectedItem().getPrixProd().getValue() ) ;
-        
-        //int id = listVParCaissier.
-       loadVenteCaissierDetail(idCompte);
+        loadVenteCaissierDetail(idCompte);
     }
 
     @FXML
@@ -385,7 +367,6 @@ public class BilanPaneController implements Initializable {
                 mois = String.valueOf(dateh.getMonthValue());
         }
         String d = dateh.getYear() + "-" + mois;
-        //List<Vente> list = venteService.ventesParMois(String.valueOf(dateh.getYear() + "-" + mois));
         loadVenteCaissier("mois", d, "", "");
     }
 
@@ -442,7 +423,6 @@ public class BilanPaneController implements Initializable {
         }
         Date date = new Date();
         LocalDate dateh = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        List<Vente> list = venteService.ventesParMois(String.valueOf(dateh.getYear() + "-" + idMois));
         String d = dateh.getYear() + "-" + idMois;
         loadVenteCaissier("mois", d, "", "");
     }
@@ -545,9 +525,7 @@ public class BilanPaneController implements Initializable {
         String d = d1.getYear() + "-" + idMoisDp1 + "-" + jr1;
         LocalDate d2 = datePiker2.getValue();
         String dl = d2.getYear() + "-" + idMoisDp2 + "-" + jr2;
-        System.out.println(d);
-        System.out.println(dl);
-//        List<Vente> list = venteService.ventesEntreDeuxDate(d, dl);
+       
         loadVenteCaissier("date", "", d, dl);
     }
 
@@ -595,9 +573,7 @@ public class BilanPaneController implements Initializable {
             
             lvte = contenirVenteService.findTotVteEffectueByTwoPeriode( dt1 ,  dt2);
         }
-        System.out.println("listVParCaissier "+lvte);
-        ObservableList<ResultatsReq > data = FXCollections.observableArrayList();
-        //ObservableList<Object> nameRow =  FXCollections.observableArrayList();
+        
         ObservableList<Object> montRow = FXCollections.observableArrayList();
         
         if(lvte!=null){
@@ -611,9 +587,7 @@ public class BilanPaneController implements Initializable {
                 montRow.add(o[3]);
             }
         }else{
-            
             listVParCaissier.add(new ResultatsReq( new SimpleStringProperty(""),new SimpleStringProperty( "")));
-         
         }
         
         caissierColVente.setCellValueFactory(cdata -> cdata.getValue().getResultString() );
@@ -660,139 +634,6 @@ public class BilanPaneController implements Initializable {
         }
     }
     
-    /*public void loadVenteCaissierDetailList(VenteR venteR)  {
-        produitListVentCaissier.clear();
-        
-        Compte c = new Compte(venteR.getidCompte().getValue());
-        Compte compte = compteService.findById(c);
-        List<Vente> list = venteService.ventesParCaissier(compte);
-        /*if(rbMois.isSelected()){
-             list = venteService.ventesParCaissierMois(compte,moisCombo.getValue());
-        } else if(rbDeuxDate.isSelected()){
-             list = venteService.ventesEntreDeuxDate(datePiker1.getPromptText(),datePiker2.getPromptText(),compte);
-        }
-        //List<Vente> list = venteService.ventesParCaissier(compte);
-        for (Vente v : list) {
-            Client cl = new Client(v.getIdClt());
-            Client clt = MainViewController.clientService.findById(cl);
-            List<ContenirVente> listCon = contenirVenteService.listParVente(v);
-            for (ContenirVente cv : listCon) {
-                try {
-                    Produit p = new Produit(cv.getIdProd());
-                    Produit produit = produitService.findById(p);
-                    produitListVentCaissier.add(new ProduitR(produit, v, cv, clt));
-                } catch (Exception e) {
-                }
-            }
-        }
-         
-        for(ProduitR prod:produitListVentCaissier){
-            if(rbMoisCours.isSelected()){
-               
-                 LocalDate dateDuJour = LocalDate.now();
-                 
-                 String dateAsString[] = prod.getDateVen().getValue().split("-");
-                 String mois = dateAsString[1];
-                 //System.out.println("ms"+mois);
-                 
-                 if(Integer.parseInt(mois)==(dateDuJour.getMonthValue())){
-                     try {
-                         
-                        produitListVentCaissierFiltre.add(prod);
-                    } catch (Exception e) {
-                         System.out.println(""+e);
-                    }
-                     
-                 }
-                
-             } else if(rbMois.isSelected()){
-                 System.out.println("ms: "+moisCombo.getSelectionModel().getSelectedIndex());
-                 String dateAsString[] = prod.getDateVen().getValue().split("-");
-                 String mois = dateAsString[1];
-                 if(moisCombo.getSelectionModel().getSelectedIndex()+1 == Integer.parseInt(mois) ){
-                     try {
-                         
-                        produitListVentCaissierFiltre.add(prod);
-                    } catch (Exception e) {
-                         System.out.println(""+e);
-                    }
-                     
-                 }
-             } else if (rbDeuxDate.isSelected()){
-                 String dateAsString[] = prod.getDateVen().getValue().split("-");
-                 String datePiker1Split[] = datePiker1.getValue().toString().split("-");
-                 String datePiker2Split[] = datePiker2.getValue().toString().split("-");
-                 String mois = dateAsString[1];
-                 System.out.println("mw: "+mois);
-                 System.out.println(""+datePiker1Split[1]);
-                 System.out.println(""+datePiker2Split[1]);
-                 if(Integer.parseInt(mois)>= Integer.parseInt(datePiker1Split[1])
-                         && Integer.parseInt(mois)<= Integer.parseInt(datePiker2Split[1]) ){
-                     try {
-                         
-                        produitListVentCaissierFiltre.add(prod);
-                    } catch (Exception e) {
-                         System.out.println(""+e);
-                    }
-                     
-                 }
-                }
-            
-        }
-        int i =0;
-         lTmp.clear();
-           lTmp.setAll(produitListVentCaissierFiltre);
-           //Comparable <ProduitR> cp;
-        List<ProduitR> lTmp2 = null;
-        lTmp2.add(lTmp.get(0));
-        boolean existe;
-        //int tle= lTmp.size();
-        for(int j=0; j<lTmp.size();j++){
-            for(int k =0;k<lTmp2.size();k++ ){
-                if(!(lTmp.get(j).getIdProd().intValue() == lTmp2.get(k).getIdProd().intValue())){
-                    lTmp2.add(lTmp.get(j));
-                }
-            }
-            
-        }
-        System.out.println("ltmp2 "+lTmp2);
-        //System.out.println("tmp2 "+lTmp2);
-        //lTmp.addAll(produitListVentCaissierFiltre.)
-        //System.out.println("ltmp "+lTmp);
-        produitListVentCaissierFiltre.clear();
-        int qte = 0;
-        /*for(ProduitR pdt: lTmp){
-            //System.out.println("pdt bn: "+pdt.getIdProd());
-            for(ProduitR pdt2: lTmp){
-                qte =0;
-                //System.out.println("pdt1 "+pdt.getIdProd()+ " pdt2 "+pdt2.getIdProd() );
-                if(pdt.getIdProd().getValue().intValue() == pdt2.getIdProd().getValue().intValue() ){
-                    qte = qte+pdt.getQteProdCom().intValue()+pdt2.getQteProdCom().intValue();
-                    //pdt.setQteProdCom(new SimpleIntegerProperty(pdt.getQteProdCom().intValue()+ pdt2.getQteProdCom().intValue() ));
-                    System.out.println("pdt bn: "+pdt.getLibProd()+" qte "+pdt.getQteProdCom().intValue());
-                    //produitListVentCaissierFiltre.add(pdt);
-                }
-            }
-            pdt.setQteProdCom(new SimpleIntegerProperty(qte));
-            produitListVentCaissierFiltre.add(pdt);
-        }
-        System.out.println("fltr: "+produitListVentCaissierFiltre);
-    }
-    
-    
-    private void loadListDetailVente() {
-        
-         
-//        ObservableList<VenteR> vtList = CaissierVenteTable.getItems();
-//        for(VenteR vt : vtList){
-            
-    //        loadVenteCaissierDetailList(vt);
-            //tableDetailCaissier.getItems().clear();
-   //     }
-        
-        //for(Produit pdt)
-        
-    }*/
     
     private FileChooser fileChooser;
     private File file;
@@ -1053,10 +894,7 @@ public class BilanPaneController implements Initializable {
                       
                       j++;
                     }
-                    
-                   //stage2.hide();
-                    
-                   //loadingPr(rt);
+                   
                     
                     File src = new File("Ressources/bilan.xls");
                     File dst;// = new File("src/bilan.xls");
@@ -1068,18 +906,16 @@ public class BilanPaneController implements Initializable {
 
                     } catch (FileNotFoundException ex) {
                         System.out.println("ex: "+ex);
-                        //Logger.getLogger(MainPrincipalController.class
-                        //        .getName()).log(Level.SEVERE, null, ex);
+                        
 
                     } catch (IOException ex) {
                         System.out.println("ex: "+ex);
-                        //Logger.getLogger(MainPrincipalController.class
-                         //       .getName()).log(Level.SEVERE, null, ex);
+                        
                     }
                     
                      
                      endScr = rt.isAlive();
-                    // System.out.println("alii"+endScr);
+                    
                     if(endScr == false){
                         //scriptIndicator.setVisible(false);
                         btnExport.setDisable(false);
@@ -1109,8 +945,7 @@ public class BilanPaneController implements Initializable {
             javax.swing.JOptionPane.showMessageDialog(null,ex); 
         }
  
-//        venteList = CaissierVenteTable.getItems();
-        //produitListVentCaissier = tableDetailCaissier.getItems();
+//       
     }
     
    

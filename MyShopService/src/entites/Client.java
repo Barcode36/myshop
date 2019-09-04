@@ -50,6 +50,17 @@ public class Client implements Serializable {
     public Client() {
     }
 
+    public Client( String nomClt, String adrClt,  String numClt, String etatClt, Double nbPoints) {
+        
+        this.nomClt = nomClt;
+        this.adrClt = adrClt;
+        this.numClt = numClt;
+        this.etatClt = etatClt;
+        this.nbPoints = nbPoints;
+    }
+    
+    
+
     public Client(Integer idClt) {
         this.idClt = idClt;
     }

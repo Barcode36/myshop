@@ -30,7 +30,62 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ContenirVente.findAll", query = "SELECT c FROM ContenirVente c")
     , @NamedQuery(name = "ContenirVente.findByQteVen", query = "SELECT c FROM ContenirVente c WHERE c.qteVen = :qteVen")
     , @NamedQuery(name = "ContenirVente.findByIdProd", query = "SELECT c FROM ContenirVente c WHERE c.idProd = :idProd")
-    , @NamedQuery(name = "ContenirVente.findByIdVen", query = "SELECT c FROM ContenirVente c WHERE c.idVen = :idVen")})
+    , @NamedQuery(name = "ContenirVente.findByIdVen", query = "SELECT c FROM ContenirVente c WHERE c.idVen = :idVen")
+   // , @NamedQuery(name = "ContenirVente.findByIdCon", query = "SELECT c.idCon FROM ContenirVente c WHERE c.idCon = :idCon")
+
+    , @NamedQuery(name = "ContenirVente.listMieuxVen", query = "SELECT p.libProd as nomProd,p.idProd ,sum(c.qteVen)"
+            + " as qteVendue,"
+            + "(sum(c.qteVen)  *  c.prixProd) as montantVente "
+            + "FROM ContenirVente c , Produit p  WHERE p.idProd = c.idProd "
+            + "GROUP BY c.idProd ORDER BY qteVendue"
+            + " DESC "
+            //+ "LIMIT 10"
+            )
+    , @NamedQuery(name = "ContenirVente.listMieuxVenByDate", query = "SELECT p.libProd ,sum(c.qteVen) as qteVendue "
+       + "FROM ContenirVente c , Produit p, Vente v  WHERE p.idProd = c.idProd "
+       + "AND v.dateVen >= :dateVen AND v.dateVen <= :dateVen2 "
+       + "AND v.idVen = c.idVen "
+       + "GROUP BY c.idProd ORDER BY qteVendue"
+       + " DESC "
+       //+ "LIMIT 10"
+       )
+    , @NamedQuery(name = "ContenirVente.listEnFinition", query = "SELECT p.libProd, p.qteIniProd "
+            + "FROM Produit p"
+            + " ORDER BY p.qteIniProd ASC")
+    , @NamedQuery(name = "ContenirVente.findVenteByPeriode", query = "SELECT c.idProd,sum(c.qteVen) AS qteVendue FROM"
+            + " ContenirVente c, Vente v WHERE c.idVen = v.idVen and v.dateVen >= :dateVen "
+            + " GROUP BY c.idProd ORDER by qteVendue DESC")
+        
+    , @NamedQuery(name = "ContenirVente.historiqueVente", query = "SELECT  p.libProd, cv.qteVen, "
+            + " cv.prixProd,cv.qteVen * cv.prixProd as mtVte,v.dateVen, c.nomClt,cv.idCon "
+            + " FROM Client c, Vente v, ContenirVente cv, Produit p  "
+            + "where p.idProd = cv.idProd and v.idVen = cv.idVen "
+            + " and v.idClt = c.idClt and v.idComp = :idComp " 
+            + "and v.dateVen >= :dateVen and v.dateVen <= :dateVen2")
+        
+     , @NamedQuery(name = "ContenirVente.findTotVteEffectueByPeriode",
+             query = "SELECT c.idComp, c.nomComp, SUM(cv.qteVen*cv.prixProd)"
+                     + " FROM Vente v, ContenirVente cv, Compte c WHERE c.idComp = v.idComp "
+                     + " AND cv.idVen = v.idVen AND v.dateVen <= :dateVen GROUP BY c.idComp")
+     
+     , @NamedQuery(name = "ContenirVente.findTotVteEffectueByTwoPeriode",
+             query = "SELECT c.idComp, c.nomComp, c.prenomComp , SUM(cv.qteVen*cv.prixProd),SUM(cv.qteVen)"
+                     + " FROM Vente v, ContenirVente cv, Compte c WHERE c.idComp = v.idComp "
+                     + " AND cv.idVen = v.idVen AND v.dateVen >= :dateVen1 AND v.dateVen <= :dateVen2 GROUP BY c.idComp")
+     
+      , @NamedQuery(name = "ContenirVente.findTotQteVendueByTwoPeriode",
+             query = "SELECT v.idComp, c.nomComp,sum(cv.qteVen)"
+                     + " FROM ContenirVente cv, Vente v, Compte c "
+                     + " WHERE cv.idVen = v.idVen and c.idComp = v.idComp and v.dateVen >= :dateVen1"
+                     + "  and v.dateVen <= :dateVen2 and v.idComp = :idComp "
+                     + " group by v.idComp")
+
+        
+        /*
+select v.idComp, c.nomComp,sum(cv.qteVen) from contenirVente cv, vente v, compte c
+where cv.idVen = v.idVen and c.idComp = v.idComp and v.dateVen > 1557839867953  and v.dateVen < 1566316779391
+ group by v.idComp        */
+})
 public class ContenirVente implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -57,6 +112,8 @@ public class ContenirVente implements Serializable {
     @Column(name = "dtVente",columnDefinition = "Date")
     private Date dtVente;
 
+   
+    
     public ContenirVente() {
     }
 

@@ -78,37 +78,6 @@ public class FrmConnnexionController implements Initializable {
         Font.loadFont(MainViewController.class.getResource("/css/Jurassic Park.ttf").toExternalForm(), 10);
         fillCompteCombo();
         
-       // MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
-         //   @Override
-          //  public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-               //MainViewController.img.setFitWidth(MainViewController.temporaryPaneTot.getWidth());
-               // System.out.println("ov "+oldValue+" nv "+newValue);
-//                MainViewController.dshPane.heightProperty().addListener(new ChangeListener<Number>() {
-                    /*@Override
-                    public void changed(ObservableValue<? extends Number> observable0, Number oldValue0, Number newValue0) {
-                        //System.out.println("dsh height: "+MainViewController.dshPane.getHeight());
-//                        MainViewController.img.setFitHeight(MainViewController.dshPane.getHeight());
-                    }
-                });*/
-                
-              //  if( (Double) oldValue < (Double) newValue){
-                    
-                    //MainViewController.img.setTranslateX(MainViewController.dshPane.getWidth());
-                    //MainViewController.dshPane.setTranslateX(0);
-                   // MainViewController.img.setFitWidth(MainViewController.temporaryPaneTot.getWidth());
-                    //System.out.println("inhinFm");
-           //     }
-                
-            //    if( (Double) oldValue > (Double) newValue){
-                   // MainViewController.img.setTranslateX(0);
-                   // MainViewController.dshPane.setTranslateX(0);
-                    
-                   // System.out.println("unhunFm");
-             //   }
-                
-        //    }
-      
-     //   });        
        
     }
 
@@ -144,10 +113,7 @@ public class FrmConnnexionController implements Initializable {
            
             
                 if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                    /*
-                    DashBoardController.btnComp.setVisible(false);
-                    DashBoardController.btnInvent.setVisible(false);
-                    DashBoardController.btnBil.setVisible(false);*/
+                    
                     
                     DashBoardController.contHbox1.getChildren().removeAll(DashBoardController.btnComp,
                             DashBoardController.btnInvent,DashBoardController.btnBil,DashBoardController.btnReg);
@@ -163,13 +129,7 @@ public class FrmConnnexionController implements Initializable {
                     
                 }
              MainViewController.dshPane.setVisible(true);
-             
-           //  if(MainViewController.temporaryPaneTot.getWidth()<1300){
-//                MainViewController.img.setFitWidth(1233);
-            //    MainViewController.img.setTranslateX(0);
-          //      MainViewController.img.setFitHeight(717);
-                // System.out.println("recadrage connect ok");
-        //    }
+           
              
         } catch (Exception e) {
             //e.printStackTrace();
