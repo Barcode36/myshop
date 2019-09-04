@@ -37,8 +37,6 @@ public class MenuLateraleCController implements Initializable {
     @FXML
     private JFXButton btnCaisse;
     @FXML
-    private JFXButton btnReglage;
-    @FXML
     private JFXButton btnAide;
     @FXML
     private JFXButton btnQuitter;
@@ -70,10 +68,10 @@ public class MenuLateraleCController implements Initializable {
         switchPane(Constants.DashBoard);
         if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
             DashBoardController.contHbox1.getChildren().removeAll(DashBoardController.btnComp,
-                            DashBoardController.btnInvent,DashBoardController.btnBil);
+                            DashBoardController.btnInvent,DashBoardController.btnBil,DashBoardController.btnReg);
                     
                     DashBoardController.contHbox1.getChildren().addAll(DashBoardController.btnAid,
-                            DashBoardController.btnReg,DashBoardController.btnDec);
+                            DashBoardController.btnDec);
                     
                     DashBoardController.contHbox2.getChildren().clear();
         } else {
@@ -101,11 +99,6 @@ public class MenuLateraleCController implements Initializable {
     @FXML
     private void openBilan(ActionEvent event) {
         switchPane(Constants.CrudBilan);
-    }
-
-    @FXML
-    private void openReglage(ActionEvent event) {
-        switchPane(Constants.Reglage);
     }
 
     @FXML
@@ -156,6 +149,7 @@ public class MenuLateraleCController implements Initializable {
                 DashBoardController.btnComp.setVisible(false);
                 DashBoardController.btnInvent.setVisible(false);
                 DashBoardController.btnBil.setVisible(false);
+                DashBoardController.btnReg.setVisible(false);
             } else {
 
             }

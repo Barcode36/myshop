@@ -203,7 +203,9 @@ public class CrudInventaireController implements Initializable {
             produit.setCodeProd(txtCode.getText());
             produit.setLibProd(txtLibProd.getText());
             produit.setPrixUniProd(txtPrixProd.getText());
-            //txtQteProd.setEditable(true);
+            txtQteProd.setFocusTraversable(true); 
+            txtQteProd.setDisable(false);
+            txtQteProd.setEditable(true);
             //System.out.println("qte prod: "+txtQteProd.getText());
             produit.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
             produit.setEtatProd("actif");
@@ -233,22 +235,29 @@ public class CrudInventaireController implements Initializable {
             produitModif.setPrixUniProd(txtPrixProd.getText());
             produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
             produitService.modifier(produitModif);
-            //txtQteAug.setText("0");
+            txtQteAug.setText("0");
             txtQteAug.setDisable(true);
+            
             saveUp.setText("Modifier");
             TrayNotification notification = new TrayNotification();
             notification.setAnimationType(AnimationType.POPUP);
             notification.setTray("MyShop", "Modiffication effectuée", NotificationType.SUCCESS);
             notification.showAndDismiss(Duration.seconds(1));
                 
+                txtQteProd.requestFocus();
+                txtQteProd.setFocusTraversable(true); 
             txtCode.setFocusTraversable(true);
             txtCode.requestFocus();
-            
+            txtQteProd.setDisable(false);
+             txtQteProd.setFocusTraversable(true);
             clearProduitText();
+            
+            
         }
 
         loadInventairegrid();
         txtCode.setFocusTraversable(true);
+        txtQteProd.setFocusTraversable(true); 
         txtQteAug.setFocusTraversable(true);
         txtCode.requestFocus();
     }

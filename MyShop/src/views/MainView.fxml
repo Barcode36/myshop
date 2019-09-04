@@ -18,18 +18,7 @@
    <children>
       <AnchorPane fx:id="stageTot" prefHeight="700.0" prefWidth="1024.0" StackPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="756.0" fitWidth="223.0" opacity="0.79" pickOnBounds="true" AnchorPane.bottomAnchor="-39.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1010.0" AnchorPane.topAnchor="0.0">
-               <image>
-                  <Image url="@../css/shop_light_side.jpg" />
-               </image></ImageView>
-            <ImageView fx:id="iv" fitHeight="717.0" fitWidth="1233.0" pickOnBounds="true">
-               <image>
-                  <Image url="@../css/shop_light.jpg" />
-               </image>
-               <effect>
-                  <Glow />
-               </effect>
-            </ImageView>
+            
             <Pane fx:id="dashPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="197.0" style="-fx-background-color: black ;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <JFXToolbar fx:id="toolbar" layoutX="196.0" prefHeight="60.0" prefWidth="828.0" styleClass="toolbar" visible="false" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="0.0">
                <left>

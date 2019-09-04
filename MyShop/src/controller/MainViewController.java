@@ -67,8 +67,7 @@ public class MainViewController implements Initializable {
     private AnchorPane stageTot;
     @FXML
     private Label maiCss;
-    @FXML
-    private ImageView iv;
+    
     @FXML
     private JFXToolbar toolbar;
     
@@ -97,6 +96,7 @@ public class MainViewController implements Initializable {
     
 
     public List<TypeCompte> listTypeCompte() {
+        
         return typeService.typeCmopteList();
     }
 
@@ -155,7 +155,7 @@ public class MainViewController implements Initializable {
         hamburgerTmp = hamburger;
         mainCss = maiCss;
         dshPane = dashPane;
-        img = iv;
+//        img = iv;
        
        
         initDrawer();
@@ -213,6 +213,7 @@ public class MainViewController implements Initializable {
                 DashBoardController.btnComp.setVisible(false);
                 DashBoardController.btnInvent.setVisible(false);
                 DashBoardController.btnBil.setVisible(false);
+                DashBoardController.btnReg.setVisible(false);
             } else {
 
             }
@@ -230,6 +231,7 @@ public class MainViewController implements Initializable {
             DashBoardController.btnComp.setVisible(false);
             DashBoardController.btnInvent.setVisible(false);
             DashBoardController.btnBil.setVisible(false);
+            DashBoardController.btnReg.setVisible(false);
         } else {
 
         }

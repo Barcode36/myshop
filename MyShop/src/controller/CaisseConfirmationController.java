@@ -120,12 +120,13 @@ public class CaisseConfirmationController extends Traitement implements Initiali
             public void run() {
                 Client.setText("Vente au client: " + clientR.getNomClt().getValue().toUpperCase()
                         + " (" + clientR.getNumClt().getValue() + ")");
-                txtPtActu.setText(clientR.getNbPoints().getValue()+" Points");
+                //txtPtActu.setText(clientR.getNbPoints().getValue()+" Points");
                 
                 txtMontCllt.setFocusTraversable(true);
                 txtMontCllt.requestFocus();
+                txtCoeff.setVisible(false);
                 
-                
+                txtPtActu.setVisible(false);
             }
         });
         
@@ -143,7 +144,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                             row = sheet.getRow(i);
                             System.out.println(""+row.getCell(0).getStringCellValue());
-                            txtCoeff.setText(row.getCell(0).getStringCellValue());
+                           // txtCoeff.setText(row.getCell(0).getStringCellValue());
                         }
                         wb.close();
                         fis.close();
@@ -159,8 +160,8 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                // e.printStackTrace(); 
             } 
         
-        txtCoeff.setStyle("-fx-font-size: 25px;");
-        txtPtActu.setStyle("-fx-font-size: 25px;");
+       // txtCoeff.setStyle("-fx-font-size: 25px;");
+        //txtPtActu.setStyle("-fx-font-size: 25px;");
         //Client c = new Client(clientR.getIdClt().getValue());
         //Client clt = clientService.findById(c);
         
@@ -206,7 +207,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 //cr.setIdClt(clientR.getIdClt().getValue());
                 Client c = new Client(clientR.getIdClt().getValue());
                 Client clt = clientService.findById(c);
-                clt.setNbPoints(clt.getNbPoints()+ Double.parseDouble(lblTot.getText()) *  Double.parseDouble(txtCoeff.getText())/100 );
+                clt.setNbPoints(clt.getNbPoints()+ Double.parseDouble(lblTot.getText()) *  10/100 );
                 clientService.modifier(clt);
                 vente.setIdComp(compteActif.getIdComp());
                 venteService.ajouter(vente);

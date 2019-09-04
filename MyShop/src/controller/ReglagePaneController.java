@@ -102,16 +102,16 @@ public class ReglagePaneController implements Initializable {
         
         
         Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Stage s = (Stage) anchorPane.getScene().getWindow();
-                if (s.isMaximized()) {
-                    MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
-                    System.out.println(s.getWidth());
-                }
-               //anchorPane.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-                //cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 487);
-            }
+        @Override
+        public void run() {
+        Stage s = (Stage) anchorPane.getScene().getWindow();
+        if (s.isMaximized()) {
+        MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
+        System.out.println(s.getWidth());
+        }
+        //anchorPane.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
+        //cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 487);
+        }
         });
         MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
             @Override

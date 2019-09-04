@@ -9,6 +9,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
+import static controller.MainViewController.clientService;
 import entites.Client;
 import entites.Produit;
 import entites.TypeCompte;
@@ -256,9 +257,37 @@ public class CaissePaneController implements Initializable {
 
         });
         txtCltV = txtClt;
-        Client client = new Client();
-        client.setNomClt("Defaut");
-        client = clientService.findByNom(client);
+         List < Client > allClient = clientService.findAll();
+         Client client = new Client();
+         client.setNomClt("Defaut");
+        client.setEtatClt("actif");
+        try{
+            client = clientService.findByNom(client);
+             
+             System.out.println("err:");
+        }catch(Exception e){
+            //e.printStackTrace();
+            client = null;
+        }
+       
+        
+        if( (allClient!=null  && allClient.size()>0) && client == null ){
+             client = new Client();
+            client.setNomClt("Defaut");
+            try {
+                client.setEtatClt("actif");
+                client.setAdrClt("Defaut");
+                client.setNumClt("Defaut");
+                client.setNbPoints(0.0);
+                clientService.ajouter(client);
+            } catch (Exception e) {
+                e.printStackTrace();
+                
+            }
+        }
+        
+        //Client
+        //client = clientService.findByNom(client);
         clientNew = new ClientR(client);
         txtCltV.setText(clientNew.getNomClt().getValue() + " (" + clientNew.getNumClt().getValue() + ")");
         txtCltV.setFocusTraversable(false);
@@ -601,9 +630,9 @@ public class CaissePaneController implements Initializable {
                                  txtCodeProdCaisse.requestFocus();
                             });
                             
-                            txtNomProdCaisse.clear();
-                            txtQteProdCaisse.clear();
-                            txtPrixUnitCaisse.clear();
+                            txtNomProdCaisse.setText(pC.getLibProd()+"");
+                            txtQteProdCaisse.setText(pC.getQteIniProd()+"");
+                            txtPrixUnitCaisse.setText(pC.getPrixUniProd()+"");
                             
                             
                     }

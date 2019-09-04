@@ -56,18 +56,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <JFXButton fx:id="btnReglage" layoutX="10.0" layoutY="276.0" onAction="#openReglage" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Reglage" textFill="WHITE">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/icons8_Slider__96px.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </JFXButton>
+    
       <JFXButton fx:id="btnAide" layoutX="10.0" layoutY="322.0" onAction="#openAide" prefHeight="46.0" prefWidth="199.0" styleClass="slide-menu-button" text="Aide" textFill="WHITE">
          <font>
             <Font size="18.0" />
