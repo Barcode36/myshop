@@ -72,7 +72,6 @@ public class DashBoardController implements Initializable {
     
     @FXML
     private BarChart<String, Integer> barCode;
-    
     @FXML
     private CategoryAxis x;
     @FXML
@@ -98,7 +97,6 @@ public class DashBoardController implements Initializable {
     
     public static HBox contHbox1;
     public static HBox contHbox2;
-
     public static JFXButton btnRe;
     public static JFXButton btnComp;
     public static JFXButton btnInvent;
@@ -115,10 +113,6 @@ public class DashBoardController implements Initializable {
     @FXML
     private JFXButton btnClient;
   
-    
-    
-    
-    
     ObservableList<PieChart.Data> datas = FXCollections.observableArrayList();
     ObservableList<ProduitR> obVent = FXCollections.observableArrayList();
     ObservableList<String> obVentNom = FXCollections.observableArrayList();
@@ -139,12 +133,9 @@ public class DashBoardController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    //boolean done;
     ArrayList<Double> tabDim = new ArrayList<>() ;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //System.out.println("ec max: "+ec.getMinWidth());
-       
         
         
         btnRe = btnRec;
@@ -184,17 +175,11 @@ public class DashBoardController implements Initializable {
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                
-               // stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-               // cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 45);*/
             }
         });
-        // loadTable();
-        List <Produit> allProduct = listProduit();
         
         List <Object []> listMieuxVen = contenirVenteService.listMieuxVen();
-       // System.out.println("avant");
-       // List <Object []> findByPeriode = contenirVenteService.findVenteByPeriode( new Date(new Timestamp(1566317373197l).getTime()) );
+        
         if(listMieuxVen!=null && listMieuxVen.size()>0){
         for(Object[] o : listMieuxVen){
                 obVentNom.add(  o[0].toString());
@@ -212,22 +197,17 @@ public class DashBoardController implements Initializable {
             
         }
        
-            
-            if(obVentNom!=null && obVentNom.size()>=10 && obProFini!=null && obProFini.size()>=10 ){
-             
-                for (int i = 0; i < 10; i++) {
-                    datas.add(new PieChart.Data(obVentNom.get(i), Double.parseDouble(obVentMont.get(i)+"")));
-                    series.getData().add(new XYChart.Data<>(obProFiniNom.get(i), obProFini.get(i)));
-
-
-                }
-                
-                pieChart.setData(datas);
-                barCode.getData().addAll(series);
-                listProdEnFin = series.getData() ;
-                
+        if(obVentNom!=null && obVentNom.size()>=10 && obProFini!=null && obProFini.size()>=10 ){
+            for (int i = 0; i < 10; i++) {
+                datas.add(new PieChart.Data(obVentNom.get(i), Double.parseDouble(obVentMont.get(i)+"")));
+                series.getData().add(new XYChart.Data<>(obProFiniNom.get(i), obProFini.get(i)));
+ 
             }
-        }
+            pieChart.setData(datas);
+            barCode.getData().addAll(series);
+            listProdEnFin = series.getData() ;
+      }
+    }
         
     
 
@@ -351,9 +331,7 @@ public class DashBoardController implements Initializable {
             MainViewController.temporaryPane.getChildren().clear();
             StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
             ObservableList<Node> elements = stackPane.getChildren();
-
             MainViewController.temporaryPane.getChildren().setAll(elements);
-
             MainViewController.drawerTmp.setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);

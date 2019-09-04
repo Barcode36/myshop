@@ -63,9 +63,9 @@ public class EssssssController implements Initializable {
         progres.progressProperty().bind(task.progressProperty());
         mySerNber = getSerialNumber();
         //ecrireSerNb(mySerNber);
-        String serNb="erfrgrht";
+        String serNb=mySerNber+"";
         //File f = new File("tmp.txt");
-        System.out.println("oki");
+       
         /*try {
             File f = new File("tmp.txt");
             System.out.println("d: "+f.exists());

@@ -126,26 +126,7 @@ public class CrudInventaireController implements Initializable {
         });
 
      
-        /*txtQteProd.setOnKeyPressed((event) -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                save();
-            }
-        });
-        txtCode.setOnKeyPressed((event) -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                save();
-            }
-        });
-        txtPrixProd.setOnKeyPressed((event) -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                save();
-            }
-        });
-        txtLibProd.setOnKeyPressed((event) -> {
-            if (event.getCode() == KeyCode.ENTER) {
-                save();
-            }
-        });*/
+       
         
         txtQteAug.setText("0");
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
@@ -305,7 +286,6 @@ public class CrudInventaireController implements Initializable {
             if (event.getCode() == KeyCode.ENTER) {
                 produitList.clear();
                 List<Produit> list = produitService.recherche2(txtRec.getText());
-                System.out.println(list);
                 for (Produit produit : list) {
                     produitList.add(new ProduitR(produit));
                 }

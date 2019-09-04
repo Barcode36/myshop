@@ -9,6 +9,7 @@ import entites.ContenirVente;
 import entites.ContenirVentePK;
 import entites.Produit;
 import entites.Vente;
+import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,5 +62,46 @@ public class ContenirVenteService implements IContenirVente{
     public List<ContenirVente> listParVente(Produit p) {
         return contenirVenteJpaController.findByProd(p);
     }
+    
+    
+    @Override
+    public List<Object[] > listMieuxVen() {
+        return contenirVenteJpaController.listMieuxVen();
+    }
+    
+    @Override
+    public List<Object[] > listMieuxVenByDate(Date dt1, Date dt2) {
+        return contenirVenteJpaController.listMieuxVenByDate(dt1, dt2);
+    }
+    
+    @Override
+     public List<Object[]> findVenteByPeriode(Date dt) {
+         return contenirVenteJpaController.findVenteByPeriode(dt);
+     }
+     
+    @Override
+     public List<Object[]> listEnFinition(){
+         return contenirVenteJpaController.listEnFinition();
+     }
+     
+    @Override
+     public List<Object[]> historiqueVente(Date dt1, Date dt2,int idCompte) {
+         return contenirVenteJpaController.historiqueVente(dt1, dt2, idCompte);
+     }
+     
+    @Override
+     public List<Object[]> findTotVteEffectueByPeriode(Date dt) {
+         return contenirVenteJpaController.findTotVteEffectueByPeriode(dt);
+     }
+    
+    @Override
+    public List<Object[]> findTotQteVendueByTwoPeriode(Date dt1, Date dt2,int idComp){
+        return contenirVenteJpaController.findTotQteVendueByTwoPeriode(dt1, dt2, idComp);
+    } 
+     
+    @Override
+     public List<Object[]> findTotVteEffectueByTwoPeriode(Date dt1, Date dt2){
+         return  contenirVenteJpaController.findTotVteEffectueByTwoPeriode(dt1, dt2);
+     }
     
 }

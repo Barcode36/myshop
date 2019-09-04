@@ -143,15 +143,7 @@
                                                       <Insets left="150.0" />
                                                    </GridPane.margin>
                                                 </JFXButton>
-                                                <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="61.0" prefWidth="139.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                                   <children>
-                                                      <ImageView fx:id="scriptIndicator" fitHeight="54.0" fitWidth="102.0" layoutX="43.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true"  AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="4.0">
-                                                         <image>
-                                                            <Image url="@../img/spinner-blue-circle.gif" />
-                                                         </image>
-                                                      </ImageView>
-                                                   </children>
-                                                </AnchorPane>
+                                               
                                              </children>
                                           </GridPane>
                                        </children>

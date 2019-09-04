@@ -160,11 +160,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                // e.printStackTrace(); 
             } 
         
-       // txtCoeff.setStyle("-fx-font-size: 25px;");
-        //txtPtActu.setStyle("-fx-font-size: 25px;");
-        //Client c = new Client(clientR.getIdClt().getValue());
-        //Client clt = clientService.findById(c);
-        
+      
     }
 
     @FXML
@@ -189,8 +185,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
         produitCaisseTable.setItems(produitListVent);
         compteActif = c;
         clientR = cr;
-//   cellData -> cellData.getValue().getQteProdCom().asObject()
-        //     new PropertyValueFactory<ProduitR, JFXTextField>("qteCom")
+
     }
 
     private IClientService clientService = MainViewController.clientService;
@@ -203,8 +198,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 Vente vente = new Vente();
                 vente.setDateVen(new Date());
                 vente.setIdClt(clientR.getIdClt().getValue());
-                //ClientR cr = new ClientR();
-                //cr.setIdClt(clientR.getIdClt().getValue());
+               
                 Client c = new Client(clientR.getIdClt().getValue());
                 Client clt = clientService.findById(c);
                 clt.setNbPoints(clt.getNbPoints()+ Double.parseDouble(lblTot.getText()) *  10/100 );
@@ -217,12 +211,11 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     contenirVente.setIdVen(vente.getIdVen());
                     contenirVente.setIdProd(pr.getIdProd().getValue());
                     contenirVente.setPrixProd(Integer.parseInt(pr.getPrixUniProd().getValue()));
-                    //System.out.println("lblTot.getText "+Double.parseDouble(lblTot.getText()));
                     contenirVente.setMontVente(Double.parseDouble(lblTot.getText()));
                     contenirVente.setDtVente(new Date());
                     
-                    //contenirVente.set
                     contenirVenteService.ajouterContenirVente(contenirVente);
+                    
                     Produit p = new Produit(pr.getIdProd().getValue());
                     Produit produit = produitService.findById(p);
                     produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());

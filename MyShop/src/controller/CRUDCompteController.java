@@ -105,21 +105,7 @@ public class CRUDCompteController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         
-        /*MainViewController.temporaryPaneTot.widthProperty().addListener((obs, oldVal, newVal)->{
-            if( (Double) newVal <= (Double) oldVal){
-                
-                    if(!ok){
-                       consCol1.setMaxWidth(500);
-                       consCol2.setMaxWidth(435);
-                       ok=true;
-                    }else{
-                        cont.setMaxWidth(cont.getMaxWidth()-7);
-                         consCol1.setMaxWidth(consCol1.getMaxWidth()-3);
-                         consCol2.setMaxWidth(consCol1.getMaxWidth()-3);
-                    }  
-            }
-            
-        });*/
+     
         
         Font.loadFont(MainViewController.class.getResource("/css/Heebo-Bold.ttf").toExternalForm(), 10);
         Font.loadFont(MainViewController.class.getResource("/css/Bearskin DEMO.otf").toExternalForm(), 10);
@@ -136,20 +122,10 @@ public class CRUDCompteController implements Initializable {
                 if (s.isMaximized()) {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                //stage.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
-//                cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 41);
+                
             }
         });
-        /*System.out.println(MainViewController.temporaryPaneTot.getWidth());
-        MainViewController.temporaryPaneTot.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                stage.setPrefWidth(newValue.doubleValue());
-                cont.setPrefWidth(newValue.doubleValue() - 41);
-            }
-
-        });*/
-
+        
     }
 
     @FXML
@@ -264,6 +240,7 @@ public class CRUDCompteController implements Initializable {
              //clearCompteTxt();
             
         } catch (Exception e) {
+            e.printStackTrace();
         }
         
        
@@ -272,7 +249,6 @@ public class CRUDCompteController implements Initializable {
     @FXML
     private void vider(ActionEvent event) {
         clearCompteTxt();
-        //saveUp.setText("Ajouter");
     }
 
 }
