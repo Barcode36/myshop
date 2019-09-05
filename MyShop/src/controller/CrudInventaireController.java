@@ -211,34 +211,36 @@ public class CrudInventaireController implements Initializable {
             }
 
         } else {
-            produitModif.setCodeProd(txtCode.getText());
-            produitModif.setLibProd(txtLibProd.getText());
-            produitModif.setPrixUniProd(txtPrixProd.getText());
-            produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
-            produitService.modifier(produitModif);
-            txtQteAug.setText("0");
-            txtQteAug.setDisable(true);
-            
-            saveUp.setText("Modifier");
-            TrayNotification notification = new TrayNotification();
-            notification.setAnimationType(AnimationType.POPUP);
-            notification.setTray("MyShop", "Modiffication effectuée", NotificationType.SUCCESS);
-            notification.showAndDismiss(Duration.seconds(1));
                 
-                txtQteProd.requestFocus();
-                txtQteProd.setFocusTraversable(true); 
-            txtCode.setFocusTraversable(true);
-            txtCode.requestFocus();
-            txtQteProd.setDisable(false);
-             txtQteProd.setFocusTraversable(true);
-            clearProduitText();
+                produitModif.setCodeProd(txtCode.getText());
+                produitModif.setLibProd(txtLibProd.getText());
+                produitModif.setPrixUniProd(txtPrixProd.getText());
+                produitModif.setQteIniProd(Integer.parseInt(txtQteProd.getText()));
+                produitService.modifier(produitModif);
+                txtQteAug.setText("0");
+                txtQteAug.setDisable(true);
+
+                saveUp.setText("Modifier");
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Modiffication effectuée", NotificationType.SUCCESS);
+                notification.showAndDismiss(Duration.seconds(1));
+
+                    txtQteProd.requestFocus();
+                    txtQteProd.setFocusTraversable(true); 
+                txtCode.setFocusTraversable(true);
+                txtCode.requestFocus();
+                txtQteProd.setDisable(false);
+                 txtQteProd.setFocusTraversable(true);
+                clearProduitText();
+           
             
             
         }
 
         loadInventairegrid();
         txtCode.setFocusTraversable(true);
-        txtQteProd.setFocusTraversable(true); 
+        txtQteProd.setDisable(false); 
         txtQteAug.setFocusTraversable(true);
         txtCode.requestFocus();
     }
@@ -248,6 +250,7 @@ public class CrudInventaireController implements Initializable {
         txtLibProd.clear();
         txtPrixProd.clear();
         txtQteProd.clear();
+        txtQteProd.setDisable(false);
         txtQteAug.setText("0");
         txtQteAug.setDisable(true);
         saveUp.setText("Ajouter");
@@ -257,22 +260,35 @@ public class CrudInventaireController implements Initializable {
 
     @FXML
     private void suppProduit(ActionEvent event) {
-        produitService.supprimer(produitModif);
-        loadInventairegrid();
-        clearProduitText();
-        saveUp.setText("Ajouter");
-        TrayNotification notification = new TrayNotification();
-        notification.setAnimationType(AnimationType.POPUP);
-        notification.setTray("MyShop", "Suppression effectué", NotificationType.SUCCESS);
-        notification.showAndDismiss(Duration.seconds(1));
-        clearProduitText();
-        txtCode.setFocusTraversable(true);
-        txtCode.requestFocus();
+        if(txtCode.getText().isEmpty() || txtLibProd.getText().isEmpty() || txtPrixProd.getText().isEmpty()
+                || txtQteProd.getText().isEmpty()){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Veuillez selectionner un produit à supprimer ", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1));
+        } else {
+            produitService.supprimer(produitModif);
+            loadInventairegrid();
+            clearProduitText();
+            saveUp.setText("Ajouter");
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Suppression effectué", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1));
+            clearProduitText();
+            txtQteProd.setDisable(false);
+            txtQteProd.setEditable(true);
+            txtCode.setFocusTraversable(true);
+            txtCode.requestFocus();
+        }
     }
 
     @FXML
     private void vider(ActionEvent event) {
         clearProduitText();
+       
+        txtQteProd.setDisable(false);
+        txtQteProd.setEditable(true);
         saveUp.setText("Ajouter");
         txtCode.setFocusTraversable(true);
         txtCode.requestFocus();
@@ -328,6 +344,8 @@ public class CrudInventaireController implements Initializable {
        txtQteProd.requestFocus();
        txtQteAug.setText("0");
        txtQteAug.setDisable(true);
+       txtQteProd.setDisable(false);
+       txtQteProd.setEditable(true);
       
     }
 
