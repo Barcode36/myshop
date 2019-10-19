@@ -131,9 +131,7 @@ public class CaissePaneController implements Initializable {
                 } else {
                     MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
                 }
-                //pane.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth());
-               // cont.setPrefWidth(MainViewController.temporaryPaneTot.getPrefWidth() - 87);
-               // System.out.println(s.isMaximized());
+                
             }
         });
         System.out.println(MainViewController.temporaryPaneTot.getPrefWidth());
@@ -151,6 +149,7 @@ public class CaissePaneController implements Initializable {
             if (event.getCode() == KeyCode.ENTER) {
                 Produit p = new Produit();
                 p.setCodeProd(txtCodeProdCaisse.getText());
+                //System.out.println("entreeeeeeee");
                 try {
                     produitVente = produitService.findByCode(p);
                     txtNomProdCaisse.setText(produitVente.getLibProd());
@@ -184,6 +183,8 @@ public class CaissePaneController implements Initializable {
                             txtQteProd.setFocusTraversable(true);
                             txtQteProd.requestFocus();
                             
+                            
+                            
                             txtQteProd.setOnAction((event2) -> {
                                  produitListVent.add(new ProduitR(produitVente, produitListVent, produitCaisseTable,
                                    Integer.parseInt(txtQteProd.getText()) ));
@@ -191,6 +192,10 @@ public class CaissePaneController implements Initializable {
                                  txtQteProd.setDisable(true);
                                  txtCodeProdCaisse.setFocusTraversable(true);
                                  txtCodeProdCaisse.requestFocus();
+                                 txtCodeProdCaisse.clear();
+                                 txtNomProdCaisse.clear();
+                                 txtQteProdCaisse.clear();
+                                 txtPrixUnitCaisse.clear();
                             });
                             
                             
@@ -224,14 +229,15 @@ public class CaissePaneController implements Initializable {
                     produitCaisseTable.setItems(produitListVent);
                     
                     //txtQteProd.setDisable(true);
-                    txtCodeProdCaisse.clear();
+                   txtCodeProdCaisse.clear();
                     
                     //System.out.println(produitListVent);
                 } catch (Exception e) {
                 }
+                 
             }
         });
-
+       
         pane.setOnKeyTyped(new EventHandler<KeyEvent>() {
 
             //String b = new String();
@@ -370,7 +376,7 @@ public class CaissePaneController implements Initializable {
             totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
             produitCaisseTable.setItems(produitListVent);
             txtCodeProdCaisse.clear();
-
+            
             //System.out.println(produitListVent);
         } catch (Exception e) {
         }
@@ -620,19 +626,25 @@ public class CaissePaneController implements Initializable {
                             txtQteProd.setText("1");
                             txtQteProd.setFocusTraversable(true);
                             txtQteProd.requestFocus();
+                            txtNomProdCaisse.setText(pC.getLibProd()+"");
+                            txtQteProdCaisse.setText(pC.getQteIniProd()+"");
+                            txtPrixUnitCaisse.setText(pC.getPrixUniProd()+"");
                             
                             txtQteProd.setOnAction((event2) -> {
                                  produitListVent.add(new ProduitR(pC, produitListVent, produitCaisseTable,
                                    Integer.parseInt(txtQteProd.getText()) ));
                                  txtQteProd.clear();
                                  txtQteProd.setDisable(true);
+                                 txtCodeProdCaisse.clear();
                                  txtCodeProdCaisse.setFocusTraversable(true);
                                  txtCodeProdCaisse.requestFocus();
+                                 
+                                  txtNomProdCaisse.clear();
+                                txtQteProdCaisse.clear();
+                                txtPrixUnitCaisse.clear();
                             });
                             
-                            txtNomProdCaisse.setText(pC.getLibProd()+"");
-                            txtQteProdCaisse.setText(pC.getQteIniProd()+"");
-                            txtPrixUnitCaisse.setText(pC.getPrixUniProd()+"");
+                            
                             
                             
                     }
@@ -656,6 +668,8 @@ public class CaissePaneController implements Initializable {
                 actionColCaisse.setCellValueFactory(new PropertyValueFactory<ProduitR, JFXCheckBox>("suppression"));
                 totalColCaisse.setCellValueFactory(cellData -> cellData.getValue().getTotal());
                 produitCaisseTable.setItems(produitListVent);
+                
+                 
                 if (this.vente == true) {
 
                 }

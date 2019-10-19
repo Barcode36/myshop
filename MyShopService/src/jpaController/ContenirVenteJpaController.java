@@ -200,7 +200,7 @@ public class ContenirVenteJpaController implements Serializable {
         return query.getResultList();
     }
     
-     public List<Object[]> findTotQteVendueByTwoPeriode(Date dt1, Date dt2, int idComp) {
+    public List<Object[]> findTotQteVendueByTwoPeriode(Date dt1, Date dt2, int idComp) {
         EntityManager em = this.getEntityManager();
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findTotQteVendueByTwoPeriode");
         query.setParameter("dateVen1", dt1);
@@ -210,11 +210,32 @@ public class ContenirVenteJpaController implements Serializable {
     }
     
     
-     public List<Object[]> findTotVteEffectueByTwoPeriode(Date dt1, Date dt2) {
+    public List<Object[]> findTotVteEffectueByTwoPeriode(Date dt1, Date dt2) {
         EntityManager em = this.getEntityManager();
         TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findTotVteEffectueByTwoPeriode");
         query.setParameter("dateVen1", dt1);
         query.setParameter("dateVen2", dt2);
+        return query.getResultList();
+    }
+    
+    public List<Object[]> findAllVteDesc() {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findAllVteDesc");
+        return query.getResultList();
+    }
+    
+    public List<Object[]> findDetailsVte(int idVente) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findDetailsVte");
+        query.setParameter("idVen", idVente);
+        return query.getResultList();
+    }
+    
+    public List<Object[]> findVenteByLike(int idVenteD) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("ContenirVente.findVenteByLike");
+        query.setParameter("idVenD", idVenteD );
+        
         return query.getResultList();
     }
 }

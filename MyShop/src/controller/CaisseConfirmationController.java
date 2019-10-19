@@ -6,18 +6,31 @@
 package controller;
 
 import Utils.Constants;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.TabSettings;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import entites.Client;
 import entites.Compte;
 import entites.ContenirVente;
+import entites.HistoriqueVente;
 import entites.Vente;
 import entites.Produit;
-import java.io.BufferedReader;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -42,6 +55,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import modele.ClientR;
 import modele.ProduitR;
 import org.apache.poi.ss.usermodel.Row;
@@ -50,10 +71,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import service.IClientService;
 import service.ICompteService;
 import service.IContenirVente;
+import service.IHistoriqueVente;
 import service.IProduitService;
 import service.IVenteService;
 import service.imp.CompteService;
 import service.imp.ContenirVenteService;
+import service.imp.HistoriqueVenteService;
 import service.imp.ProduitService;
 import service.imp.VenteService;
 import tray.animations.AnimationType;
@@ -96,6 +119,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     ICompteService compteService = new CompteService();
     IContenirVente contenirVenteService = new ContenirVenteService();
     IProduitService produitService = new ProduitService();
+    IHistoriqueVente historiqueVenteService = new HistoriqueVenteService();
 
     Compte compteActif = new Compte();
     ClientR clientR = new ClientR();
@@ -192,6 +216,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     
     @FXML
     private void Valider(ActionEvent event) {
+         
         Boolean txtNumber = textFieldTypeNumber(txtMontCllt);
         if (txtNumber) {
             if (corr == true) {
@@ -205,8 +230,10 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 clientService.modifier(clt);
                 vente.setIdComp(compteActif.getIdComp());
                 venteService.ajouter(vente);
+                
                 for (ProduitR pr : produitListVent) {
                     ContenirVente contenirVente = new ContenirVente();
+                    
                     contenirVente.setQteVen(pr.getQteProdCom().getValue());
                     contenirVente.setIdVen(vente.getIdVen());
                     contenirVente.setIdProd(pr.getIdProd().getValue());
@@ -216,6 +243,13 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     
                     contenirVenteService.ajouterContenirVente(contenirVente);
                     
+                    HistoriqueVente histoVente = new HistoriqueVente();
+                    histoVente.setIdCon(contenirVente.getIdCon());
+                    histoVente.setSmeRecue(Double.valueOf( txtMontCllt.getText()));
+                    histoVente.setSmeRendue(Double.valueOf(txtRemise.getText()));
+                    
+                    historiqueVenteService.ajouterHistoriqueVente(histoVente);
+                    
                     Produit p = new Produit(pr.getIdProd().getValue());
                     Produit produit = produitService.findById(p);
                     produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
@@ -223,6 +257,172 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     produitService.modifier(produit);
                 }
                 CaissePaneController.vente = true;
+                
+                Rectangle pageSize =  new Rectangle(320, 380);
+        
+                Document doc = new Document(pageSize);
+
+                try{
+                    PdfWriter.getInstance(doc, new FileOutputStream("facture.pdf"));
+                    doc.open();
+                    //document.add(new Paragraph(excerptsFromDavidCopperfield[0], new Font(Font.TIMES_ROMAN)));
+                    com.itextpdf.text.Font font=new com.itextpdf.text.Font(FontFamily.COURIER);
+                    
+                    Paragraph p = new Paragraph();
+                    p.setFont(font);
+                    p.setTabSettings(new TabSettings(100f));
+                    p.add(Chunk.TABBING);
+                    
+                    //com.itextpdf.text.Font font = new com.itextpdf.text.Font("Courrier Niew", 12);
+                    p.add(new Chunk("MYSHOP"));
+                   
+                    doc.add(p);
+
+                    
+
+                    p = new Paragraph();
+                    p.setFont(font);
+                    p.setTabSettings(new TabSettings(72f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("**************"));
+                    doc.add(p); 
+                    
+                    p = new Paragraph();
+                     p.setFont(font);
+                    p.setTabSettings(new TabSettings(82f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("Vente N."+vente.getIdVen()));
+                    p.setFont(font);
+                    doc.add(p); 
+
+                    p = new Paragraph();
+                     p.setFont(font);
+                    p.setTabSettings(new TabSettings(120f));
+                    //p.add(Chunk.TABBING);
+                    int caiPseudoLength = compteActif.getPseudoComp().length();
+                    String recompCaiName = "";
+                    if(caiPseudoLength > 7){
+                        for(int i=0;i<7;i++){
+                            recompCaiName = recompCaiName+compteActif.getPseudoComp().charAt(i);
+                        }
+                        recompCaiName = recompCaiName+".";
+                    }else{
+                        recompCaiName = compteActif.getPseudoComp();
+                    }
+                    
+                    p.add(new Chunk("==================================")) ;
+                    p.add(new Chunk("Cais: "+recompCaiName)) ;
+                    p.add(Chunk.TABBING);
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date = new Date(); 
+                    df.format( new Date(date.getTime()));
+                    p.add(new Chunk("Date: "+df.format( new Date(date.getTime()))+" \n"));
+                    doc.add(p);
+
+                    p = new Paragraph("");
+                     p.setFont(font);
+                    p.add(new Chunk("Client: "+clientR.getNomClt().getValue()+" ("+clientR.getNumClt().getValue()+")\n"));
+                    p.add(new Chunk("=================================="));
+                    doc.add(p);
+
+                    PdfPTable table = new PdfPTable(4);
+                    table.setWidths(new float []{2f, 1f, 1f,1.5f});
+                     table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    table.setWidthPercentage(100);
+                    PdfPCell cell = new PdfPCell();
+                    //cell.setColspan(5);
+                    table.getDefaultCell().setBorder(cell.NO_BORDER);
+                    
+                    
+                    table.addCell( new Phrase("Produits ",font));
+                    table.addCell(new Phrase("PU ",font));
+                    table.addCell(new Phrase("Qte ",font));
+                    table.addCell(new Phrase("Total ",font));
+                    
+                    ObservableList<ProduitR> pdt =  produitCaisseTable.getItems();
+                    //System.out.println("length: "+pdt.size());
+                    int tot = 0;
+                    for( ProduitR prod : pdt ){
+                        
+                        String prodName = prod.getLibProd().getValue()+"";
+                      
+                        String tabNameSplitted[] = prodName.split(" ");
+                        String recomposedName = "";
+                        for(int i=0;i<2;i++ ){
+                            //System.out.println(""+tabNameSplitted[i]);
+                            if(tabNameSplitted[i].length()>3){
+                                 recomposedName = recomposedName+tabNameSplitted[i].substring(0,3)+". ";
+                            }else {
+                                if( !recomposedName.equalsIgnoreCase("") || !recomposedName.equalsIgnoreCase(" ")){
+                                    recomposedName = recomposedName+tabNameSplitted[i].substring(0,tabNameSplitted[i].length())+". ";
+                                }
+                            }
+                       
+                        }
+                        //p.add(new Chunk(""+recomposedName));
+                        table.addCell( new Phrase(""+recomposedName,font));
+                        table.addCell( new Phrase(""+prod.getPrixUniProd().getValue(),font));
+                        table.addCell(new Phrase(""+prod.getQteProdCom().getValue(),font));
+                        table.addCell(new Phrase(""+prod.getTotal().getValue(),font));
+                        
+                        tot+= Integer.parseInt(prod.getTotal().getValue()) ;
+                      
+                    }
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    
+                    table.addCell(new Phrase("Reg: Espèce",font));
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(new Phrase(tot+" F",font) );
+                    
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    
+                    table.addCell(new Phrase("Reçu: "+txtMontCllt.getText(),font) );
+                    table.addCell(" ");
+                    table.addCell(new Phrase("Rend: ",font) );
+                    table.addCell(new Phrase(""+txtRemise.getText(),font));
+                    doc.add(table);
+                    
+                    p = new Paragraph();
+                    p.setFont(font);
+                    p.add(new Chunk("=================================="));
+                    //p.setTabSettings(new TabSettings(20f));
+                   // p.add(Chunk.TABBING);
+                    p.add(new Chunk(" Merci de votre visite et à Bientôt "));
+                    p.add(new Chunk("=================================="));
+                    
+                    doc.add(p);
+                    
+                    //impression de la facture
+                    if (Desktop.isDesktopSupported()){  
+                        if(Desktop.getDesktop().isSupported(java.awt.Desktop.Action.PRINT)){  
+                            try {  
+                                        java.awt.Desktop.getDesktop().print(new File("facture.pdf"));  
+                                } catch (IOException ex) {  
+                                    System.out.println("ex "+ex);
+                                        //Traitement de l'exception  
+                                }  
+                        } else {  
+                              System.out.println("La fonction n'est pas supportée par votre système d'exploitation");  //  
+                        }  
+                    } else {  
+                        System.out.println("Desktop pas supporté par votre système d'exploitation ");
+                            // 
+                    }
+
+
+                }catch(Exception e){
+                    System.out.println(""+e);
+                   // e.printStackTrace();
+                }
+                doc.close();
+
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
                 notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);

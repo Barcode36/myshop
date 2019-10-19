@@ -183,6 +183,7 @@ public class CrudInventaireController implements Initializable {
             Produit produit = new Produit();
             produit.setCodeProd(txtCode.getText());
             produit.setLibProd(txtLibProd.getText());
+            
             produit.setPrixUniProd(txtPrixProd.getText());
             txtQteProd.setFocusTraversable(true); 
             txtQteProd.setDisable(false);

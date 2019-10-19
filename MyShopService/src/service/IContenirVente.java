@@ -42,4 +42,10 @@ public interface IContenirVente {
     
     public List<Object[]> findTotQteVendueByTwoPeriode(Date dt1, Date dt2,int idComp) ;
     
+    public List<Object[]> findAllVteDesc();
+    
+    public List<Object[]> findDetailsVte(int idVente);
+    
+    public List<Object[]> findVenteByLike(int idVente);
+    
 }
