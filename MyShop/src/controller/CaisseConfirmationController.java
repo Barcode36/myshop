@@ -17,6 +17,8 @@ import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import static controller.DetailsVenteController.MergePages;
+import static controller.DetailsVenteController.print;
 import entites.Client;
 import entites.Compte;
 import entites.ContenirVente;
@@ -31,7 +33,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -126,6 +130,8 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     private boolean corr = true;
     @FXML
     private Label Client;
+  
+    private List<String> shopInfos ; 
 
      private File file;
     /**
@@ -153,36 +159,13 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 txtPtActu.setVisible(false);
             }
         });
-        
+        shopInfos = new ArrayList<String>();
         try{
-               
-               
-                 file = new File("Ressources/coeff.xls");
-                 
-                if (file != null) {
-                    try {
-                        FileInputStream fis = new FileInputStream(file);
-                        XSSFWorkbook wb = new XSSFWorkbook(fis);
-                        XSSFSheet sheet = wb.getSheetAt(0);
-                        Row row;
-                        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                            row = sheet.getRow(i);
-                            System.out.println(""+row.getCell(0).getStringCellValue());
-                           // txtCoeff.setText(row.getCell(0).getStringCellValue());
-                        }
-                        wb.close();
-                        fis.close();
-                    } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MainPrincipalController.class
-                            .getName()).log(Level.SEVERE, null, ex);
-
-                    } 
-                }
-                
-            } catch (IOException e) { 
-                System.out.println(""+e);
-               // e.printStackTrace(); 
-            } 
+            shopInfos = ReglagePaneController.lireFichier("shopInfosTxt.txt");
+        } catch (Exception e) { 
+            System.out.println(""+e);
+           // e.printStackTrace(); 
+        } 
         
       
     }
@@ -258,45 +241,51 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 }
                 CaissePaneController.vente = true;
                 
-                Rectangle pageSize =  new Rectangle(320, 380);
+                Rectangle pageSize =  new Rectangle(340, 380);
         
-                Document doc = new Document(pageSize);
-
+                Document doc = new Document(pageSize,30f,0,0,0);
+                //doc.bottom(0);
+                
+                
                 try{
+                    //System.out.println(shopInfos.get(0));
                     PdfWriter.getInstance(doc, new FileOutputStream("facture.pdf"));
                     doc.open();
                     //document.add(new Paragraph(excerptsFromDavidCopperfield[0], new Font(Font.TIMES_ROMAN)));
-                    com.itextpdf.text.Font font=new com.itextpdf.text.Font(FontFamily.COURIER);
-                    
+                    com.itextpdf.text.Font titleFont=new com.itextpdf.text.Font(FontFamily.COURIER,19f);
+                    //System.out.println("font "+ti.getSize());
                     Paragraph p = new Paragraph();
-                    p.setFont(font);
-                    p.setTabSettings(new TabSettings(100f));
+                    p.setFont(titleFont);
+                    p.setTabSettings(new TabSettings(79f));
                     p.add(Chunk.TABBING);
-                    
-                    //com.itextpdf.text.Font font = new com.itextpdf.text.Font("Courrier Niew", 12);
-                    p.add(new Chunk("MYSHOP"));
-                   
+                    p.add(new Chunk(""+shopInfos.get(0)));
                     doc.add(p);
-
                     
+                    com.itextpdf.text.Font bodyFont=new com.itextpdf.text.Font(FontFamily.COURIER,10f);
+                    p = new Paragraph();
+                    p.setFont(bodyFont);
+                    p.setTabSettings(new TabSettings(85f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("Tel:"+shopInfos.get(1)));
+                    doc.add(p); 
 
                     p = new Paragraph();
-                    p.setFont(font);
+                    p.setFont(bodyFont);
                     p.setTabSettings(new TabSettings(72f));
                     p.add(Chunk.TABBING);
-                    p.add(new Chunk("**************"));
+                    p.add(new Chunk("******************"));
                     doc.add(p); 
                     
                     p = new Paragraph();
-                     p.setFont(font);
+                     p.setFont(bodyFont);
                     p.setTabSettings(new TabSettings(82f));
                     p.add(Chunk.TABBING);
                     p.add(new Chunk("Vente N."+vente.getIdVen()));
-                    p.setFont(font);
+                    p.setFont(bodyFont);
                     doc.add(p); 
 
                     p = new Paragraph();
-                     p.setFont(font);
+                     p.setFont(bodyFont);
                     p.setTabSettings(new TabSettings(120f));
                     //p.add(Chunk.TABBING);
                     int caiPseudoLength = compteActif.getPseudoComp().length();
@@ -310,23 +299,24 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                         recompCaiName = compteActif.getPseudoComp();
                     }
                     
-                    p.add(new Chunk("==================================")) ;
+                    p.add(new Chunk("================================================ ")) ;
                     p.add(new Chunk("Cais: "+recompCaiName)) ;
                     p.add(Chunk.TABBING);
-                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                    Date date = new Date(); 
-                    df.format( new Date(date.getTime()));
-                    p.add(new Chunk("Date: "+df.format( new Date(date.getTime()))+" \n"));
+                    
+                    p.add(new Chunk("Client: "+clientR.getNomClt().getValue()+"\n"));
                     doc.add(p);
 
                     p = new Paragraph("");
-                     p.setFont(font);
-                    p.add(new Chunk("Client: "+clientR.getNomClt().getValue()+" ("+clientR.getNumClt().getValue()+")\n"));
-                    p.add(new Chunk("=================================="));
+                    p.setFont(bodyFont);
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                    Date date = new Date(); 
+                    df.format( new Date(date.getTime()));
+                    p.add(new Chunk("Date: "+df.format( new Date(date.getTime()))+" \n"));
+                    p.add(new Chunk("================================================ "));
                     doc.add(p);
 
-                    PdfPTable table = new PdfPTable(4);
-                    table.setWidths(new float []{2f, 1f, 1f,1.5f});
+                    PdfPTable table = new PdfPTable(6);
+                    table.setWidths(new float []{2f, 1f, 1f,1.5f,0.5f,1f});
                      table.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     table.setWidthPercentage(100);
                     PdfPCell cell = new PdfPCell();
@@ -334,10 +324,12 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     table.getDefaultCell().setBorder(cell.NO_BORDER);
                     
                     
-                    table.addCell( new Phrase("Produits ",font));
-                    table.addCell(new Phrase("PU ",font));
-                    table.addCell(new Phrase("Qte ",font));
-                    table.addCell(new Phrase("Total ",font));
+                    table.addCell( new Phrase("Produits ",bodyFont));
+                    table.addCell(new Phrase("PU ",bodyFont));
+                    table.addCell(new Phrase("Qte ",bodyFont));
+                    table.addCell(new Phrase("Total ",bodyFont));
+                    table.addCell(new Phrase(" ",bodyFont));
+                    table.addCell(new Phrase(" ",bodyFont));
                     
                     ObservableList<ProduitR> pdt =  produitCaisseTable.getItems();
                     //System.out.println("length: "+pdt.size());
@@ -360,11 +352,12 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                        
                         }
                         //p.add(new Chunk(""+recomposedName));
-                        table.addCell( new Phrase(""+recomposedName,font));
-                        table.addCell( new Phrase(""+prod.getPrixUniProd().getValue(),font));
-                        table.addCell(new Phrase(""+prod.getQteProdCom().getValue(),font));
-                        table.addCell(new Phrase(""+prod.getTotal().getValue(),font));
-                        
+                        table.addCell( new Phrase(""+recomposedName,bodyFont));
+                        table.addCell( new Phrase(""+prod.getPrixUniProd().getValue(),bodyFont));
+                        table.addCell(new Phrase(""+prod.getQteProdCom().getValue(),bodyFont));
+                        table.addCell(new Phrase(""+prod.getTotal().getValue(),bodyFont));
+                        table.addCell(new Phrase("F",bodyFont));
+                        table.addCell(new Phrase(" ",bodyFont));
                         tot+= Integer.parseInt(prod.getTotal().getValue()) ;
                       
                     }
@@ -372,63 +365,86 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     table.addCell(" ");
                     table.addCell(" ");
                     table.addCell(" ");
-                    
-                    table.addCell(new Phrase("Reg: Espèce",font));
-                    table.addCell(" ");
-                    table.addCell(" ");
-                    table.addCell(new Phrase(tot+" F",font) );
-                    
-                    table.addCell(" ");
-                    table.addCell(" ");
                     table.addCell(" ");
                     table.addCell(" ");
                     
-                    table.addCell(new Phrase("Reçu: "+txtMontCllt.getText(),font) );
+                    table.addCell(new Phrase("Reg: Esp.",bodyFont));
                     table.addCell(" ");
-                    table.addCell(new Phrase("Rend: ",font) );
-                    table.addCell(new Phrase(""+txtRemise.getText(),font));
+                    table.addCell(" ");
+                    table.addCell(new Phrase(tot+" ",bodyFont) );
+                    table.addCell(new Phrase("F",bodyFont));
+                    table.addCell(" ");
+                    
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    
+                    table.addCell(new Phrase("Reçu: "+txtMontCllt.getText()+" F",bodyFont) );
+                    table.addCell(new Phrase(" ",bodyFont));
+                    table.addCell(new Phrase("Rendu: ",bodyFont) );
+                    table.addCell(new Phrase(""+txtRemise.getText(),bodyFont));
+                    table.addCell(new Phrase("F",bodyFont));
+                    table.addCell(" ");
                     doc.add(table);
                     
                     p = new Paragraph();
-                    p.setFont(font);
-                    p.add(new Chunk("=================================="));
-                    //p.setTabSettings(new TabSettings(20f));
-                   // p.add(Chunk.TABBING);
+                    p.setFont(bodyFont);
+                    p.setTabSettings(new TabSettings(40f));
+                    p.add(new Chunk("================================================ "));
+                    p.add(Chunk.TABBING);
                     p.add(new Chunk(" Merci de votre visite et à Bientôt "));
-                    p.add(new Chunk("=================================="));
-                    
+                    p.add(new Chunk("================================================ "));
                     doc.add(p);
                     
+                    /*com.itextpdf.text.Header
+                    HeaderFooter footer = new HeaderFooter(footPh1, footPh2);
+                    footer.setAlignment(Element.ALIGN_CENTER);
+                    document.setFooter(footer); */
+                    
+                    p = new Paragraph();
+                    com.itextpdf.text.Font footerFont=new com.itextpdf.text.Font(FontFamily.COURIER, 7f);
+                    p.setFont(footerFont);
+                    p.setTabSettings(new TabSettings(15f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("MYSHOP, LOGICIEL DE GESTION EFFICACE DE VOTRE SHOP."));
+                   
+                    doc.add(p);
+                    
+                    p = new Paragraph();
+                    p.setFont(footerFont);
+                    p.setTabSettings(new TabSettings(70f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("CONTACT:(00228)90628725",footerFont));
+                    doc.add(p);
+                    
+                    doc.close();
+                    
+                    //fusion des pages du recu
+                   String newFileName = MergePages("facture.pdf");
+                    
                     //impression de la facture
-                    if (Desktop.isDesktopSupported()){  
-                        if(Desktop.getDesktop().isSupported(java.awt.Desktop.Action.PRINT)){  
-                            try {  
-                                        java.awt.Desktop.getDesktop().print(new File("facture.pdf"));  
-                                } catch (IOException ex) {  
-                                    System.out.println("ex "+ex);
-                                        //Traitement de l'exception  
-                                }  
-                        } else {  
-                              System.out.println("La fonction n'est pas supportée par votre système d'exploitation");  //  
-                        }  
-                    } else {  
-                        System.out.println("Desktop pas supporté par votre système d'exploitation ");
-                            // 
-                    }
-
-
-                }catch(Exception e){
-                    System.out.println(""+e);
-                   // e.printStackTrace();
-                }
-                doc.close();
-
+                   print(newFileName);
+                    
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
                 notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
                 notification.showAndDismiss(Duration.seconds(1.5));
                 Stage stage = (Stage) btnClose.getScene().getWindow();
                 stage.close();
+
+                }catch(Exception e){
+                    TrayNotification notification = new TrayNotification();
+                    notification.setAnimationType(AnimationType.POPUP);
+                    notification.setTray("MyShop", "Vente Non Effectuée: "+e.getMessage(), NotificationType.ERROR);
+                    notification.showAndDismiss(Duration.seconds(2));
+                   // e.printStackTrace();
+                }
+                
+
+               
                 switchPane(Constants.Caisse);
             } else {
                 TrayNotification notification = new TrayNotification();
