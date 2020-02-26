@@ -41,6 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
             + " DESC "
             //+ "LIMIT 10"
             )
+        
     , @NamedQuery(name = "ContenirVente.listMieuxVenByDate", query = "SELECT p.libProd ,sum(c.qteVen) as qteVendue "
        + "FROM ContenirVente c , Produit p, Vente v  WHERE p.idProd = c.idProd "
        + "AND v.dateVen >= :dateVen AND v.dateVen <= :dateVen2 "
@@ -49,9 +50,11 @@ import javax.xml.bind.annotation.XmlRootElement;
        + " DESC "
        //+ "LIMIT 10"
        )
+        
     , @NamedQuery(name = "ContenirVente.listEnFinition", query = "SELECT p.libProd, p.qteIniProd "
             + "FROM Produit p"
             + " ORDER BY p.qteIniProd ASC")
+        
     , @NamedQuery(name = "ContenirVente.findVenteByPeriode", query = "SELECT c.idProd,sum(c.qteVen) AS qteVendue FROM"
             + " ContenirVente c, Vente v WHERE c.idVen = v.idVen and v.dateVen >= :dateVen "
             + " GROUP BY c.idProd ORDER by qteVendue DESC")
@@ -63,25 +66,70 @@ import javax.xml.bind.annotation.XmlRootElement;
             + " and v.idClt = c.idClt and v.idComp = :idComp " 
             + "and v.dateVen >= :dateVen and v.dateVen <= :dateVen2")
         
-     , @NamedQuery(name = "ContenirVente.findTotVteEffectueByPeriode",
-             query = "SELECT c.idComp, c.nomComp, SUM(cv.qteVen*cv.prixProd)"
-                     + " FROM Vente v, ContenirVente cv, Compte c WHERE c.idComp = v.idComp "
-                     + " AND cv.idVen = v.idVen AND v.dateVen <= :dateVen GROUP BY c.idComp")
-     
-     , @NamedQuery(name = "ContenirVente.findTotVteEffectueByTwoPeriode",
-             query = "SELECT c.idComp, c.nomComp, c.prenomComp , SUM(cv.qteVen*cv.prixProd),SUM(cv.qteVen)"
-                     + " FROM Vente v, ContenirVente cv, Compte c WHERE c.idComp = v.idComp "
-                     + " AND cv.idVen = v.idVen AND v.dateVen >= :dateVen1 AND v.dateVen <= :dateVen2 GROUP BY c.idComp")
-     
-      , @NamedQuery(name = "ContenirVente.findTotQteVendueByTwoPeriode",
-             query = "SELECT v.idComp, c.nomComp,sum(cv.qteVen)"
-                     + " FROM ContenirVente cv, Vente v, Compte c "
-                     + " WHERE cv.idVen = v.idVen and c.idComp = v.idComp and v.dateVen >= :dateVen1"
-                     + "  and v.dateVen <= :dateVen2 and v.idComp = :idComp "
-                     + " group by v.idComp")
+    , @NamedQuery(name = "ContenirVente.findTotVteEffectueByPeriode",
+            query = "SELECT c.idComp, c.nomComp, SUM(cv.qteVen*cv.prixProd)"
+                + " FROM Vente v, ContenirVente cv, Compte c WHERE c.idComp = v.idComp "
+                + " AND cv.idVen = v.idVen AND v.dateVen <= :dateVen GROUP BY c.idComp")
 
+    , @NamedQuery(name = "ContenirVente.findTotVteEffectueByTwoPeriode",
+            query = "SELECT c.idComp, c.nomComp, c.prenomComp , SUM(cv.qteVen*cv.prixProd),SUM(cv.qteVen)"
+                + " FROM Vente v, ContenirVente cv, Compte c WHERE c.idComp = v.idComp "
+                + " AND cv.idVen = v.idVen AND v.dateVen >= :dateVen1 AND v.dateVen <= :dateVen2 GROUP BY c.idComp")
+
+    , @NamedQuery(name = "ContenirVente.findTotQteVendueByTwoPeriode",
+           query = "SELECT v.idComp, c.nomComp,sum(cv.qteVen)"
+                + " FROM ContenirVente cv, Vente v, Compte c "
+                + " WHERE cv.idVen = v.idVen and c.idComp = v.idComp and v.dateVen >= :dateVen1"
+                + "  and v.dateVen <= :dateVen2 and v.idComp = :idComp "
+                + " group by v.idComp")
+
+    , @NamedQuery(name = "ContenirVente.findAllVteDesc",
+         query = "SELECT cv.idVen, cv.montVente, c.nomClt, c.numClt, cp.pseudoComp, cv.dtVente"
+                + " FROM ContenirVente cv, Client c, Vente v, Compte cp "
+                + " WHERE cv.idVen = v.idVen and c.idClt = v.idClt and v.idComp = cp.idComp "
+                + " group by cv.idVen"
+                + " order by cv.idVen desc")
         
+    , @NamedQuery(name = "ContenirVente.findDetailsVte",
+        query = "SELECT p.libProd, cv.prixProd, cv.qteVen, (cv.prixProd * cv.qteVen) "
+                + " FROM ContenirVente cv, Produit p"
+                + " WHERE cv.idVen = :idVen and cv.idProd = p.idProd "
+                )
+        
+    , @NamedQuery(name = "ContenirVente.findVenteByLike", 
+            query = "SELECT cv.idVen, cv.montVente, c.nomClt, c.numClt, cp.pseudoComp, cv.dtVente"
+                + " FROM ContenirVente cv, Client c, Vente v, Compte cp "
+                + " WHERE cv.idVen = :idVenD "
+                + " and cv.idVen = v.idVen and c.idClt = v.idClt and v.idComp = cp.idComp "
+                + " group by cv.idVen"
+                + " order by cv.idVen desc"
+    )
+
+
+
         /*
+        select cv.idVen,  cv.prixProd, cv.montVente,cv.qteVen, cv.dtVente, p.libProd,  c.nomClt, c.numClt, cp.pseudoComp
+from contenirVente cv, produit p, client c, vente v, compte cp
+where cv.idVen = v.idVen 
+and cv.idProd = p.idProd
+and v.idClt = c.idClt
+and v.idComp = cp.idComp 
+order by cv.idVen desc
+ ;
+    
+       select cv.idVen, cv.montVente, cv.dtVente,  c.nomClt, c.numClt, cp.pseudoComp
+from contenirVente cv, client c, vente v, compte cp
+where cv.idVen = v.idVen 
+
+and v.idClt = c.idClt
+and v.idComp = cp.idComp 
+group by cv.idVen 
+order by cv.idVen desc
+
+        select idProd, prixProd, qteVen
+from contenirVente
+where idVen = 7151 ;
+        
 select v.idComp, c.nomComp,sum(cv.qteVen) from contenirVente cv, vente v, compte c
 where cv.idVen = v.idVen and c.idComp = v.idComp and v.dateVen > 1557839867953  and v.dateVen < 1566316779391
  group by v.idComp        */

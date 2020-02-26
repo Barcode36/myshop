@@ -6,19 +6,36 @@
 package controller;
 
 import Utils.Constants;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.TabSettings;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import static controller.DetailsVenteController.MergePages;
+import static controller.DetailsVenteController.print;
 import entites.Client;
 import entites.Compte;
 import entites.ContenirVente;
+import entites.HistoriqueVente;
 import entites.Vente;
 import entites.Produit;
-import java.io.BufferedReader;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +59,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javax.print.Doc;
+import javax.print.DocFlavor;
+import javax.print.DocPrintJob;
+import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
+import javax.print.SimpleDoc;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import modele.ClientR;
 import modele.ProduitR;
 import org.apache.poi.ss.usermodel.Row;
@@ -50,10 +75,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import service.IClientService;
 import service.ICompteService;
 import service.IContenirVente;
+import service.IHistoriqueVente;
 import service.IProduitService;
 import service.IVenteService;
 import service.imp.CompteService;
 import service.imp.ContenirVenteService;
+import service.imp.HistoriqueVenteService;
 import service.imp.ProduitService;
 import service.imp.VenteService;
 import tray.animations.AnimationType;
@@ -96,12 +123,15 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     ICompteService compteService = new CompteService();
     IContenirVente contenirVenteService = new ContenirVenteService();
     IProduitService produitService = new ProduitService();
+    IHistoriqueVente historiqueVenteService = new HistoriqueVenteService();
 
     Compte compteActif = new Compte();
     ClientR clientR = new ClientR();
     private boolean corr = true;
     @FXML
     private Label Client;
+  
+    private List<String> shopInfos ; 
 
      private File file;
     /**
@@ -129,36 +159,13 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 txtPtActu.setVisible(false);
             }
         });
-        
+        shopInfos = new ArrayList<String>();
         try{
-               
-               
-                 file = new File("Ressources/coeff.xls");
-                 
-                if (file != null) {
-                    try {
-                        FileInputStream fis = new FileInputStream(file);
-                        XSSFWorkbook wb = new XSSFWorkbook(fis);
-                        XSSFSheet sheet = wb.getSheetAt(0);
-                        Row row;
-                        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                            row = sheet.getRow(i);
-                            System.out.println(""+row.getCell(0).getStringCellValue());
-                           // txtCoeff.setText(row.getCell(0).getStringCellValue());
-                        }
-                        wb.close();
-                        fis.close();
-                    } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MainPrincipalController.class
-                            .getName()).log(Level.SEVERE, null, ex);
-
-                    } 
-                }
-                
-            } catch (IOException e) { 
-                System.out.println(""+e);
-               // e.printStackTrace(); 
-            } 
+            shopInfos = ReglagePaneController.lireFichier("shopInfosTxt.txt");
+        } catch (Exception e) { 
+            System.out.println(""+e);
+           // e.printStackTrace(); 
+        } 
         
       
     }
@@ -192,6 +199,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     
     @FXML
     private void Valider(ActionEvent event) {
+         
         Boolean txtNumber = textFieldTypeNumber(txtMontCllt);
         if (txtNumber) {
             if (corr == true) {
@@ -205,8 +213,10 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                 clientService.modifier(clt);
                 vente.setIdComp(compteActif.getIdComp());
                 venteService.ajouter(vente);
+                
                 for (ProduitR pr : produitListVent) {
                     ContenirVente contenirVente = new ContenirVente();
+                    
                     contenirVente.setQteVen(pr.getQteProdCom().getValue());
                     contenirVente.setIdVen(vente.getIdVen());
                     contenirVente.setIdProd(pr.getIdProd().getValue());
@@ -216,6 +226,13 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     
                     contenirVenteService.ajouterContenirVente(contenirVente);
                     
+                    HistoriqueVente histoVente = new HistoriqueVente();
+                    histoVente.setIdCon(contenirVente.getIdCon());
+                    histoVente.setSmeRecue(Double.valueOf( txtMontCllt.getText()));
+                    histoVente.setSmeRendue(Double.valueOf(txtRemise.getText()));
+                    
+                    historiqueVenteService.ajouterHistoriqueVente(histoVente);
+                    
                     Produit p = new Produit(pr.getIdProd().getValue());
                     Produit produit = produitService.findById(p);
                     produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
@@ -223,12 +240,211 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     produitService.modifier(produit);
                 }
                 CaissePaneController.vente = true;
+                
+                Rectangle pageSize =  new Rectangle(340, 380);
+        
+                Document doc = new Document(pageSize,30f,0,0,0);
+                //doc.bottom(0);
+                
+                
+                try{
+                    //System.out.println(shopInfos.get(0));
+                    PdfWriter.getInstance(doc, new FileOutputStream("facture.pdf"));
+                    doc.open();
+                    //document.add(new Paragraph(excerptsFromDavidCopperfield[0], new Font(Font.TIMES_ROMAN)));
+                    com.itextpdf.text.Font titleFont=new com.itextpdf.text.Font(FontFamily.COURIER,19f);
+                    //System.out.println("font "+ti.getSize());
+                    Paragraph p = new Paragraph();
+                    p.setFont(titleFont);
+                    p.setTabSettings(new TabSettings(79f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk(""+shopInfos.get(0)));
+                    doc.add(p);
+                    
+                    com.itextpdf.text.Font bodyFont=new com.itextpdf.text.Font(FontFamily.COURIER,10f);
+                    p = new Paragraph();
+                    p.setFont(bodyFont);
+                    p.setTabSettings(new TabSettings(85f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("Tel:"+shopInfos.get(1)));
+                    doc.add(p); 
+
+                    p = new Paragraph();
+                    p.setFont(bodyFont);
+                    p.setTabSettings(new TabSettings(72f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("******************"));
+                    doc.add(p); 
+                    
+                    p = new Paragraph();
+                     p.setFont(bodyFont);
+                    p.setTabSettings(new TabSettings(82f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("Vente N."+vente.getIdVen()));
+                    p.setFont(bodyFont);
+                    doc.add(p); 
+
+                    p = new Paragraph();
+                     p.setFont(bodyFont);
+                    p.setTabSettings(new TabSettings(120f));
+                    //p.add(Chunk.TABBING);
+                    int caiPseudoLength = compteActif.getPseudoComp().length();
+                    String recompCaiName = "";
+                    if(caiPseudoLength > 7){
+                        for(int i=0;i<7;i++){
+                            recompCaiName = recompCaiName+compteActif.getPseudoComp().charAt(i);
+                        }
+                        recompCaiName = recompCaiName+".";
+                    }else{
+                        recompCaiName = compteActif.getPseudoComp();
+                    }
+                    
+                    p.add(new Chunk("================================================ ")) ;
+                    p.add(new Chunk("Cais: "+recompCaiName)) ;
+                    p.add(Chunk.TABBING);
+                    
+                    p.add(new Chunk("Client: "+clientR.getNomClt().getValue()+"\n"));
+                    doc.add(p);
+
+                    p = new Paragraph("");
+                    p.setFont(bodyFont);
+                    SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                    Date date = new Date(); 
+                    df.format( new Date(date.getTime()));
+                    p.add(new Chunk("Date: "+df.format( new Date(date.getTime()))+" \n"));
+                    p.add(new Chunk("================================================ "));
+                    doc.add(p);
+
+                    PdfPTable table = new PdfPTable(6);
+                    table.setWidths(new float []{2f, 1f, 1f,1.5f,0.5f,1f});
+                     table.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    table.setWidthPercentage(100);
+                    PdfPCell cell = new PdfPCell();
+                    //cell.setColspan(5);
+                    table.getDefaultCell().setBorder(cell.NO_BORDER);
+                    
+                    
+                    table.addCell( new Phrase("Produits ",bodyFont));
+                    table.addCell(new Phrase("PU ",bodyFont));
+                    table.addCell(new Phrase("Qte ",bodyFont));
+                    table.addCell(new Phrase("Total ",bodyFont));
+                    table.addCell(new Phrase(" ",bodyFont));
+                    table.addCell(new Phrase(" ",bodyFont));
+                    
+                    ObservableList<ProduitR> pdt =  produitCaisseTable.getItems();
+                    //System.out.println("length: "+pdt.size());
+                    int tot = 0;
+                    for( ProduitR prod : pdt ){
+                        
+                        String prodName = prod.getLibProd().getValue()+"";
+                      
+                        String tabNameSplitted[] = prodName.split(" ");
+                        String recomposedName = "";
+                        for(int i=0;i<2;i++ ){
+                            //System.out.println(""+tabNameSplitted[i]);
+                            if(tabNameSplitted[i].length()>3){
+                                 recomposedName = recomposedName+tabNameSplitted[i].substring(0,3)+". ";
+                            }else {
+                                if( !recomposedName.equalsIgnoreCase("") || !recomposedName.equalsIgnoreCase(" ")){
+                                    recomposedName = recomposedName+tabNameSplitted[i].substring(0,tabNameSplitted[i].length())+". ";
+                                }
+                            }
+                       
+                        }
+                        //p.add(new Chunk(""+recomposedName));
+                        table.addCell( new Phrase(""+recomposedName,bodyFont));
+                        table.addCell( new Phrase(""+prod.getPrixUniProd().getValue(),bodyFont));
+                        table.addCell(new Phrase(""+prod.getQteProdCom().getValue(),bodyFont));
+                        table.addCell(new Phrase(""+prod.getTotal().getValue(),bodyFont));
+                        table.addCell(new Phrase("F",bodyFont));
+                        table.addCell(new Phrase(" ",bodyFont));
+                        tot+= Integer.parseInt(prod.getTotal().getValue()) ;
+                      
+                    }
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    
+                    table.addCell(new Phrase("Reg: Esp.",bodyFont));
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(new Phrase(tot+" ",bodyFont) );
+                    table.addCell(new Phrase("F",bodyFont));
+                    table.addCell(" ");
+                    
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    table.addCell(" ");
+                    
+                    table.addCell(new Phrase("Reçu: "+txtMontCllt.getText()+" F",bodyFont) );
+                    table.addCell(new Phrase(" ",bodyFont));
+                    table.addCell(new Phrase("Rendu: ",bodyFont) );
+                    table.addCell(new Phrase(""+txtRemise.getText(),bodyFont));
+                    table.addCell(new Phrase("F",bodyFont));
+                    table.addCell(" ");
+                    doc.add(table);
+                    
+                    p = new Paragraph();
+                    p.setFont(bodyFont);
+                    p.setTabSettings(new TabSettings(40f));
+                    p.add(new Chunk("================================================ "));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk(" Merci de votre visite et à Bientôt "));
+                    p.add(new Chunk("================================================ "));
+                    doc.add(p);
+                    
+                    /*com.itextpdf.text.Header
+                    HeaderFooter footer = new HeaderFooter(footPh1, footPh2);
+                    footer.setAlignment(Element.ALIGN_CENTER);
+                    document.setFooter(footer); */
+                    
+                    p = new Paragraph();
+                    com.itextpdf.text.Font footerFont=new com.itextpdf.text.Font(FontFamily.COURIER, 7f);
+                    p.setFont(footerFont);
+                    p.setTabSettings(new TabSettings(15f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("MYSHOP, LOGICIEL DE GESTION EFFICACE DE VOTRE SHOP."));
+                   
+                    doc.add(p);
+                    
+                    p = new Paragraph();
+                    p.setFont(footerFont);
+                    p.setTabSettings(new TabSettings(70f));
+                    p.add(Chunk.TABBING);
+                    p.add(new Chunk("CONTACT:(00228)90628725",footerFont));
+                    doc.add(p);
+                    
+                    doc.close();
+                    
+                    //fusion des pages du recu
+                   String newFileName = MergePages("facture.pdf");
+                    
+                    //impression de la facture
+                   print(newFileName);
+                    
                 TrayNotification notification = new TrayNotification();
                 notification.setAnimationType(AnimationType.POPUP);
                 notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
                 notification.showAndDismiss(Duration.seconds(1.5));
                 Stage stage = (Stage) btnClose.getScene().getWindow();
                 stage.close();
+
+                }catch(Exception e){
+                    TrayNotification notification = new TrayNotification();
+                    notification.setAnimationType(AnimationType.POPUP);
+                    notification.setTray("MyShop", "Vente Non Effectuée: "+e.getMessage(), NotificationType.ERROR);
+                    notification.showAndDismiss(Duration.seconds(2));
+                   // e.printStackTrace();
+                }
+                
+
+               
                 switchPane(Constants.Caisse);
             } else {
                 TrayNotification notification = new TrayNotification();

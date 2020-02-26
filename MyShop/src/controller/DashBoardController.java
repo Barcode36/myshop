@@ -101,7 +101,7 @@ public class DashBoardController implements Initializable {
     public static JFXButton btnComp;
     public static JFXButton btnInvent;
     public static JFXButton btnBil;
-     public static JFXButton btnReg;
+    public static JFXButton btnReg;
     public static JFXButton btnAid;
     public static JFXButton btnDec;
     @FXML

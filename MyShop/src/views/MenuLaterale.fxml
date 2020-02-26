@@ -101,6 +101,18 @@
             </ImageView>
          </graphic>
       </JFXButton>
+      <JFXButton fx:id="btnHistoVente" layoutX="29.0" layoutY="453.0" onAction="#openRechercheVente" prefHeight="53.0" prefWidth="189.0" styleClass="slide-menu-button" text="Rech. Vente" textFill="#f8f7f7">
+         <font>
+            <Font size="16.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="36.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/icons8_Search_104px.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
       <JFXButton fx:id="btnReglage" layoutX="10.0" layoutY="432.0" onAction="#openReglage" prefHeight="53.0" prefWidth="189.0" styleClass="slide-menu-button" text="Reglage" textFill="#f8f7f7">
          <font>
             <Font size="16.0" />

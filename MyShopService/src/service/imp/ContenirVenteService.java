@@ -102,6 +102,22 @@ public class ContenirVenteService implements IContenirVente{
     @Override
      public List<Object[]> findTotVteEffectueByTwoPeriode(Date dt1, Date dt2){
          return  contenirVenteJpaController.findTotVteEffectueByTwoPeriode(dt1, dt2);
-     }
+    }
+     
+    @Override
+     public List<Object[]> findAllVteDesc(){
+         return  contenirVenteJpaController.findAllVteDesc();
+    }
+     
+    @Override
+     public List<Object[]> findDetailsVte(int idVente){
+         return  contenirVenteJpaController.findDetailsVte(idVente);
+    }
+     
+    @Override
+    public List<Object[]> findVenteByLike(int idVenteD ){
+         return  contenirVenteJpaController.findVenteByLike(idVenteD);
+    }
+     
     
 }

@@ -136,6 +136,11 @@ public class MenuLateraleController implements Initializable {
     private void openRecherche(ActionEvent event) {
         switchPane(Constants.RechercheProd);
     }
+    
+    @FXML
+    private void openRechercheVente(ActionEvent event) {
+        switchPane(Constants.RechercheVente);
+    }
 
     @FXML
     private void openAide(ActionEvent event) {
