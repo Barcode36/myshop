@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -20,22 +23,38 @@
                      <children>
                         <AnchorPane fx:id="anchorPane" prefHeight="576.0" prefWidth="986.0">
                            <children>
-                              <JFXButton layoutX="421.0" layoutY="54.0" onAction="#catalogue" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Catalogue">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </JFXButton>
-                              <TitledPane fx:id="cont" animated="false" layoutX="148.0" layoutY="110.0" prefHeight="433.0" prefWidth="682.0" text="Operation de Reglage">
+                              <TitledPane fx:id="cont" animated="false" layoutX="90.0" layoutY="46.0" prefHeight="534.0" prefWidth="825.0" text="Operation de Reglage">
                                  <content>
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="card">
                                        <children>
-                                          <JFXButton layoutX="91.0" layoutY="67.0" onAction="#importInventaire" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Importation" />
-                                          <JFXButton layoutX="444.0" layoutY="67.0" onAction="#exportInventaire" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Exportation" />
-                                          <JFXTextField fx:id="txtCoeffParam" onAction="#getCoefficient" labelFloat="true" layoutX="91.0" layoutY="158.0" prefHeight="52.0" prefWidth="334.0" promptText="Coefficient des Points des clients" unFocusColor="#301afc">
+                                          <JFXButton layoutX="312.0" layoutY="441.0" onAction="#importInventaire" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Importation" />
+                                          <JFXButton layoutX="523.0" layoutY="441.0" onAction="#exportInventaire" prefHeight="44.0" prefWidth="139.0" styleClass="save-del" text="Exportation" />
+                                          <JFXTextField fx:id="txtCoeffParam" labelFloat="true" layoutX="32.0" layoutY="247.0" prefHeight="52.0" prefWidth="318.0" promptText="Coefficient des Points des clients" unFocusColor="#301afc">
                                              <styleClass>
                                                 <String fx:value="card" />
                                                 <String fx:value="lab" />
                                              </styleClass></JFXTextField>
+                                          <JFXTextField fx:id="txtShopNameParam" labelFloat="true" layoutX="33.0" layoutY="79.0" prefHeight="52.0" prefWidth="318.0" promptText="Nom de votre boutique" unFocusColor="#301afc">
+                                             <styleClass>
+                                                <String fx:value="card" />
+                                                <String fx:value="lab" />
+                                             </styleClass>
+                                          </JFXTextField>
+                                          <JFXTextField fx:id="txtShopNumParam" labelFloat="true" layoutX="32.0" layoutY="164.0" prefHeight="52.0" prefWidth="319.0" promptText="Numéro de votre boutique" unFocusColor="#301afc">
+                                             <styleClass>
+                                                <String fx:value="card" />
+                                                <String fx:value="lab" />
+                                             </styleClass>
+                                          </JFXTextField>
+                                          <JFXButton layoutX="314.0" layoutY="330.0" onAction="#getShopInfos" prefHeight="43.0" prefWidth="116.0" style="-fx-pref-width: 140px; -fx-pref-height: 40px;" styleClass="btn-choix" text="Enregistrer" />
+                                          <Label alignment="CENTER" contentDisplay="CENTER" layoutX="114.0" layoutY="6.0" prefHeight="54.0" prefWidth="574.0" text="Definissez les informations de votre boutique ici" textAlignment="CENTER" />
+                                          <Separator layoutY="400.0" prefHeight="23.0" prefWidth="823.0" />
+                                          <JFXTextArea fx:id="txtShopMsgParam" labelFloat="true" layoutX="392.0" layoutY="79.0" prefHeight="221.0" prefWidth="408.0" promptText="Message circonstanciel de la boutique" styleClass="blue-gradient" unFocusColor="#301afc" />
+                                          <JFXButton layoutX="101.0" layoutY="441.0" onAction="#catalogue" prefHeight="0.0" prefWidth="-66.0" styleClass="save-del" text="Catalogue">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </JFXButton>
                                        </children>
                                     </AnchorPane>
                                  </content>

@@ -156,7 +156,7 @@ public class ContenirVente implements Serializable {
     private int prixProd;
     @Basic(optional = false)
     @Column(name = "montVente")
-    private double montVente;
+    private Integer montVente;
     @Column(name = "dtVente",columnDefinition = "Date")
     private Date dtVente;
 
@@ -214,7 +214,7 @@ public class ContenirVente implements Serializable {
         return montVente;
     }
 
-    public void setMontVente(double montVente) {
+    public void setMontVente(Integer montVente) {
         this.montVente = montVente;
     }
 

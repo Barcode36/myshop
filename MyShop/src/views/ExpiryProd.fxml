@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RechercheProduitPaneController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ExpiryProdPaneController">
    <children>
-      <AnchorPane fx:id="stage" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="700.0" prefWidth="986.0" stylesheets="@../css/essai.css" StackPane.alignment="CENTER">
+      <AnchorPane fx:id="stage" maxHeight="1.7976931348623157E308" minHeight="-Infinity" prefHeight="700.0" prefWidth="986.0" stylesheets="@../css/essai.css">
          <children>
             <BorderPane layoutX="100.0" layoutY="138.0" prefHeight="539.0" prefWidth="881.0" AnchorPane.bottomAnchor="71.0" AnchorPane.leftAnchor="100.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="138.0">
                <top>
@@ -21,13 +21,13 @@
                         <AnchorPane fx:id="cont" prefHeight="553.0" prefWidth="881.0" styleClass="card">
                            <children>
                               <JFXTextField fx:id="txtRec" labelFloat="true" layoutX="14.0" layoutY="32.0" onKeyReleased="#recherche" prefHeight="26.0" prefWidth="709.0" promptText="Nom ou Code du Produit" />
-                              <TableView fx:id="produitTable" layoutX="17.0" layoutY="94.0" onMouseClicked="#openStockInfos" prefHeight="421.0" prefWidth="846.0" stylesheets="@../css/MainPrincipalCss.css" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="94.0">
+                              <TableView fx:id="produitTable" layoutX="17.0" layoutY="94.0" prefHeight="421.0" prefWidth="846.0" stylesheets="@../css/MainPrincipalCss.css" AnchorPane.bottomAnchor="21.0" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="94.0">
                                  <columns>
                                     <TableColumn fx:id="libProdCol" prefWidth="246.0" text="Produit" />
                                     <TableColumn fx:id="codeProdcol" prefWidth="236.0" text="Code" />
                                     <TableColumn fx:id="qteProdCol" prefWidth="243.0" text="Quantité" />
-                                    <TableColumn fx:id="prixProdCol" prefWidth="138.0" text="Prix Unitaire" />
-                                    <TableColumn fx:id="expiryProdCol" prefWidth="199.0" text="Date de péremption" />
+                                    <TableColumn fx:id="prixProdCol" prefWidth="244.0" text="Prix Unitaire" />
+                                    <TableColumn fx:id="expiryProdCol" prefWidth="244.0" text="Date d'expiration" />
                                  </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -39,7 +39,7 @@
                   </HBox>
                </top>
             </BorderPane>
-            <Label layoutX="273.0" layoutY="62.0" prefHeight="61.0" prefWidth="478.0" text="Rechercher un Produit" textFill="WHITE" AnchorPane.bottomAnchor="577.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="273.0" AnchorPane.topAnchor="62.0">
+            <Label layoutX="273.0" layoutY="62.0" prefHeight="61.0" prefWidth="478.0" text="Produit en voie de péremption" textFill="WHITE" AnchorPane.bottomAnchor="577.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="273.0" AnchorPane.topAnchor="62.0">
                <styleClass>
                   <String fx:value="titre" />
                   <String fx:value="linear_gradient_red_inverse" />

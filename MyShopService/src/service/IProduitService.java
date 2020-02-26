@@ -23,6 +23,8 @@ public interface IProduitService {
     public Produit findById(Produit produit);
 
     public Produit findByCode(Produit produit);
+    
+    public List<Object[] > findProdOrderByExpiryDate();
 
     public List<Produit> produitList();
 

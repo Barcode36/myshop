@@ -5,6 +5,7 @@
  */
 package controller;
 
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import entites.Produit;
 import java.awt.image.BufferedImage;
@@ -22,7 +23,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Writer;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
@@ -83,8 +86,20 @@ public class ReglagePaneController implements Initializable {
     private TitledPane cont;
     @FXML
     private JFXTextField txtCoeffParam;
+    @FXML
+    private JFXTextField txtShopNameParam;
+    @FXML
+    private JFXTextField txtShopNumParam;
+     @FXML
+    private JFXTextArea txtShopMsgParam;
     
+    public static JFXTextField txtShpName;
+    public static JFXTextField txtShopNum;
+            
     public static  Integer coeffClient;
+    public static  String shopName;
+    public static  String shopNum;
+    public static  String shopMsg;
     /**
      * Initializes the controller class.
      */
@@ -106,8 +121,8 @@ public class ReglagePaneController implements Initializable {
         public void run() {
         Stage s = (Stage) anchorPane.getScene().getWindow();
         if (s.isMaximized()) {
-        MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
-        System.out.println(s.getWidth());
+            MainViewController.temporaryPaneTot.setPrefWidth(s.getWidth());
+            System.out.println(s.getWidth());
         }
         //anchorPane.setPrefWidth(MainViewController.temporaryPaneTot.getWidth());
         //cont.setPrefWidth(MainViewController.temporaryPaneTot.getWidth() - 487);
@@ -121,40 +136,45 @@ public class ReglagePaneController implements Initializable {
             }
 
         });
-      
-            try{
-               
-               
-                 file = new File("Ressources/coeff.xls");
-                 
-                if (file != null) {
-                    try {
-                        InputStream fis = new FileInputStream(file);
-                        XSSFWorkbook wb = new XSSFWorkbook(fis);
-                        XSSFSheet sheet = wb.getSheetAt(0);
-                        Row row;
-                        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                            row = sheet.getRow(i);
-                            //System.out.println(""+row.getCell(0).getStringCellValue());
-                            txtCoeffParam.setText(row.getCell(0).getStringCellValue());
-                        }
-                        wb.close();
-                        fis.close();
-                    } catch (FileNotFoundException ex) {
-                    Logger.getLogger(MainPrincipalController.class
-                            .getName()).log(Level.SEVERE, null, ex);
-
-                    } 
-                }
-                
-            } catch (IOException e) { 
-                System.out.println(""+e);
-               // e.printStackTrace(); 
-            }
+        
+        try{
+            List<String> shopInfosList = new ArrayList<>();
+            shopInfosList.addAll(lireFichier("myshopInfos"));
             
-            if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                txtCoeffParam.setEditable(false);
-            }
+            txtShopNameParam.setText(shopInfosList.get(0));
+            txtShopNumParam.setText(shopInfosList.get(1));
+            txtCoeffParam.setText(shopInfosList.get(2));
+            txtShopMsgParam.setText(shopInfosList.get(3));
+            
+            shopName = txtShopNameParam.getText();
+            shopNum = txtShopNumParam.getText();
+            shopMsg = txtShopMsgParam.getText();
+            //System.out.println("sM "+shopMsg);
+            coeffClient =  Integer.parseInt(txtCoeffParam.getText()) ;
+            
+        }catch(Exception e){
+            System.out.println(""+e);
+        }
+        
+        if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+            txtCoeffParam.setEditable(false);
+            txtShopNameParam.setEditable(false);
+            txtShopNumParam.setEditable(false);
+        }
+        
+        
+        
+        if(MainViewController.compteActif.getPseudoComp().equals("admin") && 
+            PasswordEncrypt.generateSecurePassword("root", FrmConnnexionController.ky).equals(MainViewController.compteActif.getNomComp().split(" ")[0])    ){
+            txtShopNameParam.setEditable(true);
+            txtShopNumParam.setEditable(true);
+        } else {
+             txtShopNameParam.setEditable(false);
+            txtShopNumParam.setEditable(false);
+        }
+        
+       
+        
     }
 
     @FXML
@@ -357,47 +377,137 @@ public class ReglagePaneController implements Initializable {
     @FXML
     private void getCoefficient(){
         
-        
         if (MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                if(txtCoeffParam.getText().isEmpty()){
-                    coeffClient = 0;
-
-                }else {
-                 coeffClient = Integer.parseInt(txtCoeffParam.getText());
-                }
-
-                XSSFWorkbook wb = new XSSFWorkbook();
-                XSSFSheet sheet = wb.createSheet("Coefficient");
-                int index = 1;
-                
-            
-                XSSFRow row = sheet.createRow(index);
-                
-                row.createCell(0).setCellValue(txtCoeffParam.getText());
-               
-            
-            try {
-                file = new File("Ressources/coeff.xls");
-                OutputStream fos = new FileOutputStream(file.getAbsolutePath());
-                wb.write(fos);
-                fos.close();
-                TrayNotification notification = new TrayNotification();
-                notification.setAnimationType(AnimationType.POPUP);
-                notification.setTray("MyShop", "Coefficient défini avec succès", NotificationType.SUCCESS);
-                notification.showAndDismiss(Duration.seconds(1.5));
-
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(MainPrincipalController.class
-                        .getName()).log(Level.SEVERE, null, ex);
-
-            } catch (IOException ex) {
-                Logger.getLogger(MainPrincipalController.class
-                        .getName()).log(Level.SEVERE, null, ex);
+            if(txtCoeffParam.getText().isEmpty()){
+                coeffClient = 0;
+            }else {
+             coeffClient = Integer.parseInt(txtCoeffParam.getText());
             }
-                txtCoeffParam.setText("");
+            
+            List<String> coeffList = new ArrayList<>();
+            coeffList.add(coeffClient+"");
+            ecrireFichier("coeff", coeffList);
 
-            } 
+            txtCoeffParam.setText("");
+            
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Coefficient défini avec succès", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1.5));
+
+        } 
        
     }
 
+    @FXML
+    private void getShopInfos(){
+        
+        if (MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+            
+            
+            
+            if(txtShopNameParam.getText().equals("")){
+               shopName = ""; 
+            }else{
+                shopName = txtShopNameParam.getText();
+            }
+            if(txtShopNumParam.getText().equals("")){
+                shopNum = "";
+            }else{
+                shopNum = txtShopNumParam.getText();
+            }
+            if(txtShopMsgParam.getText().equals("")){
+                shopMsg = "Merci de votre visite et à Bientôt !!!";
+            } else {
+                shopMsg = txtShopMsgParam.getText();
+            }
+            
+            if(txtCoeffParam.getText().equals("")){
+                coeffClient = 0;
+            }  else{
+                coeffClient = Integer.parseInt(txtCoeffParam.getText());
+            }   
+            
+            
+            List<String> shopInfosList = new ArrayList<>();
+            
+            shopInfosList.add(shopName);
+            shopInfosList.add(shopNum);
+            shopInfosList.add(coeffClient+"");
+            shopInfosList.add(shopMsg);
+            
+            ecrireFichier("myshopInfos", shopInfosList);
+
+            //txtShopNameParam.setText("");
+            
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Informations de votre boutique définies avec succès", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1.5));
+
+        } 
+       
+    }
+    
+    public static List<String> lireFichier(String nomFichier){
+        BufferedReader fluxEntree=null;
+        String ligneLue;
+        List<String> lignes = new ArrayList<String>();
+        try{
+            fluxEntree = new BufferedReader(new FileReader(nomFichier));
+            ligneLue = fluxEntree.readLine();
+            while(ligneLue!=null){
+                lignes.add(ligneLue);
+                ligneLue = fluxEntree.readLine();
+            }
+        }
+        catch(IOException exc){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Echec de l'opération! ", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(10));
+            //exc.printStackTrace();
+        }
+        try{
+            fluxEntree.close();
+        }
+        catch(IOException e){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Echec de l'opération! "+e, NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1.5));
+            e.printStackTrace();
+        }
+        return lignes;
+    }
+
+    public static void ecrireFichier(String nomFichier, List<String> lignes){
+        Writer fluxSortie=null;
+        try{
+            fluxSortie = new PrintWriter(new BufferedWriter(new FileWriter(
+                    nomFichier)));
+            for(int i=0;i<lignes.size()-1;i++){
+                fluxSortie.write(lignes.get(i)+"\n");
+            }
+            fluxSortie.write(lignes.get(lignes.size()-1));
+        }
+        catch(IOException exc){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Echec de l'opération! "+exc, NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1.5));
+            
+            exc.printStackTrace();
+        }
+        try{
+            fluxSortie.close();
+        }
+        catch(IOException e){
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Echec de l'opération! "+e, NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1.5));
+            e.printStackTrace();
+        }
+    }
 }

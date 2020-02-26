@@ -17,6 +17,7 @@ import com.itextpdf.text.TabSettings;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.jfoenix.controls.JFXCheckBox;
 import static controller.DetailsVenteController.MergePages;
 import static controller.DetailsVenteController.print;
 import entites.Client;
@@ -25,10 +26,8 @@ import entites.ContenirVente;
 import entites.HistoriqueVente;
 import entites.Vente;
 import entites.Produit;
-import java.awt.Desktop;
+import entites.Stock;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -40,6 +39,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -59,29 +59,21 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
 import modele.ClientR;
 import modele.ProduitR;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import modele.StockR;
 import service.IClientService;
 import service.ICompteService;
 import service.IContenirVente;
 import service.IHistoriqueVente;
 import service.IProduitService;
+import service.IStockService;
 import service.IVenteService;
 import service.imp.CompteService;
 import service.imp.ContenirVenteService;
 import service.imp.HistoriqueVenteService;
 import service.imp.ProduitService;
+import service.imp.StockService;
 import service.imp.VenteService;
 import tray.animations.AnimationType;
 import tray.notification.NotificationType;
@@ -116,13 +108,17 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     private TextField txtCoeff;
     @FXML
     private Button btnClose;
+    @FXML
+    private JFXCheckBox printCkBx;
 
     ObservableList<ProduitR> produitListVent = FXCollections.observableArrayList();
-
+    ObservableList<StockR> stockList = FXCollections.observableArrayList();
+    
     IVenteService venteService = new VenteService();
     ICompteService compteService = new CompteService();
     IContenirVente contenirVenteService = new ContenirVenteService();
     IProduitService produitService = new ProduitService();
+    IStockService stockService = new StockService();
     IHistoriqueVente historiqueVenteService = new HistoriqueVenteService();
 
     Compte compteActif = new Compte();
@@ -134,6 +130,8 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     private List<String> shopInfos ; 
 
      private File file;
+     
+     //Integer idVente;
     /**
      * Initializes the controller class.
      */
@@ -161,11 +159,12 @@ public class CaisseConfirmationController extends Traitement implements Initiali
         });
         shopInfos = new ArrayList<String>();
         try{
-            shopInfos = ReglagePaneController.lireFichier("shopInfosTxt.txt");
+            shopInfos = ReglagePaneController.lireFichier("myshopInfos");
         } catch (Exception e) { 
             System.out.println(""+e);
            // e.printStackTrace(); 
         } 
+        
         
       
     }
@@ -192,6 +191,16 @@ public class CaisseConfirmationController extends Traitement implements Initiali
         produitCaisseTable.setItems(produitListVent);
         compteActif = c;
         clientR = cr;
+        
+        if(produitListVent != null && produitListVent.size() !=0){
+            for(ProduitR pr : produitListVent){
+                
+            }
+        }
+        
+        
+        
+        
 
     }
 
@@ -199,7 +208,9 @@ public class CaisseConfirmationController extends Traitement implements Initiali
     
     @FXML
     private void Valider(ActionEvent event) {
-         
+        
+        StockR [][] tabStock = null;
+        
         Boolean txtNumber = textFieldTypeNumber(txtMontCllt);
         if (txtNumber) {
             if (corr == true) {
@@ -221,15 +232,15 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     contenirVente.setIdVen(vente.getIdVen());
                     contenirVente.setIdProd(pr.getIdProd().getValue());
                     contenirVente.setPrixProd(Integer.parseInt(pr.getPrixUniProd().getValue()));
-                    contenirVente.setMontVente(Double.parseDouble(lblTot.getText()));
+                    contenirVente.setMontVente( new Integer(lblTot.getText()));
                     contenirVente.setDtVente(new Date());
                     
                     contenirVenteService.ajouterContenirVente(contenirVente);
                     
                     HistoriqueVente histoVente = new HistoriqueVente();
                     histoVente.setIdCon(contenirVente.getIdCon());
-                    histoVente.setSmeRecue(Double.valueOf( txtMontCllt.getText()));
-                    histoVente.setSmeRendue(Double.valueOf(txtRemise.getText()));
+                    histoVente.setSmeRecue(new Integer( txtMontCllt.getText()));
+                    histoVente.setSmeRendue(new Integer(txtRemise.getText()));
                     
                     historiqueVenteService.ajouterHistoriqueVente(histoVente);
                     
@@ -238,14 +249,128 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     produit.setQteIniProd(produit.getQteIniProd() - pr.getQteProdCom().getValue());
 
                     produitService.modifier(produit);
+                    
+                    /*List <Object[]> l = null;
+                    l = stockService.findAll(pr.getIdProd().get()) ;
+                    //int a,b = 0;
+                   // System.out.println(l);
+                    for (Object[] stk : l) {
+                        
+                        stockList.add(new StockR(
+                            new SimpleStringProperty(stk[0]+""),
+                            new SimpleDoubleProperty(Double.parseDouble(stk[1]+"")),
+                            new SimpleIntegerProperty(Integer.parseInt(stk[2]+"")),
+                            new SimpleIntegerProperty(Integer.parseInt(stk[3]+"")),
+                            new SimpleStringProperty(stk[4]+"")
+                        ));            
+                    }
+                    
+                    for (int i=stockList.size()-1;i>=0;i--) {
+                        
+                        if(stockList.get(i).getQteActuStock().get() > 0 ) {
+                            //stockList.get(i).setQteActuStock(
+                            //   new SimpleIntegerProperty(stockList.get(i).getQteActuStock().get() - pr.getQteProdCom().getValue())
+                           // );
+                            
+                            Stock st = new Stock(stockList.get(i).getIdStock().get());
+                            Stock st2 = stockService.findById(st);
+                            st2.setQteActuStock(st2.getQteActuStock() - pr.getQteProdCom().getValue());
+                            stockService.modifier(st2);
+                            
+                        }       
+                    }
+                    
+                    for(int i = 0;i<produitListVent.size();i++){
+                            for(int j =0;j<l.size();j++){
+                                tabStock[i][j] = stockList.get(i);
+                            }
+                    }*/
                 }
+                
                 CaissePaneController.vente = true;
                 
-                Rectangle pageSize =  new Rectangle(340, 380);
+                //idVente = vente.getIdVen();
+                //System.out.println("isSelll: "+printCkBx.isSelected());
+                if(printCkBx.isSelected()){
+                    createFacture(vente.getIdVen());
+                } else {
+                    System.out.println("isNtSelll");
+                }
+                
+                
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
+                notification.showAndDismiss(Duration.seconds(1.5));
+                Stage stage = (Stage) btnClose.getScene().getWindow();
+                stage.close();
+
+                switchPane(Constants.Caisse);
+            } else {
+                TrayNotification notification = new TrayNotification();
+                notification.setAnimationType(AnimationType.POPUP);
+                notification.setTray("MyShop", "Montant incorrect", NotificationType.ERROR);
+                notification.showAndDismiss(Duration.seconds(1.5));
+            }
+        } else {
+            TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Montant doit etre numerique", NotificationType.ERROR);
+            notification.showAndDismiss(Duration.seconds(1.5));
+        }
+
+    }
+
+    private void switchPane(String pane) {
+        try {
+            MainViewController.temporaryPane.getChildren().clear();
+            StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
+            ObservableList<Node> elements = stackPane.getChildren();
+
+            MainViewController.temporaryPane.getChildren().setAll(elements);
+
+            MainViewController.drawerTmp.setVisible(true);
+            // MainViewController.hamburgerTmp = new JFXHamburger();
+        } catch (IOException ex) {
+            Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void calculRemise(KeyEvent event) {
+        int rem = 0;
+        if (!txtMontCllt.getText().equals("")) {
+            try {
+                rem = Integer.parseInt(txtMontCllt.getText()) - Integer.parseInt(lblTot.getText());
+                txtRemise.setText(String.valueOf(rem));
+                
+                
+                if( Integer.parseInt( txtMontCllt.getText()) > Integer.parseInt(lblTot.getText()) ){
+                     txtMontCllt.setStyle("Background-color: lightgreen;");
+                }
+                
+            } catch (Exception e) {
+            }
+
+        } else {
+            txtRemise.clear();
+        }
+        if (rem < 0 || txtRemise.getText().equals("") ) {
+            corr = false;
+            txtMontCllt.setStyle(" -fx-background-color: red; "); ;
+        } else {
+            corr = true;
+            txtMontCllt.setStyle("-fx-background-color: lightgreen;");
+        }
+        
+    }
+
+      public void createFacture(Integer idVente){
+        Rectangle pageSize =  new Rectangle(340, 380);
         
                 Document doc = new Document(pageSize,30f,0,0,0);
                 //doc.bottom(0);
-                
+                //105.897.257
                 
                 try{
                     //System.out.println(shopInfos.get(0));
@@ -266,7 +391,11 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     p.setFont(bodyFont);
                     p.setTabSettings(new TabSettings(85f));
                     p.add(Chunk.TABBING);
-                    p.add(new Chunk("Tel:"+shopInfos.get(1)));
+                    if(shopInfos.get(1).equals("")){
+                        p.add(new Chunk(""));
+                    }else{
+                        p.add(new Chunk("Tel:"+shopInfos.get(1)));
+                    }
                     doc.add(p); 
 
                     p = new Paragraph();
@@ -280,7 +409,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                      p.setFont(bodyFont);
                     p.setTabSettings(new TabSettings(82f));
                     p.add(Chunk.TABBING);
-                    p.add(new Chunk("Vente N."+vente.getIdVen()));
+                    p.add(new Chunk("Vente N."+idVente));
                     p.setFont(bodyFont);
                     doc.add(p); 
 
@@ -340,7 +469,15 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                       
                         String tabNameSplitted[] = prodName.split(" ");
                         String recomposedName = "";
-                        for(int i=0;i<2;i++ ){
+                        if( tabNameSplitted.length <= 1 ){
+                            if(tabNameSplitted[0].length()>5){
+                                recomposedName = recomposedName+tabNameSplitted[0].substring(0,5)+". ";
+                            } else{
+                                recomposedName = recomposedName+tabNameSplitted[0].substring(0,tabNameSplitted[0].length())+". ";
+                            }
+                            
+                        } else{
+                            for(int i=0;i<2;i++ ){
                             //System.out.println(""+tabNameSplitted[i]);
                             if(tabNameSplitted[i].length()>3){
                                  recomposedName = recomposedName+tabNameSplitted[i].substring(0,3)+". ";
@@ -351,6 +488,8 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                             }
                        
                         }
+                        }
+                        
                         //p.add(new Chunk(""+recomposedName));
                         table.addCell( new Phrase(""+recomposedName,bodyFont));
                         table.addCell( new Phrase(""+prod.getPrixUniProd().getValue(),bodyFont));
@@ -371,7 +510,7 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     table.addCell(new Phrase("Reg: Esp.",bodyFont));
                     table.addCell(" ");
                     table.addCell(" ");
-                    table.addCell(new Phrase(tot+" ",bodyFont) );
+                    table.addCell(new Phrase(CaisseConfirmationController.insertDot(tot+"")+" ",bodyFont) );
                     table.addCell(new Phrase("F",bodyFont));
                     table.addCell(" ");
                     
@@ -382,21 +521,32 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     table.addCell(" ");
                     table.addCell(" ");
                     
-                    table.addCell(new Phrase("Reçu: "+txtMontCllt.getText()+" F",bodyFont) );
-                    table.addCell(new Phrase(" ",bodyFont));
+                    table.addCell(new Phrase("Reçu: "+CaisseConfirmationController.insertDot(txtMontCllt.getText()),bodyFont) );
+                    table.addCell(new Phrase("F",bodyFont));
                     table.addCell(new Phrase("Rendu: ",bodyFont) );
-                    table.addCell(new Phrase(""+txtRemise.getText(),bodyFont));
+                    table.addCell(new Phrase(""+CaisseConfirmationController.insertDot(txtRemise.getText()),bodyFont));
                     table.addCell(new Phrase("F",bodyFont));
                     table.addCell(" ");
                     doc.add(table);
                     
                     p = new Paragraph();
                     p.setFont(bodyFont);
-                    p.setTabSettings(new TabSettings(40f));
-                    p.add(new Chunk("================================================ "));
+                    p.setTabSettings(new TabSettings(15f));
+                    p.add(new Phrase("================================================ ",bodyFont));
+                    //System.out.println("siiiiiize : "+shopInfos.size());
                     p.add(Chunk.TABBING);
-                    p.add(new Chunk(" Merci de votre visite et à Bientôt "));
-                    p.add(new Chunk("================================================ "));
+                    if(shopInfos.size() == 4){
+                        if(shopInfos.get(3).equalsIgnoreCase("")){
+                            p.add(new Phrase(" Merci de votre visite et à Bientôt !!! ",bodyFont));
+                        }else{
+                            p.add(new Phrase(shopInfos.get(3)+" ",bodyFont));
+                        }
+                    } else {
+                        p.add(new Phrase(" Merci de votre visite et à Bientôt !!! "));
+                    }
+                    
+                    
+                    p.add(new Phrase("================================================ ",bodyFont));
                     doc.add(p);
                     
                     /*com.itextpdf.text.Header
@@ -422,87 +572,41 @@ public class CaisseConfirmationController extends Traitement implements Initiali
                     
                     doc.close();
                     
+                    
+                    
                     //fusion des pages du recu
                    String newFileName = MergePages("facture.pdf");
                     
                     //impression de la facture
                    print(newFileName);
-                    
-                TrayNotification notification = new TrayNotification();
-                notification.setAnimationType(AnimationType.POPUP);
-                notification.setTray("MyShop", "Vente Effectuée", NotificationType.SUCCESS);
-                notification.showAndDismiss(Duration.seconds(1.5));
-                Stage stage = (Stage) btnClose.getScene().getWindow();
-                stage.close();
-
-                }catch(Exception e){
+                   
+                   }catch(Exception e){
+                       //javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info trouveéééé \n "+e);
+                       e.printStackTrace();
                     TrayNotification notification = new TrayNotification();
                     notification.setAnimationType(AnimationType.POPUP);
-                    notification.setTray("MyShop", "Vente Non Effectuée: "+e.getMessage(), NotificationType.ERROR);
-                    notification.showAndDismiss(Duration.seconds(2));
-                   // e.printStackTrace();
+                    notification.setTray("MyShop", "Vente Non Effectuée: "+e, NotificationType.ERROR);
+                    notification.showAndDismiss(Duration.seconds(3));
+                    e.printStackTrace();
                 }
-                
-
-               
-                switchPane(Constants.Caisse);
-            } else {
-                TrayNotification notification = new TrayNotification();
-                notification.setAnimationType(AnimationType.POPUP);
-                notification.setTray("MyShop", "Montant incorrect", NotificationType.ERROR);
-                notification.showAndDismiss(Duration.seconds(1.5));
-            }
-        } else {
-            TrayNotification notification = new TrayNotification();
-            notification.setAnimationType(AnimationType.POPUP);
-            notification.setTray("MyShop", "Montant doit etre numerique", NotificationType.ERROR);
-            notification.showAndDismiss(Duration.seconds(1.5));
-        }
-
     }
-
-    private void switchPane(String pane) {
-        try {
-            MainViewController.temporaryPane.getChildren().clear();
-            StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
-            ObservableList<Node> elements = stackPane.getChildren();
-
-            MainViewController.temporaryPane.getChildren().setAll(elements);
-
-            MainViewController.drawerTmp.setVisible(true);
-            // MainViewController.hamburgerTmp = new JFXHamburger();
-        } catch (IOException ex) {
-            Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @FXML
-    private void calculRemise(KeyEvent event) {
-        int rem = 0;
-        if (!txtMontCllt.getText().equals("")) {
-            try {
-                rem = Integer.parseInt(txtMontCllt.getText()) - Integer.parseInt(lblTot.getText());
-                txtRemise.setText(String.valueOf(rem));
-                
-                
-                if( Double.parseDouble( txtMontCllt.getText()) > Double.parseDouble(lblTot.getText()) ){
-                     txtMontCllt.setStyle("Background-color: lightgreen;");
-                }
-                
-            } catch (Exception e) {
-            }
-
-        } else {
-            txtRemise.clear();
-        }
-        if (rem < 0 || txtRemise.getText().equals("") ) {
-            corr = false;
-            txtMontCllt.setStyle(" -fx-background-color: red; "); ;
-        } else {
-            corr = true;
-            txtMontCllt.setStyle("-fx-background-color: lightgreen;");
-        }
-        
+      
+    public static String insertDot(String mt){
+        String nmt = "";
+        int tle = mt.length();
+        //System.out.println("tle: "+tle);
+       // System.out.println("");
+       if(tle >= 3){
+           for(int i=tle-1;i>=0;i--){
+               //System.out.println("i: "+i);
+               nmt = mt.charAt(i)+nmt;
+               if( (tle-i) %3 == 0 && i>0 ){
+                   nmt = "."+nmt;
+               }
+           }
+           
+       }
+       return nmt;
     }
 
 }

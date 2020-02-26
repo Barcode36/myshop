@@ -60,6 +60,11 @@ public class CompteService implements ICompteService {
     public Compte findById(Compte compte) {
         return compteJpaController.findCompte(compte.getIdComp());
     }
+    
+    @Override
+    public Compte findByPseudoComp(String pseudoComp) {
+        return compteJpaController.findByPseudoComp(pseudoComp);
+    }
 
     @Override
     public List<Compte> compteList() {

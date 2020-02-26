@@ -5,10 +5,10 @@
  */
 package jpaController;
 
-import entites.Produit;
+import entites.Client;
+import entites.Stock;
 import java.io.Serializable;
 import java.util.List;
-import javafx.collections.ObservableList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -23,9 +23,9 @@ import jpaController.exceptions.PreexistingEntityException;
  *
  * @author Christ
  */
-public class ProduitJpaController implements Serializable {
+public class StockJpaController implements Serializable {
 
-    public ProduitJpaController(EntityManagerFactory emf) {
+    public StockJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
@@ -34,16 +34,16 @@ public class ProduitJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Produit produit) throws PreexistingEntityException, Exception {
+    public void create(Stock stock) throws PreexistingEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            em.persist(produit);
+            em.persist(stock);
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findProduit(produit.getIdProd()) != null) {
-                throw new PreexistingEntityException("Produit " + produit + " already exists.", ex);
+            if (findStock(stock.getIdStock()) != null) {
+                throw new PreexistingEntityException("Stock " + stock + " already exists.", ex);
             }
             throw ex;
         } finally {
@@ -53,19 +53,19 @@ public class ProduitJpaController implements Serializable {
         }
     }
 
-    public void edit(Produit produit) throws NonexistentEntityException, Exception {
+    public void edit(Stock stock) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            produit = em.merge(produit);
+            stock = em.merge(stock);
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = produit.getIdProd();
-                if (findProduit(id) == null) {
-                    throw new NonexistentEntityException("The produit with id " + id + " no longer exists.");
+                Integer id = stock.getIdStock();
+                if (findStock(id) == null) {
+                    throw new NonexistentEntityException("The stock with id " + id + " no longer exists.");
                 }
             }
             throw ex;
@@ -81,14 +81,14 @@ public class ProduitJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Produit produit;
+            Stock stock;
             try {
-                produit = em.getReference(Produit.class, id);
-                produit.getIdProd();
+                stock = em.getReference(Stock.class, id);
+                stock.getIdStock();
             } catch (EntityNotFoundException enfe) {
-                throw new NonexistentEntityException("The produit with id " + id + " no longer exists.", enfe);
+                throw new NonexistentEntityException("The stock with id " + id + " no longer exists.", enfe);
             }
-            em.remove(produit);
+            em.remove(stock);
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -97,19 +97,19 @@ public class ProduitJpaController implements Serializable {
         }
     }
 
-    public List<Produit> findProduitEntities() {
-        return findProduitEntities(true, -1, -1);
+    public List<Stock> findStockEntities() {
+        return findStocktEntities(true, -1, -1);
     }
 
-    public List<Produit> findProduitEntities(int maxResults, int firstResult) {
-        return findProduitEntities(false, maxResults, firstResult);
+    public List<Stock> findStockEntities(int maxResults, int firstResult) {
+        return findStocktEntities(false, maxResults, firstResult);
     }
 
-    private List<Produit> findProduitEntities(boolean all, int maxResults, int firstResult) {
+    private List<Stock> findStocktEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(Produit.class));
+            cq.select(cq.from(Stock.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -121,20 +121,20 @@ public class ProduitJpaController implements Serializable {
         }
     }
 
-    public Produit findProduit(Integer id) {
+    public Stock findStock(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(Produit.class, id);
+            return em.find(Stock.class, id);
         } finally {
             em.close();
         }
     }
 
-    public int getProduitCount() {
+    public int geStockCount() {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<Produit> rt = cq.from(Produit.class);
+            Root<Stock> rt = cq.from(Client.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -143,42 +143,25 @@ public class ProduitJpaController implements Serializable {
         }
     }
 
-    public Produit findByCode(Produit produit) {
+    public Stock findStockByCode(Stock c) {
         EntityManager em = this.getEntityManager();
-        TypedQuery<Produit> query = (TypedQuery<Produit>) em.createNamedQuery("Produit.findByCodeProd");
-        query.setParameter("codeProd", produit.getCodeProd());
+        TypedQuery<Stock> query = (TypedQuery<Stock>) em.createNamedQuery("Stock.findByCodeStock");
+        query.setParameter("codeStock", c.getCodeStock());
         return query.getSingleResult();
     }
 
-    public List<Produit> Recherche(String s) {
+    public List<Object[]> findAll(int idProd) {
         EntityManager em = this.getEntityManager();
-        // Query query = em.createNativeQuery("select * from produit where libProd like :lib", Produit.class);
-
-        TypedQuery<Produit> query = (TypedQuery<Produit>) em.createNamedQuery("Produit.findByLibProdLike");
-        query.setParameter("libProd", "%" + s + "%");
-
+        TypedQuery<Object[]> query = (TypedQuery<Object[]>) em.createNamedQuery("Stock.findStocks");
+        query.setParameter("idProd", idProd);
         return query.getResultList();
     }
 
-    public List<Produit> Recherche2(String s) {
+    public List<Stock> recLikeCodeOrDtOrFour(Stock c) {
         EntityManager em = this.getEntityManager();
-        // Query query = em.createNativeQuery("select * from produit where libProd like :lib", Produit.class);
-
-        TypedQuery<Produit> query = (TypedQuery<Produit>) em.createNamedQuery("Produit.findByLibProdLike2");
-        query.setParameter("libProd", s);
-
+        TypedQuery<Stock> query = (TypedQuery<Stock>) em.createNamedQuery("Stock.findByRec");
+        query.setParameter("codeStock", "%" + c.getCodeStock()+ "%");
         return query.getResultList();
     }
 
-    public List<Produit> findAll() {
-        EntityManager em = this.getEntityManager();
-        TypedQuery<Produit> query = (TypedQuery<Produit>) em.createNamedQuery("Produit.findAll");
-        return query.getResultList();
-    }
-    
-    public List<Object[] > findProdOrderByExpiryDate() {
-        EntityManager em = this.getEntityManager();
-        TypedQuery<Object[]> query = (TypedQuery<Object[] >) em.createNamedQuery("Produit.findProdOrderByExpiryDate");
-        return  query.getResultList();
-    }
 }

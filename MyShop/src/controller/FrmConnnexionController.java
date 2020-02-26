@@ -48,6 +48,8 @@ public class FrmConnnexionController implements Initializable {
     ObservableList<String> compteList = FXCollections.observableArrayList();
     @FXML
     private AnchorPane cont;
+    
+    public static String ky;
 
     /**
      * Initializes the controller class.
@@ -84,19 +86,42 @@ public class FrmConnnexionController implements Initializable {
     @FXML
     private void connexionButton(ActionEvent event) {
         Compte c = new Compte();
-        try {
-            if (!txtPseudoCennect.getValue().isEmpty()) {
-                c.setPseudoComp(txtPseudoCennect.getValue());
-            }
-        } catch (Exception e) {
-            c.setPseudoComp(txtPseudoCennect.getJFXEditor().getText());
-        }
-
+       
+       
+        c.setPseudoComp(txtPseudoCennect.getJFXEditor().getText());
+        System.out.println("getval: "+txtPseudoCennect.getJFXEditor().getText());
         c.setMdpComp(txtPassConnect.getText());
+        
         try {
             
+           /// MainViewController.compteServiceD.
+           if(txtPseudoCennect.getJFXEditor().getText().equals("admin")){
+                Compte cp = MainViewController.compteServiceD.findByPseudoComp(txtPseudoCennect.getJFXEditor().getText());
+                 ky = cp.getNomComp().split(" ")[1];
+                System.out.println("cp "+cp.getMdpComp()+" ky "+ky);
+
+                //if(cp !=null){
+                   // javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info trouveéééé \n");
+
+                    //System.out.println("pk"+ PasswordEncrypt.verifyUserPassword(txtPassConnect.getText(), cp.getMdpComp(), ky));   
+                if(PasswordEncrypt.verifyUserPassword(txtPassConnect.getText(), cp.getMdpComp(), ky)){
+                    c.setMdpComp(PasswordEncrypt.generateSecurePassword(txtPassConnect.getText(), ky)); 
+                    System.out.println("cp222 "+c.getMdpComp()+" ky "+ky);
+                    System.out.println("comp: "+cp.getMdpComp().equals(c.getMdpComp()));
+                    
+                    //ReglagePaneController.txtShopNum.setEditable(false);
+                    //ReglagePaneController.txtShpName.setEditable(false);
+                }
+                
+           }
+            
+                
+            //}
             
             MainViewController.compteActif = MainViewController.compteServiceD.Connexion(c);
+            /*javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info \n"
+                    + ""+MainViewController.compteActif.getMdpComp()
+                    + "Contactez le +228 90628725 pour plus d'informations! Merci"); */
             TypeCompte compte = new TypeCompte(MainViewController.compteActif.getIdTypComp());
             MainViewController.typeCompteActif = MainViewController.typeServiceD.findById(compte);
             MainViewController.temporaryPane.getChildren().clear();
@@ -110,25 +135,25 @@ public class FrmConnnexionController implements Initializable {
             MainViewController.hamburgerTmp.setVisible(false);
             MainViewController.mainCss.setVisible(false);
             MainViewController.dshPane.setVisible(true);
-           
+                       
             
-                if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
-                    
-                    
-                    DashBoardController.contHbox1.getChildren().removeAll(DashBoardController.btnComp,
-                            DashBoardController.btnInvent,DashBoardController.btnBil,DashBoardController.btnReg);
-                    
-                    DashBoardController.contHbox1.getChildren().addAll(DashBoardController.btnAid,
-                            DashBoardController.btnDec);
-                    
-                    DashBoardController.contHbox2.getChildren().clear();
-                    VBox menu = null;
-                    menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateralC));
-                    MainViewController.drawerTmp.setSidePane(menu);
-                }else{
-                    
-                }
-             MainViewController.dshPane.setVisible(true);
+            if (!MainViewController.typeCompteActif.getLibTyp().equals("Administrateur")) {
+
+
+                DashBoardController.contHbox1.getChildren().removeAll(DashBoardController.btnComp,
+                        DashBoardController.btnInvent,DashBoardController.btnBil,DashBoardController.btnReg);
+
+                DashBoardController.contHbox1.getChildren().addAll(DashBoardController.btnAid,
+                        DashBoardController.btnDec);
+
+                DashBoardController.contHbox2.getChildren().clear();
+                VBox menu = null;
+                menu = FXMLLoader.load(getClass().getResource(Constants.MenuLateralC));
+                MainViewController.drawerTmp.setSidePane(menu);
+            }else{
+
+            }
+            MainViewController.dshPane.setVisible(true);
            
              
         } catch (Exception e) {
@@ -140,6 +165,23 @@ public class FrmConnnexionController implements Initializable {
             notification.setTray("MyShop", "Pseudo ou Mot de passe incorrect", NotificationType.ERROR);
             notification.showAndDismiss(Duration.seconds(1.5));
         }
+        //System.out.println("verif: "+txtPassConnect.getText());
+//        System.out.println("PasswordEncr "+MainViewController.compteActif.getNomComp().split(" ")[1]);
+       // System.out.println("MainViewControl "+MainViewController.compteActif.getMdpComp());
+        
+        /*if (MainViewController.typeCompteActif.getLibTyp().equals("Administrateur") && PasswordEncrypt.verifyUserPassword(txtPassConnect.getText(), MainViewController.compteActif.getMdpComp(), PasswordEncrypt.getSalt(30))  
+                 ){
+        //if (MainViewController.typeCompteActif.getLibTyp().equals("Administrateur") && MainViewController.compteActif.getNomComp().equals("root")
+        //        ){    
+        TrayNotification notification = new TrayNotification();
+            notification.setAnimationType(AnimationType.POPUP);
+            notification.setTray("MyShop", "Bienvenu M. Ulrich ", NotificationType.SUCCESS);
+            notification.showAndDismiss(Duration.seconds(1.5));
+        }else{
+            System.out.println("");
+                    System.out.println("PasswordEncrypt.getSalt(30) "+PasswordEncrypt.getSalt(30));
+
+        }*/
     }
 
     @FXML

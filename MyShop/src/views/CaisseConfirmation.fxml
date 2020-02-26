@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuItem?>
@@ -52,16 +53,18 @@
                               <Font name="Times New Roman" size="24.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="txtCoeff" editable="false" layoutX="408.0" layoutY="80.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="231.0" promptText="Coefficient des Points des clients">
+                        <TextField fx:id="txtCoeff" editable="false" layoutX="408.0" layoutY="80.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="231.0" promptText="Coefficient des Points des clients" visible="false">
                            <font>
                               <Font name="Times New Roman" size="15.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="txtPtActu" editable="false" layoutX="408.0" layoutY="20.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="231.0" promptText="Points actuels du client">
+                        <TextField fx:id="txtPtActu" editable="false" layoutX="408.0" layoutY="20.0" onKeyReleased="#calculRemise" prefHeight="41.0" prefWidth="231.0" promptText="Points actuels du client" visible="false">
                            <font>
                               <Font name="Times New Roman" size="15.0" />
                            </font>
                         </TextField>
+                        <JFXCheckBox fx:id="printCkBx" alignment="CENTER" layoutX="475.0" layoutY="90.0" prefHeight="39.0" prefWidth="62.0" text=" " wrapText="true" />
+                        <Label alignment="CENTER" layoutX="398.0" layoutY="45.0" prefHeight="45.0" prefWidth="216.0" text="Imprimer la Facture" textAlignment="CENTER" />
                      </children>
                   </Pane>
                </children>

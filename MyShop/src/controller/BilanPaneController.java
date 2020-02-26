@@ -537,12 +537,14 @@ public class BilanPaneController implements Initializable {
             
              LocalDate today = LocalDateTime.now().toLocalDate();
              LocalDate firstDay = LocalDateTime.of(today.getYear(), today.getMonthValue(), 1, 0, 0).toLocalDate();
+             LocalDate secondDay = LocalDateTime.of(today.getYear(), today.getMonthValue(), firstDay.lengthOfMonth() , 0, 0).toLocalDate();
              
-             long todayLong = today.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+             long secondLong = secondDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
              long firstDayLong = firstDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
              
            java.sql.Date dt1 =  new java.sql.Date(new Timestamp( firstDayLong *1000  ).getTime());
-           java.sql.Date dt2 =  new java.sql.Date(new Timestamp(todayLong*1000).getTime());
+           java.sql.Date dt2 =  new java.sql.Date(new Timestamp(secondLong*1000).getTime());
+            System.out.println(dt1+" xxxx "+dt2);
             
             lvte = contenirVenteService.findTotVteEffectueByTwoPeriode (dt1,dt2);
             
@@ -557,9 +559,10 @@ public class BilanPaneController implements Initializable {
              
             java.sql.Date dt1 =  new java.sql.Date(new Timestamp( todayLong *1000  ).getTime());
             java.sql.Date dt2 =  new java.sql.Date(new Timestamp(firstDayLong*1000).getTime());
-            System.out.println("");
+            System.out.println(dt1+" xxxx "+dt2);
+            
             lvte = contenirVenteService.findTotVteEffectueByTwoPeriode (dt1,dt2);
-          } else if (rbDeuxDate.isSelected()) {
+        } else if (rbDeuxDate.isSelected()) {
              
             LocalDate d3 = datePiker1.getValue();
             LocalDate firstDay = LocalDateTime.of(d3.getYear(),d3.getMonthValue(),d3.getDayOfMonth(),0,0).toLocalDate();
@@ -570,6 +573,7 @@ public class BilanPaneController implements Initializable {
             long firstDayLong = secondDay.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
             java.sql.Date dt1 = new java.sql.Date(new Timestamp( todayLong *1000   ).getTime());
             java.sql.Date dt2 = new java.sql.Date(new Timestamp(  firstDayLong*1000  ).getTime());
+            System.out.println(dt1+" xxxx "+dt2);
             
             lvte = contenirVenteService.findTotVteEffectueByTwoPeriode( dt1 ,  dt2);
         }
@@ -596,9 +600,11 @@ public class BilanPaneController implements Initializable {
          
          total = 0;
         int tle = montRow.size();
+        System.out.println("total : "+tle);
         if(tle > 0){
-             for(int i =0; i< tle;i++){
+            for(int i =0; i< tle;i++){
                 total = Integer.parseInt(montRow.get(i)+"") + total;
+                
                 lblMontTotBil.setText( "TOTAL: "+ total);
                 lblMontTotBil.setStyle("-fx-background-color: lightgreen;"
                         + "-fx-font-size: 30px;");
@@ -765,6 +771,7 @@ public class BilanPaneController implements Initializable {
             
         indexCaiVte = indexCaiVte + 2; //48
             
+        if( listProdEnFin!=null && !listProdEnFin.isEmpty()  ){
             for(XYChart.Data dt : listProdEnFin){
                 row = sheet.createRow(indexCaiVte);//row 48
                 headerCell=row.createCell(0);
@@ -776,6 +783,8 @@ public class BilanPaneController implements Initializable {
                 rowIndex++;
                indexCaiVte++;
             }
+        }
+            
     
         indexCaiVte+=2;
         
@@ -892,7 +901,7 @@ public class BilanPaneController implements Initializable {
                      
                     while(rt.isAlive()){
                       
-                      j++;
+                      //j++;
                     }
                    
                     

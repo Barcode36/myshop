@@ -9,6 +9,7 @@ import entites.Produit;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.ObservableList;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import jpaController.ProduitJpaController;
@@ -65,6 +66,11 @@ public class ProduitService implements IProduitService {
     @Override
     public List<Produit> produitList() {
         return produitJpaController.findAll();
+    }
+            
+    @Override
+    public List<Object[] > findProdOrderByExpiryDate() {
+        return produitJpaController.findProdOrderByExpiryDate();
     }
 
     @Override

@@ -13,13 +13,18 @@ import entites.ContenirVente;
 import entites.Produit;
 import entites.Vente;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
 import javafx.scene.input.KeyEvent;
+import javafx.util.converter.DateStringConverter;
 import service.IProduitService;
 import service.imp.ProduitService;
 
@@ -36,6 +41,7 @@ public class ProduitR {
     private SimpleStringProperty cltAch;
     private SimpleIntegerProperty qteIniProd;
     private SimpleIntegerProperty qteProdCom;
+    private SimpleStringProperty expiryDate;
     private SimpleStringProperty dateVen;
     private JFXCheckBox Suppression;
     private SimpleStringProperty total;
@@ -51,6 +57,12 @@ public class ProduitR {
         this.prixUniProd = new SimpleStringProperty(produit.getPrixUniProd());
         this.qteIniProd = new SimpleIntegerProperty(produit.getQteIniProd());
         this.codeProd = new SimpleStringProperty(produit.getCodeProd());
+        if(produit.getExpiryDate() == null){
+           this.expiryDate =  new SimpleStringProperty(""); 
+        }else{
+            this.expiryDate =  new SimpleStringProperty(produit.getExpiryDate()+"");
+        }
+       
 
     }
 
@@ -255,6 +267,34 @@ public class ProduitR {
     @Override
     public String toString() {
         return libProd.getValue();
+    }
+
+    public SimpleStringProperty getExpiryDate() {
+        /*SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+        String dateInString = expiryDate.getValue();
+        if(expiryDate != null){
+            //return new SimpleStringProperty(formatter.format(dateInString))  ;
+            
+            String dt = "";
+            try {
+                Date date = formatter.parse(dateInString);
+                System.out.println(date);
+                System.out.println(formatter.format(date));
+                dt = date+"";
+            //return new SimpleStringProperty(formatter.format(date))  ;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            return new SimpleStringProperty(formatter.format(dt)); 
+            
+        }else{
+            return new SimpleStringProperty("Date non-enregistrée")  ;
+        }*/
+        return expiryDate;
+    }
+
+    public void setExpiryDate(SimpleStringProperty expiryDate) {
+        this.expiryDate = expiryDate;
     }
 
     
