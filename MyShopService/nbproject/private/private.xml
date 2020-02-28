@@ -3,8 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/jpaController/ContenirVenteJpaController.java</file>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/service/IContenirVente.java</file>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/META-INF/persistence.xml</file>
             <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/entites/Stock.java</file>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/service/imp/ContenirVenteService.java</file>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/service/IStockService.java</file>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/service/imp/StockService.java</file>
             <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/entites/ContenirVente.java</file>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/jpaController/StockJpaController.java</file>
+            <file>file:/C:/Users/elsha/Documents/NetBeansProjects/myshop-MyShopV-1/MyShopService/src/jpaController/VenteJpaController.java</file>
         </group>
     </open-files>
 </project-private>
