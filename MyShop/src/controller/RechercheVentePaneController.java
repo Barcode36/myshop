@@ -276,7 +276,6 @@ public class RechercheVentePaneController implements Initializable {
             Logger.getLogger(MainPrincipalController.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
     

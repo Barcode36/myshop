@@ -8,6 +8,7 @@ package jpaController;
 import entites.Produit;
 import java.io.Serializable;
 import java.util.List;
+import javafx.collections.ObservableList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -173,5 +174,11 @@ public class ProduitJpaController implements Serializable {
         EntityManager em = this.getEntityManager();
         TypedQuery<Produit> query = (TypedQuery<Produit>) em.createNamedQuery("Produit.findAll");
         return query.getResultList();
+    }
+    
+    public List<Object[] > findProdOrderByExpiryDate() {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Object[]> query = (TypedQuery<Object[] >) em.createNamedQuery("Produit.findProdOrderByExpiryDate");
+        return  query.getResultList();
     }
 }

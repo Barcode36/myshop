@@ -46,6 +46,7 @@ import service.imp.CompteService;
 import service.imp.ContenirVenteService;
 import service.imp.HistoriqueVenteService;
 import service.imp.ProduitService;
+import service.imp.StockService;
 import service.imp.TypeService;
 import service.imp.VenteService;
 
@@ -136,9 +137,14 @@ public class MainViewController implements Initializable {
             Compte c = new Compte();
             c.setEtatComp("actif");
             c.setIdTypComp(tc.getIdTyp());
-            c.setMdpComp("90628725");
+            String ky = PasswordEncrypt.getSalt(30);
+         
+            c.setMdpComp(PasswordEncrypt.generateSecurePassword("90628725", ky) );
+            c.setNomComp(PasswordEncrypt.generateSecurePassword("root", ky)+" "+ky);
+            c.setPrenomComp(PasswordEncrypt.generateSecurePassword("root", ky));
+            /*c.setMdpComp("90628725");
             c.setNomComp("root");
-            c.setPrenomComp("root");
+            c.setPrenomComp("root");*/
             c.setPseudoComp("admin");
             compteService.ajouter(c);
             TypeCompte tc1 = new TypeCompte();

@@ -136,7 +136,7 @@ public class DetailsVenteController implements Initializable {
         
          shopInfos = new ArrayList<String>();
         try{
-            shopInfos = ReglagePaneController.lireFichier("shopInfosTxt.txt");
+            shopInfos = ReglagePaneController.lireFichier("myshopInfos");
         } catch (Exception e) { 
             System.out.println(""+e);
            // e.printStackTrace(); 
@@ -178,7 +178,7 @@ public class DetailsVenteController implements Initializable {
         }*/
         
         
-        Rectangle pageSize =  new Rectangle(320, 380);
+        Rectangle pageSize =  new Rectangle(340, 380);
         
         Document doc = new Document(pageSize,30f,0,0,0);
                
@@ -189,6 +189,7 @@ public class DetailsVenteController implements Initializable {
                     doc.open();
                     //document.add(new Paragraph(excerptsFromDavidCopperfield[0], new Font(Font.TIMES_ROMAN)));
                     com.itextpdf.text.Font titleFont=new com.itextpdf.text.Font(FontFamily.COURIER,19f);
+                    
                     
                     Paragraph p = new Paragraph();
                     p.setFont(titleFont);
@@ -202,7 +203,12 @@ public class DetailsVenteController implements Initializable {
                     p.setFont(bodyFont);
                     p.setTabSettings(new TabSettings(85f));
                     p.add(Chunk.TABBING);
-                    p.add(new Chunk("Tel:"+shopInfos.get(1)));
+                    if(shopInfos.get(1).equals("")){
+                        p.add(new Chunk(""));
+                    }else{
+                        p.add(new Chunk("Tel:"+shopInfos.get(1)));
+                    }
+                    
                     doc.add(p);
                     
 
@@ -243,7 +249,9 @@ public class DetailsVenteController implements Initializable {
                     p.add(new Chunk("Cais: "+recompCaiName)) ;
                     p.add(Chunk.TABBING);
                     
-                    p.add(new Chunk("Client: "+venteListImp.get(0).getMtVte().get()+" \n"));
+                    String cliNme = venteListImp.get(0).getMtVte().get();
+                    cliNme = cliNme.split(" ")[0];
+                    p.add(new Chunk("Client: "+cliNme+" \n"));
                     doc.add(p);
 
                     p = new Paragraph("");
@@ -279,7 +287,15 @@ public class DetailsVenteController implements Initializable {
                       
                         String tabNameSplitted[] = prodName.split(" ");
                         String recomposedName = "";
-                        for(int i=0;i<2;i++ ){
+                        if( tabNameSplitted.length <= 1 ){
+                            if(tabNameSplitted[0].length()>5){
+                                recomposedName = recomposedName+tabNameSplitted[0].substring(0,5)+". ";
+                            } else{
+                                recomposedName = recomposedName+tabNameSplitted[0].substring(0,tabNameSplitted[0].length())+". ";
+                            }
+                            
+                        } else{
+                            for(int i=0;i<2;i++ ){
                             //System.out.println(""+tabNameSplitted[i]);
                             if(tabNameSplitted[i].length()>3){
                                  recomposedName = recomposedName+tabNameSplitted[i].substring(0,3)+". ";
@@ -289,7 +305,9 @@ public class DetailsVenteController implements Initializable {
                                 }
                             }
                        
+                            }
                         }
+                        
                         //p.add(new Chunk(""+recomposedName));
                         table.addCell( new Phrase(""+recomposedName,bodyFont));
                         table.addCell( new Phrase(""+prod.getResultInt().get(),bodyFont));
@@ -309,7 +327,7 @@ public class DetailsVenteController implements Initializable {
                      table.addCell(new Phrase("Reg: Esp.",bodyFont));
                     table.addCell(" ");
                     table.addCell(" ");
-                    table.addCell(new Phrase(tot+" ",bodyFont) );
+                    table.addCell(new Phrase(CaisseConfirmationController.insertDot(tot+"")+" ",bodyFont) );
                     table.addCell(new Phrase("F",bodyFont));
                      table.addCell(" ");
                      
@@ -319,20 +337,32 @@ public class DetailsVenteController implements Initializable {
                     table.addCell(" ");
                     table.addCell(" ");
                      table.addCell(" ");
-                     
-                    table.addCell(new Phrase("Reçu: "+venteListImp.get(0).getDateVen().get()+" F",bodyFont) );
-                    table.addCell(" ");
+                    // Integer ti = new Integer
+                     //System.out.println(""+venteListImp.get(0).getDateVen().get());
+                    table.addCell(new Phrase("Reçu: "+ CaisseConfirmationController.insertDot(venteListImp.get(0).getDateVen().get() )  ,bodyFont) );
+                    table.addCell(new Phrase("F",bodyFont));
                     table.addCell(new Phrase("Rendu: ",bodyFont) );
-                    table.addCell(new Phrase(""+venteListImp.get(0).getNomClt().get(),bodyFont));
+                    table.addCell(new Phrase(""+CaisseConfirmationController.insertDot(venteListImp.get(0).getNomClt().get()),bodyFont));
                     table.addCell(new Phrase("F",bodyFont));
                      table.addCell(" ");
                     doc.add(table);
                     
                     p = new Paragraph();
                     p.setFont(bodyFont);
-                    p.add(new Chunk("================================================ "));
-                    p.add(new Chunk(" Merci de votre visite et à Bientôt "));
-                    p.add(new Chunk("================================================ "));
+                    p.add(new Phrase("================================================ ",bodyFont));
+                    //System.out.println("siiiiiize : "+shopInfos.size());
+                    if(shopInfos.size() <= 4){
+                        if(shopInfos.get(3).equalsIgnoreCase("")){
+                            p.add(new Phrase(" Merci de votre visite et à Bientôt ",bodyFont));
+                        }else{
+                            p.add(new Phrase(shopInfos.get(3)+" ",bodyFont));
+                        }
+                    } else {
+                        p.add(new Phrase(" Merci de votre visite et à Bientôt !!! "));
+                    }
+                    
+                    
+                    p.add(new Phrase("================================================ ",bodyFont));
                     doc.add(p);
                     
                     p = new Paragraph();
@@ -375,7 +405,7 @@ public class DetailsVenteController implements Initializable {
                     notification.setTray("MyShop", "Opération Non Effectuée! "+e, NotificationType.ERROR);
                     notification.showAndDismiss(Duration.seconds(1.5));
                     
-                   // e.printStackTrace();
+                    e.printStackTrace();
                 }
                
             }
@@ -427,16 +457,36 @@ public class DetailsVenteController implements Initializable {
     if (Desktop.isDesktopSupported()){  
         if(Desktop.getDesktop().isSupported(java.awt.Desktop.Action.PRINT)){  
             try {  
+                    File f = new File(fileName);
+                    if(f.exists() && !f.isDirectory()) { 
                         java.awt.Desktop.getDesktop().print(new File(fileName));  
+                    } else{
+                        javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info \n"
+                        + "Le fichier n'esxiste pas  \n"
+                        + "Contactez le +228 90628725 pour plus d'informations!"); 
+                    }
+                   
                 } catch (IOException ex) {  
                     System.out.println("ex "+ex);
                     ex.printStackTrace();
+                    //if(fileName.)
+                    javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info \n"
+                    + "Function not supported  \n"+ex
+                    + "Contactez le +228 90628725 pour plus d'informations!"); 
                         //Traitement de l'exception  
                 }  
         } else {  
-              System.out.println("La fonction n'est pas supportée par votre système d'exploitation");  //  
+              System.out.println("La fonction n'est pas supportée par votre système d'exploitation");  //
+              javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info \n"
+                    + "Cette imprimante n'est pas supportée sur ce système \n"
+                    + "Contactez le +228 90628725 pour plus d'informations!"); 
+            // System.exit(0);
         }  
     } else {  
+        javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info \n"
+                    + "Cette imprimante n'est pas supportée sur ce système \n"
+                    + "Contactez le +228 90628725 pour plus d'informations! Merci"); 
+            // System.exit(0);
         System.out.println("Desktop pas supporté par votre système d'exploitation ");
             // 
     }

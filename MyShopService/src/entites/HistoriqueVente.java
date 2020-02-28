@@ -55,10 +55,10 @@ public class HistoriqueVente implements Serializable {
     private Long idCon;
     @Basic(optional = false)
     @Column(name = "smeRecue")
-    private double smeRecue;
+    private Integer smeRecue;
     @Basic(optional = false)
     @Column(name = "smeRendue")
-    private double smeRendue;
+    private Integer smeRendue;
     
     
     public HistoriqueVente() {
@@ -84,7 +84,7 @@ public class HistoriqueVente implements Serializable {
         return smeRecue;
     }
 
-    public void setSmeRecue(double smeRecue) {
+    public void setSmeRecue(Integer smeRecue) {
         this.smeRecue = smeRecue;
     }
 
@@ -92,7 +92,7 @@ public class HistoriqueVente implements Serializable {
         return smeRendue;
     }
 
-    public void setSmeRendue(double smeRendue) {
+    public void setSmeRendue(Integer smeRendue) {
         this.smeRendue = smeRendue;
     }
 

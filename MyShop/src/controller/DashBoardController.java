@@ -206,7 +206,35 @@ public class DashBoardController implements Initializable {
             pieChart.setData(datas);
             barCode.getData().addAll(series);
             listProdEnFin = series.getData() ;
-      }
+ 
+        }
+        /*List<Object []> expiryList = produitService.findProdOrderByExpiryDate();
+       expiryProductList.clear();
+       int n = 0;
+        if(expiryList!=null){
+            System.out.println(expiryList.isEmpty());
+          //Object[] o = expiryList.get(0);
+         // System.out.println(""+o[0]);
+            for(Object[] p : expiryList){
+                //System.out.println(""+p[0]);
+                if (n<6){
+                    if(p[0] != null){
+                        expiryProductList.add(new ResultatsReq( 
+                            new SimpleStringProperty(p[0]+""),
+                            new SimpleStringProperty( "Imminent")
+                        ));
+                    }
+                }
+                n++;
+            }
+        }
+            /**/
+            
+       /* prodCol.setCellValueFactory(cellData -> cellData.getValue().getResultString());
+        expiryDtCol.setCellValueFactory(cellData -> cellData.getValue().getResultInt());
+        
+        expiryTable.setItems(expiryProductList);*/
+ 
     }
         
     

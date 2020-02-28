@@ -13,6 +13,7 @@
     <class>entites.Concerner</class>
     <class>entites.ContenirVente</class>
     <class>entites.HistoriqueVente</class>
+    <class>entites.Stock</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:test.sqlite"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

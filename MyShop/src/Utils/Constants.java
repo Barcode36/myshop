@@ -25,7 +25,7 @@ public class Constants {
     public static final String Aide = "/views/AidePane.fxml";
     public static final String Client = "/views/ClientPane.fxml";
     public static final String Historique = "/views/HistoriquePane.fxml";
-    
-    
+    public static final String RechercheVente = "/views/HistoriqueVentes.fxml";
+    public static final String PinPane = "/views/pinPane.fxml";
    
 }

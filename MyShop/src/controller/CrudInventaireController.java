@@ -6,9 +6,16 @@
 package controller;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import entites.Produit;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -65,6 +72,8 @@ public class CrudInventaireController implements Initializable {
     private JFXTextField txtQteProd;
     @FXML
     private JFXTextField txtQteAug;
+    @FXML
+    private JFXDatePicker datePikerExpiryDate;
 
     IProduitService produitService = MainViewController.produitService;
 
@@ -137,7 +146,7 @@ public class CrudInventaireController implements Initializable {
 
     }
 
-    public void loadInventairegrid() {
+    public void  loadInventairegrid() {
         produitList.clear();
         for (Produit produit : listProduit()) {
             produitList.add(new ProduitR(produit));
@@ -162,6 +171,7 @@ public class CrudInventaireController implements Initializable {
         txtQteProd.setEditable(false);
         txtQteAug.setDisable(false);
         txtQteAug.setText("0");
+        //datePikerExpiryDate.setValue(LocalDate.MAX);
         saveUp.setText("Modifier");
     }
 
@@ -183,8 +193,13 @@ public class CrudInventaireController implements Initializable {
             Produit produit = new Produit();
             produit.setCodeProd(txtCode.getText());
             produit.setLibProd(txtLibProd.getText());
-            
+            // SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+             
             produit.setPrixUniProd(txtPrixProd.getText());
+            LocalDate d3 = datePikerExpiryDate.getValue();
+            //long registerDayLong = d3.atStartOfDay(ZoneId.systemDefault()).toEpochSecond();
+            //produit.setExpiryDate(Date.from(d3.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            
             txtQteProd.setFocusTraversable(true); 
             txtQteProd.setDisable(false);
             txtQteProd.setEditable(true);

@@ -6,17 +6,16 @@
 package views;
 
 import Utils.Constants;
+import static controller.ReglagePaneController.lireFichier;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -59,11 +58,25 @@ public class EssssssController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        //ReglagePaneController.ecrireFichier("", lignes);
+        
         Task task = taskWorker(100);
+        
+        List<String> shopInfosList = new ArrayList<>();
+        shopInfosList.addAll(lireFichier("myshop"));
+        
         progres.progressProperty().bind(task.progressProperty());
-        mySerNber = getSerialNumber();
+       // mySerNber = getSerialNumber();
+        //System.out.println("mySerNber00: "+mySerNber);
+      //  String tab0[] = mySerNber.split(" ");
+        //for (String tab1 : tab) {
+            //System.out.println("tabiii "+tab[tab.length-1]);
+       // mySerNber = tab0[tab0.length-1];
+        //System.out.println("mySerNber: "+mySerNber);
         //ecrireSerNb(mySerNber);
-        String serNb=mySerNber+"";
+       
+       // }
+        
         //File f = new File("tmp.txt");
        
         /*try {
@@ -72,7 +85,6 @@ public class EssssssController implements Initializable {
             BufferedReader in = new BufferedReader(new FileReader(f.getAbsolutePath()));
             String line="";
            line = in.readLine();
-            
                 serNb = line;
       // Afficher le contenu du fichier
             //line=in.readLine();
@@ -86,15 +98,16 @@ public class EssssssController implements Initializable {
             System.out.println(""+ex);
         }*/
         
-        if( !( serNb.equalsIgnoreCase(mySerNber))){
+        /*if( !( shopInfosList.get(0).equals(crypt(mySerNber)))){
             javax.swing.JOptionPane.showMessageDialog(null,"MyShop Info \n"
-                    + "Vous n'avez pas accès à cette application\n"
+                    + "Vous n'avez pas accès à cette application \n"
                     + "Contactez le +228 90628725 pour plus d'informations! Merci"); 
              System.exit(0);
-        }
-        
+        }*/
+         
         task.setOnSucceeded(e -> {
-               
+             
+         
             try {
                 
                 
@@ -122,26 +135,45 @@ public class EssssssController implements Initializable {
         th.start();
 
     }
-    
+    /*
     private String  getSerialNumber(){
         String result = "";
             try
         {
             //String result = null;
+            Process a = Runtime.getRuntime().exec("wmic baseboard get serialnumber");
+            System.out.println("");
+            /*BufferedReader inputa
+            = new BufferedReader(new InputStreamReader(a.getInputStream()));
+            String linea;
+            
+            while ((linea = inputa.readLine()) != null)
+            {
+            result += linea;
+            }
+            if (result.equalsIgnoreCase(" ")) {
+            System.out.println("Result is empty");
+            } else
+            {
+            System.out.println("result000a: "+result);
+            ///motherboard.setText(result);
+            }
+            inputa.close();*/
+            /*
             Process p = Runtime.getRuntime().exec("wmic baseboard get serialnumber");
             BufferedReader input
-                    = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line;
             while ((line = input.readLine()) != null)
             {
-                result += line;
+            result += line;
             }
             if (result.equalsIgnoreCase(" ")) {
-                System.out.println("Result is empty");
+            System.out.println("Result is empty");
             } else
             {
-                System.out.println("result: "+result);
-                ///motherboard.setText(result);
+            //System.out.println("result: "+result);
+            ///motherboard.setText(result);
             }
             input.close();
         } catch (IOException ex)
@@ -151,8 +183,38 @@ public class EssssssController implements Initializable {
             return result;
             
     }
+    */
+    private static MessageDigest digester;
+
+    static {
+        try {
+            digester = MessageDigest.getInstance("MD5");
+        }
+        catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
     
-    private void ecrireSerNb(String serNber){
+    public static String crypt(String str) {
+        if (str == null || str.length() == 0) {
+            throw new IllegalArgumentException("String to encript cannot be null or zero length");
+        }
+
+        digester.update(str.getBytes());
+        byte[] hash = digester.digest();
+        StringBuffer hexString = new StringBuffer();
+        for (int i = 0; i < hash.length; i++) {
+            if ((0xff & hash[i]) < 0x10) {
+                hexString.append("0" + Integer.toHexString((0xFF & hash[i])));
+            }
+            else {
+                hexString.append(Integer.toHexString(0xFF & hash[i]));
+            }
+        }
+        return hexString.toString();
+    }
+    
+    /*private void ecrireSerNb(String serNber){
          final String chemin = "tmp.txt";
         final File fichier =new File(chemin); 
         try {
@@ -184,7 +246,7 @@ public class EssssssController implements Initializable {
         }
         in.close();
         return line;
-    }
+    }*/
     
 
 }
