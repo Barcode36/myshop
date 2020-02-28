@@ -5,7 +5,9 @@
  */
 package controller;
 
+import Utils.Constants;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import static controller.CaissePaneController.clientNew;
 import entites.Produit;
 import entites.Stock;
@@ -98,7 +100,7 @@ public class newStockController implements Initializable {
         }
         
        
-        SimpleStringProperty dtS = new SimpleStringProperty(""+new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+        SimpleStringProperty dtS = new SimpleStringProperty(""+new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
 
         codeStockField.setText("stock "+dtS.getValue());
         fourCombo.setItems(lFour);
@@ -109,15 +111,15 @@ public class newStockController implements Initializable {
     @FXML
     private void saveStock(ActionEvent event) {
         Stock s = new Stock();
-       
+              
         s.setCodeStock(codeStockField.getText());
         s.setFournisseur(fourCombo.getEditor().getText());
         s.setQteIniSTock(Integer.parseInt(qteStockProd.getText())); //qteStockProd
         s.setCoutAchatUni(Integer.parseInt(prixAchatField.getText()));
         s.setIdProd(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get());
         s.setQteActuStock(Integer.parseInt(qteStockProd.getText()));
-        s.setDateRavi(new Date());
-        s.setDateExpi(new Date(dtPickerExpiry.getValue().atStartOfDay(ZoneId.systemDefault()).toEpochSecond()));
+        s.setDateRavi( new Date());
+        s.setDateExpi(new Date(dtPickerExpiry.getValue().atStartOfDay(ZoneId.systemDefault()).toEpochSecond()*1000));
         Produit p = new Produit();
         p.setIdProd(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get());
        
@@ -146,6 +148,7 @@ public class newStockController implements Initializable {
           //switchPane("/views/stockInfos.fxml");
           
         Stage st = (Stage) saveBtn.getScene().getWindow();
+        //switchPane(Constants.RechercheProd);
          try {
                 Parent root;
                 FXMLLoader loader = new FXMLLoader();
@@ -237,7 +240,7 @@ public class newStockController implements Initializable {
         
     }
 
-     /*private void switchPane(String pane) {
+     private void switchPane(String pane) {
         try {
             MainViewController.temporaryPane.getChildren().clear();
             StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
@@ -250,6 +253,6 @@ public class newStockController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }*/
+    }
     
 }

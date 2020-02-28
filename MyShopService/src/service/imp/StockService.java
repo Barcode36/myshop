@@ -59,6 +59,11 @@ public class StockService implements IStockService {
     public Stock findById(Stock stock) {
         return stockJpaController.findStock(stock.getIdStock());
     }
+    
+    @Override
+    public Stock findStockByIdProd(Stock stock) {
+        return stockJpaController.findStockByIdProd(stock);
+    }
 
     @Override
     public List<Object[]> findAll(int idProd) {

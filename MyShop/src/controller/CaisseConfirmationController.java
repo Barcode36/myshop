@@ -198,10 +198,6 @@ public class CaisseConfirmationController extends Traitement implements Initiali
             }
         }
         
-        
-        
-        
-
     }
 
     private IClientService clientService = MainViewController.clientService;
@@ -250,41 +246,37 @@ public class CaisseConfirmationController extends Traitement implements Initiali
 
                     produitService.modifier(produit);
                     
-                    /*List <Object[]> l = null;
+                    List <Object[]> l = null;
                     l = stockService.findAll(pr.getIdProd().get()) ;
                     //int a,b = 0;
                    // System.out.println(l);
                     for (Object[] stk : l) {
                         
                         stockList.add(new StockR(
-                            new SimpleStringProperty(stk[0]+""),
-                            new SimpleDoubleProperty(Double.parseDouble(stk[1]+"")),
+                            new SimpleIntegerProperty(Integer.parseInt(stk[5]+"")),
+                            new SimpleIntegerProperty(Integer.parseInt(stk[1]+"")),
                             new SimpleIntegerProperty(Integer.parseInt(stk[2]+"")),
-                            new SimpleIntegerProperty(Integer.parseInt(stk[3]+"")),
-                            new SimpleStringProperty(stk[4]+"")
+                            new SimpleIntegerProperty(Integer.parseInt(stk[3]+""))
+                            
                         ));            
                     }
                     
                     for (int i=stockList.size()-1;i>=0;i--) {
                         
                         if(stockList.get(i).getQteActuStock().get() > 0 ) {
-                            //stockList.get(i).setQteActuStock(
-                            //   new SimpleIntegerProperty(stockList.get(i).getQteActuStock().get() - pr.getQteProdCom().getValue())
-                           // );
+                            
+                            System.out.println(" idSt "+stockList.get(i).getIdStock().get());
                             
                             Stock st = new Stock(stockList.get(i).getIdStock().get());
                             Stock st2 = stockService.findById(st);
                             st2.setQteActuStock(st2.getQteActuStock() - pr.getQteProdCom().getValue());
                             stockService.modifier(st2);
                             
+                            i=-1;//juste pour quitter la boucle
+                            
                         }       
                     }
-                    
-                    for(int i = 0;i<produitListVent.size();i++){
-                            for(int j =0;j<l.size();j++){
-                                tabStock[i][j] = stockList.get(i);
-                            }
-                    }*/
+                   
                 }
                 
                 CaissePaneController.vente = true;

@@ -7,6 +7,8 @@ package modele;
 
 import entites.Client;
 import entites.Stock;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -38,8 +40,11 @@ public class StockR {
         this.coutAchatStock = coutAchatStock;
         this.qteIniSTock = qteIniSTock;
         this.qteActuStock = qteActuStock;
-        this.dateRavi = dateRavi;
-        this.dateExpi = dateExpi;
+        DateFormat dateFormat = new SimpleDateFormat("d-MM-yyy HH:mm:ss");
+        String dateh = dateFormat.format(dateRavi.get());
+        this.dateRavi = new SimpleStringProperty(dateh);
+        dateh = dateFormat.format(dateExpi.get());
+        this.dateExpi = new SimpleStringProperty(dateh);
         this.Fournisseur = Fournisseur;
     }
 
@@ -50,9 +55,15 @@ public class StockR {
         this.qteActuStock = qteActuStock;
         this.Fournisseur = Fournisseur;
     }
-    
-    
 
+    public StockR(SimpleIntegerProperty idStock, SimpleIntegerProperty coutAchatStock, SimpleIntegerProperty qteIniSTock, SimpleIntegerProperty qteActuStock) {
+        this.idStock = idStock;
+        this.coutAchatStock = coutAchatStock;
+        this.qteIniSTock = qteIniSTock;
+        this.qteActuStock = qteActuStock;
+    }
+
+   
     public StockR(Stock stk) {
         this.idProd = new SimpleIntegerProperty(stk.getIdProd());
         this.codeStock = new SimpleStringProperty(stk.getCodeStock());
