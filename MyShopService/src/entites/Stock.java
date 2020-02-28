@@ -25,8 +25,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "stock")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Stock.findStocks", query = "SELECT s.codeStock,s.coutAchatUni,s.qteIniSTock, s.qteActuStock,s.Fournisseur FROM Stock s where s.idProd = :idProd order by s.idStock desc")
+    @NamedQuery(name = "Stock.findStocks", query = "SELECT s.codeStock,s.coutAchatUni,s.qteIniSTock, s.qteActuStock,s.Fournisseur,s.idStock FROM Stock s where s.idProd = :idProd order by s.idStock desc")
     , @NamedQuery(name = "Stock.findByIdProd", query = "SELECT s FROM Stock s WHERE s.idStock = :idStock")
+    , @NamedQuery(name = "Stock.findByIdProdMme", query = "SELECT s FROM Stock s WHERE s.idProd = :idProd")
     , @NamedQuery(name = "Stock.findByCodeStock", query = "SELECT s FROM Stock s WHERE s.codeStock = :codeStock ")    
     , @NamedQuery(name = "Stock.findByRec", query = "SELECT s FROM Stock s WHERE (s.codeStock LIKE :codeStock OR s.dateRavi LIKE :codeStock OR s.Fournisseur LIKE :codeStock)")
 
@@ -61,17 +62,7 @@ public class Stock implements Serializable {
     public Stock() {
     }
 
-    public Stock(Integer idStock, Integer idProd, String codeStock, Integer coutAchatUni, Integer qteIniSTock, Integer qteActuStock, Date dateRavi, Date dateExpi, String Fournisseur) {
-        this.idStock = idStock;
-        this.idProd = idProd;
-        this.codeStock = codeStock;
-        this.coutAchatUni = coutAchatUni;
-        this.qteIniSTock = qteIniSTock;
-        this.qteActuStock = qteActuStock;
-        this.dateRavi = dateRavi;
-        this.dateExpi = dateExpi;
-        this.Fournisseur = Fournisseur;
-    }
+    
 
     public Stock(int idStock) {
         this.idStock = idStock;

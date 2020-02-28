@@ -5,7 +5,9 @@
  */
 package controller;
 
+import Utils.Constants;
 import com.jfoenix.controls.JFXTextField;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import entites.Produit;
 import java.io.IOException;
 import java.net.URL;
@@ -27,6 +29,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
@@ -36,6 +39,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -74,10 +78,12 @@ public class RechercheProduitPaneController implements Initializable {
     private AnchorPane cont;
     
     public static TableView<ProduitR> recTableProd;
+    public static Integer selectedLineId;
 
     public List<Produit> listProduit() {
         return produitService.produitList();
     }
+    
     
     
 
@@ -208,10 +214,29 @@ public class RechercheProduitPaneController implements Initializable {
             stage.initStyle(StageStyle.UTILITY);
             stage.setResizable(false);
             stage.show();
+            /*stage.setOnHidden(ex -> {
+                selectedLineId = recTableProd.getSelectionModel().getSelectedIndex();
+                 switchPane(Constants.RechercheProd);
+            });*/
 
         } catch (IOException ex) {
             Logger.getLogger(MainPrincipalController.class
                     .getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void switchPane(String pane) {
+        try {
+            MainViewController.temporaryPane.getChildren().clear();
+            StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));
+            ObservableList<Node> elements = stackPane.getChildren();
+
+            MainViewController.temporaryPane.getChildren().setAll(elements);
+
+            MainViewController.drawerTmp.setVisible(true);
+            // MainViewController.hamburgerTmp = new JFXHamburger();
+        } catch (IOException ex) {
+            Logger.getLogger(MenuLateraleController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

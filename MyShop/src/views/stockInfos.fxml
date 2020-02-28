@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 
-
 <StackPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StockInfosController">
    <children>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="596.0" prefWidth="905.0">
@@ -33,16 +32,16 @@
                               </AnchorPane>
                           </content>
                         </ScrollPane>
-                        <ComboBox fx:id="actionCombo" layoutX="470.0" layoutY="237.0" prefHeight="37.0" prefWidth="262.0" promptText="Veuiller selectionner une action à faire" />
-                        <Label layoutX="470.0" layoutY="306.0" prefHeight="37.0" prefWidth="76.0" text="Période :    Du" />
-                        <DatePicker fx:id="dtPickerFrom" layoutX="560.0" layoutY="312.0" prefHeight="25.0" prefWidth="116.0" />
-                        <DatePicker fx:id="dtPickerTo" layoutX="733.0" layoutY="312.0" prefHeight="25.0" prefWidth="116.0" />
-                        <Label layoutX="694.0" layoutY="312.0" prefHeight="25.0" prefWidth="24.0" text="Au" />
+                        <ComboBox fx:id="actionCombo" layoutX="470.0" layoutY="217.0" prefHeight="37.0" prefWidth="262.0" promptText="Veuiller selectionner une action à faire" />
+                        <Label layoutX="471.0" layoutY="278.0" prefHeight="37.0" prefWidth="76.0" text="Période :    Du" />
+                        <DatePicker fx:id="dtPickerFrom" layoutX="561.0" layoutY="284.0" prefHeight="25.0" prefWidth="116.0" />
+                        <DatePicker fx:id="dtPickerTo" layoutX="734.0" layoutY="284.0" prefHeight="25.0" prefWidth="116.0" />
+                        <Label layoutX="695.0" layoutY="284.0" prefHeight="25.0" prefWidth="24.0" text="Au" />
                         <DatePicker fx:id="triDtPicker" layoutX="14.0" layoutY="14.0" prefHeight="38.0" prefWidth="276.0" promptText="Rechercher un stock par date" />
                         <TextField fx:id="benRechFieldProd" layoutX="699.0" layoutY="70.0" prefHeight="25.0" prefWidth="90.0" />
                         <Label layoutX="470.0" layoutY="68.0" prefHeight="28.0" prefWidth="189.0" text="Benefice recherché sur ce produit" />
                         <Button fx:id="prodValidBtn" layoutX="792.0" layoutY="70.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="67.0" text="Valider" />
-                        <TextField fx:id="actualPriceField" editable="false" layoutX="698.0" layoutY="16.0" prefHeight="28.0" prefWidth="87.0" />
+                        <TextField fx:id="actualPriceField" layoutX="698.0" layoutY="16.0" prefHeight="28.0" prefWidth="87.0" />
                         <Label layoutX="470.0" layoutY="14.0" prefHeight="31.0" prefWidth="177.0" text="Prix unitaire actuel" />
                         <TextField fx:id="previsionnelPrice" editable="false" layoutX="699.0" layoutY="157.0" prefHeight="28.0" prefWidth="155.0" />
                         <Label layoutX="471.0" layoutY="155.0" prefHeight="31.0" prefWidth="202.0" text="Prix previsionnel de vente du produit" />
@@ -50,7 +49,7 @@
                         <TextField fx:id="benRechFieldStock" disable="true" layoutX="699.0" layoutY="111.0" prefHeight="25.0" prefWidth="90.0" />
                         <Label layoutX="470.0" layoutY="109.0" prefHeight="28.0" prefWidth="189.0" text="Benefice recherché sur le(s) stock(s)" />
                         <Button fx:id="stockValidBtn" layoutX="792.0" layoutY="111.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="66.0" text="Valider" />
-                        <TableView fx:id="resultTable" layoutX="478.0" layoutY="359.0" prefHeight="174.0" prefWidth="375.0">
+                        <TableView fx:id="resultTable" layoutX="479.0" layoutY="331.0" prefHeight="174.0" prefWidth="375.0">
                           <columns>
                             <TableColumn fx:id="stockColumn" prefWidth="75.0" text="Stock" />
                             <TableColumn fx:id="resultColumn" prefWidth="75.0" text="Resultat" />
@@ -60,6 +59,7 @@
                            </columnResizePolicy>
                         </TableView>
                         <Button fx:id="prodModifPrix" layoutX="792.0" layoutY="17.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="68.0" text="Modifier" />
+                        <Label fx:id="totLabel" layoutX="676.0" layoutY="505.0" prefHeight="31.0" prefWidth="179.0" text="Label" />
                      </children>
                   </AnchorPane>
               </content>

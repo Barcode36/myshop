@@ -21,6 +21,8 @@ public interface IStockService {
     public void supprimer(Stock stock);
 
     public Stock findById(Stock stock);
+    
+    public Stock findStockByIdProd(Stock stock);
 
     public List<Object[]> findAll(int idProd);
     

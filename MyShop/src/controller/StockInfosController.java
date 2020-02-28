@@ -111,7 +111,7 @@ public class StockInfosController implements Initializable {
     @FXML
     private TextField previsionnelPrice;
     @FXML
-    private ComboBox actionCombo;
+    private ComboBox <String> actionCombo;
     @FXML
     private DatePicker triDtPicker;
     @FXML
@@ -126,9 +126,9 @@ public class StockInfosController implements Initializable {
     private ScrollPane scPane;
     @FXML
     private VBox stockVBox;
+    @FXML
+    private Label totLabel;
     
-    public static TitledPane pane;
-
     IContenirVente contenirVenteService = MainViewController.contenirVenteService;
     IHistoriqueVente historiqueVenteService = MainViewController.historiqueVenteService;
 
@@ -149,32 +149,21 @@ public class StockInfosController implements Initializable {
         return stockService.findAll(idProd);
     }
 
-    /*public void loadInventairegrid(int idVente) {
-        detailsVenteList.clear();
-        List<Object[]> lv = detailsVente(idVente);
-        
-        if(lv!=null){
-            for (Object[] o : lv) {
-                detailsVenteList.add(new ResultatsReq(
-                        new SimpleStringProperty(o[0]+""),
-                        new SimpleStringProperty(o[1]+""),
-                        new SimpleStringProperty(o[2]+""),
-                        new SimpleStringProperty(o[3]+"")
-                    )
-                );
-                
-                tot+= Double.valueOf(o[3]+"");
+   /* private void acceptTextFieldFormat(TextField textField){
+        textField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    textField.setText(newValue.replaceAll("[^\\d]", ""));
+                    
+                }
             }
-            produitCol.setCellValueFactory(cellData -> cellData.getValue().getResultString());
-            prixUniCol.setCellValueFactory(cellData -> cellData.getValue().getResultInt());
-            qteVendueCol.setCellValueFactory(cellData -> cellData.getValue().getPrixProd());
-            totalCol.setCellValueFactory(cellData -> cellData.getValue().getMtVte());
-            
-            venteDetailsTable.setItems(detailsVenteList);
-            totLabel.setText("TOTAL: "+tot+" F");
-        }        
+        });
         
-    }*/
+    }
+    
+    //private boolean verifTextField(TextField)
 
     /**
      * Initializes the controller class.
@@ -191,151 +180,133 @@ public class StockInfosController implements Initializable {
         IStockService stockService = new StockService() ;
         List <Object[]> l = null;
         l = stockService.findAll(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get()) ;
-       // System.out.println(l);
         for (Object[] stk : l) {
-           //System.out.println("AJOUT ");
-           //idProd, codeStock, coutAchatStock, qteIniSTock, qteActuStock, dateRavi, dateExpi, Fournisseur)
-           //produitList.get(produitList.size()-1).setExpiryDate(new SimpleStringProperty(""+new SimpleDateFormat("dd-MM-yyyy").format(new Date(produit.getExpiryDate().getTime()))) );
-            //Date dt1 = (Date) stk[6]; 
-            //Date dt2 = (Date) stk[7]; 
+           
             stockList.add(new StockR(
                     new SimpleStringProperty(stk[0]+""),
                     new SimpleIntegerProperty(Integer.parseInt(stk[1]+"")),
                     new SimpleIntegerProperty(Integer.parseInt(stk[2]+"")),
                      new SimpleIntegerProperty(Integer.parseInt(stk[3]+"")),
                     new SimpleStringProperty(stk[4]+"")
-                    //new SimpleIntegerProperty(Integer.parseInt(stk[2]+"")),
-                   // new  SimpleStringProperty(""+new SimpleDateFormat("dd-MM-yyyy").format(dt1)),
-                    //new SimpleStringProperty(""+new SimpleDateFormat("dd-MM-yyyy").format(dt2)),
-                    //new SimpleStringProperty(stk[3]+"")
             ));
             
-            
         }
-        
-       
         
         actualPriceField.setText(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getPrixUniProd().get());
         
         ObservableList<String> listAction = FXCollections.observableArrayList(); 
+         /*SimpleStringProperty act0 = new SimpleStringProperty("0");
+         SimpleStringProperty act0act = new SimpleStringProperty("Benefice actuel sur ce produit");
+         SimpleStringProperty act1 = new SimpleStringProperty("1");
+         SimpleStringProperty act1act = new SimpleStringProperty("Benefice total sur ce produit");
+         SimpleStringProperty act2 = new SimpleStringProperty("2");
+         SimpleStringProperty act2act = new SimpleStringProperty("Benefice moyen sur ce produit");
+         
+         
+        //listAction.addAll( new ResultatsReq(act0,act0act),new ResultatsReq(act1,act1act),new ResultatsReq(act2,act2act));*/
         listAction.addAll("Benefice actuel sur ce produit","Benefice total sur ce produit","Benefice moyen sur ce produit");
+                
         actionCombo.setItems(listAction);
-        
-            /**/
-           // ObservableList<StockR> stockList = FXCollections.observableArrayList();
-           
-        ObservableList <Integer> tabNodeIndice = FXCollections.observableArrayList();
-        ObservableList <Integer> selIndice = FXCollections.observableArrayList();
-        int i = 0;
+       
          CheckBox[] cbs = new CheckBox[stockList.size()];
          TitledPane[] tps = new TitledPane[stockList.size()];
          
          int j = 0, smeQte = 0;
          double ly = 15;
+         ArrayList <CheckBox> selectedBoxes = new ArrayList<CheckBox>();
+         
+         
         if(stockList!=null && stockList.size()>0){
+           
             for(StockR s:stockList){
                 
                 AnchorPane p = new AnchorPane();
-               
-		Label a1 = new Label("Quantité initiale ");
+                Label a = new Label("\n");
+                
+		Label a1 = new Label("  Qt initiale ");
                 Button bt1 = new Button(""+s.getQteIniSTock().get());
                 bt1.setMnemonicParsing(false);
                 bt1.setMouseTransparent(true);
-                bt1.setMinSize(37, 25);
+                bt1.setMinSize(25, 20);
                 bt1.setLayoutY(ly);
-                bt1.setStyle("-fx-background-radius: 25px;");
+                bt1.setStyle("-fx-background-radius: 15px;-fx-background-color:#D473D4;-fx-text-fill:#ffff;-fx-font-size:10;");
                 ly+=30;
                 Label a11 = new Label("\n");
-                //bt1.setLayoutX(a1.getLayoutX()+5);
                 
-                Label a2 = new Label( "Valeur initiale du stock ");
-                //a2.setLayoutX(a1.getLayoutX() + 20);
+                
+                Label a2 = new Label( " Valeur initiale du stock ");
                 Button bt2 = new Button(""+s.getCoutAchatStock().get()*s.getQteIniSTock().get());
                 bt2.setMnemonicParsing(false);
                 bt2.setMouseTransparent(true);
-                bt2.setMinSize(37, 25);
+                bt2.setMinSize(25, 20);
                 bt2.setLayoutY(ly);
-                bt2.setStyle("-fx-background-radius: 25px;");
+                bt2.setStyle("-fx-background-radius: 15px;-fx-background-color:#D473D4;-fx-text-fill:#ffff;-fx-font-size:10;");
                 ly+=30;
                 Label a12 = new Label("\n");
-                //bt2.setLayoutX(a2.getLayoutX()+5);
                 
-                Label a3 = new Label("Quantité vendue ");
+                Label a3 = new Label("  Qt vendue ");
                 Button bt3 = new Button(""+(s.getQteIniSTock().get() - s.getQteActuStock().get()));
                 bt3.setMnemonicParsing(false);
                 bt3.setMouseTransparent(true);
-                bt3.setMinSize(37, 25);
+                bt3.setMinSize(25, 20);
                 bt3.setLayoutY(ly);
-                bt3.setStyle("-fx-background-radius: 25px;");
+                bt3.setStyle("-fx-background-radius: 15px;-fx-background-color:#D473D4;-fx-text-fill:#ffff;-fx-font-size:10;");
                 ly+=30;
                 Label a13 = new Label("\n");
-                //bt1.setLayoutX(a1.getLayoutX()+5);
                 
-                Label a4 = new Label("Valeur actuelle du stock ");
-                //a4.setLayoutX(a1.getLayoutX() + 20);
-                Button bt4 = new Button(""+(s.getQteActuStock().get()*s.getCoutAchatStock().get()));
+                Label a4 = new Label(" Valeur actuelle du stock ");
+                Button bt4 = new Button(""+(s.getQteActuStock().get()*(Integer.parseInt(actualPriceField.getText()))));
                 bt4.setMnemonicParsing(false);
                 bt4.setMouseTransparent(true);
-                bt4.setMinSize(37, 25);
+                bt4.setMinSize(25, 20);
                 bt4.setLayoutY(ly);
-                bt4.setStyle("-fx-background-radius: 25px;");
+                bt4.setStyle("-fx-background-radius: 15px;-fx-background-color:#D473D4;-fx-text-fill:#ffff;-fx-font-size:10;");
                 ly+=30;
                 Label a14 = new Label("\n");
-                //bt2.setLayoutX(a2.getLayoutX()+5);
                 
-                Label a5 = new Label("Quantité actuelle ");
-                //a4.setLayoutX(a1.getLayoutX() + 20);
+                Label a5 = new Label("  Qt actuelle ");
                 Button bt5 = new Button(""+s.getQteActuStock().get());
                 bt5.setMnemonicParsing(false);
                 bt5.setMouseTransparent(true);
-                bt5.setMinSize(37, 25);
+                bt5.setMinSize(25, 20);
                 bt5.setLayoutY(ly);
-                bt5.setStyle("-fx-background-radius: 25px;");
+                bt5.setStyle("-fx-background-radius: 15px;-fx-background-color:#D473D4;-fx-text-fill:#ffff;-fx-font-size:10;");
                 ly+=30;
                 Label a15 = new Label("\n");
-                //bt2.setLayoutX(a2.getLayoutX()+5);
                 
-                Label a6 = new Label("Prévision benefice du stock ");
+                Label a6 = new Label(" Prévision benefice du stock ");
                 Button bt6 = new Button(""+ (Double.parseDouble(actualPriceField.getText())*s.getQteIniSTock().get() - s.getCoutAchatStock().get()*s.getQteIniSTock().get()));
                 bt6.setMnemonicParsing(false);
                 bt6.setMouseTransparent(true);
-                bt6.setMinSize(37, 25);
+                bt6.setMinSize(25, 20);
                 bt6.setLayoutY(ly);
-                bt6.setStyle("-fx-background-radius: 25px;");
+                bt6.setStyle("-fx-background-radius: 15px;-fx-background-color:#D473D4;-fx-text-fill:#ffff;-fx-font-size:10;");
                 ly+=30;
-                  Label a16 = new Label("\n");
+                Label a16 = new Label("\n");
                 
-                Label a7 = new Label("Prix unitaire d'achat");
+                Label a7 = new Label("  Prix unitaire d'achat");
                 Button bt7 = new Button(""+s.getCoutAchatStock().get());
                 bt7.setMnemonicParsing(false);
                 bt7.setMouseTransparent(true);
-                bt7.setMinSize(37, 25);
+                bt7.setMinSize(25, 20);
                 bt7.setLayoutY(ly);
-                bt7.setStyle("-fx-background-radius: 25px;");
-                  Label a17 = new Label("\n");
-                //ly+=30;
-                
+                bt7.setStyle("-fx-background-radius: 15px;-fx-background-color:#D473D4;-fx-text-fill:#ffff;-fx-font-size:10;");
+                Label a17 = new Label("\n");
                 
                 CheckBox cb = cbs[j] = new CheckBox();
-                
-               // a.setLayoutX(cb.getLayoutX() + 10);
-                
-               // Label b = new Label("Quantité actuelle: "+s.getQteActuStock().get()+"\n\n");
-               // Label c = new Label("Quantité vendue: "+(s.getQteIniSTock().get() - s.getQteActuStock().get()+"\n\n"));
-                
+                cb.setId(""+j);
+             
                  VBox labBtnContainer = new VBox();
-                 //labBtnContainer.
                  double sp = 15;
+                 HBox labBtnMiniCont = new HBox();
+                 labBtnMiniCont.getChildren().add(a);
                  HBox labBtnMiniCont1 = new HBox();
                  labBtnMiniCont1.setSpacing(sp);
                  labBtnMiniCont1.getChildren().addAll(a1,bt1,a2,bt2,a11,a12);
-                 //labBtnContainer.getChildren().add(labBtnMiniCont1);
                  
-                         
                  HBox labBtnMiniCont2 = new HBox();
                  labBtnMiniCont2.setSpacing(sp);
                  labBtnMiniCont2.getChildren().addAll(a3,bt3,a4,bt4,a13,a14);
-               //  labBtnContainer.getChildren().add(labBtnMiniCont2);
                  
                  HBox labBtnMiniCont3 = new HBox();
                  labBtnMiniCont3.setSpacing(sp);
@@ -345,141 +316,164 @@ public class StockInfosController implements Initializable {
                  HBox labBtnMiniCont4 = new HBox();
                  labBtnMiniCont4.setSpacing(sp);
                  labBtnMiniCont4.getChildren().addAll(a7,bt7,a17);
-                 //labBtnContainer.getChildren().add(labBtnMiniCont4);
                  
-                  /*HBox labBtnMiniCont5 = new HBox();
-                  labBtnMiniCont5.setSpacing(sp);
-                 labBtnMiniCont5.getChildren().addAll(a5,bt5);
-                // labBtnContainer.getChildren().add(labBtnMiniCont5);
-                 
-                  HBox labBtnMiniCont6 = new HBox();
-                  labBtnMiniCont6.setSpacing(sp);
-                 labBtnMiniCont6.getChildren().addAll(a6,bt6);
-                // labBtnContainer.getChildren().add(labBtnMiniCont6);
-                 
-                  HBox labBtnMiniCont7 = new HBox();
-                  labBtnMiniCont7.setSpacing(sp);
-                 labBtnMiniCont7.getChildren().addAll(a7,bt7);
-                 ,labBtnMiniCont5,labBtnMiniCont6,labBtnMiniCont7
-                 */
-                 
-                 //labBtnContainer.setSpacing(15);
-                 labBtnContainer.getChildren().addAll(labBtnMiniCont1,labBtnMiniCont2,labBtnMiniCont3,
-                         labBtnMiniCont4);
+                 labBtnContainer.getChildren().addAll(labBtnMiniCont,labBtnMiniCont1,labBtnMiniCont2,labBtnMiniCont3,
+                         labBtnMiniCont4
+                 );
                  
                p.getChildren().add(labBtnContainer);
                 
-                
                 HBox c = new HBox();
                 
-                
-                tabNodeIndice.add(i);
-                tabNodeIndice.add(i++);
-                final TitledPane t = tps[j] = new TitledPane(""+s.getCodeStock().get(), p);
-               // t.setPrefSize(350, 250);
+                final TitledPane t = tps[j] = new TitledPane(""+s.getCodeStock().get()+" ("+s.getQteActuStock().get()+")", p);
                 t.setExpanded(false);
-                
              
                 c.getChildren().addAll(cb, t);
-             //c.getChildren().get
-             int sel = 0;
-              selIndice.clear();
-                cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                public void changed(ObservableValue ov,Boolean old_val, Boolean new_val) {
-                   if( new_val == true){
-                       selIndice.add(selIndice.size()+1);
-                       System.out.println("new_val "+new_val+" tle "+selIndice.size());
-                   }else if( new_val == false){
-                        selIndice.remove(selIndice.size()-1);
-                        System.out.println("new_val "+new_val+" tle "+selIndice.size());
-                   }
-                     
-                      benRechFieldStock.setDisable(false);
-                      benRechFieldProd.setDisable(true);
-                }
-            });
-                
-                
-                
              
-                //stockVBox.getChildren().add(p);
+                cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+                    public void changed(ObservableValue ov,Boolean old_val, Boolean new_val) {
+                       if( new_val == true){
+                           selectedBoxes.add(cb);
+                           System.out.println("new_val "+new_val+" tle "+selectedBoxes.size());
+                       }else {
+                            selectedBoxes.remove(cb);
+                            System.out.println("new_val "+new_val+" tle "+selectedBoxes.size());
+                       }
+
+                        benRechFieldStock.setDisable(false);
+                        benRechFieldProd.setDisable(true);
+                    }
+                });
+              
                 stockVBox.getChildren().add(c);
-                //p.setLayoutY(p.getLayoutY()+10);
-                i+=2;
+              
                 j++;
                 
                 scPane.setVvalue(stockVBox.getHeight());
                 scPane.setHvalue(stockVBox.getWidth());
                 
-                prodValidBtn.setOnAction( event -> {
-                    if(!benRechFieldProd.getText().equalsIgnoreCase("")){
-                        int ben = Integer.parseInt(benRechFieldProd.getText());
-                        Produit prod = new Produit();
-                        prod.setIdProd(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get());
-                        Produit produitModif = MainViewController.produitService.findById(prod);
-                        int qte =  produitModif.getQteIniProd();
-                        int prixAchat =0;
-                        for(int z =0;z < selIndice.size();z++){
-                            prixAchat  = stockList.get(z).getCoutAchatStock().get() + prixAchat;
-                        }
-                        previsionnelPrice.setText(""+Math.round(prixUniPrevisionnel(ben, qte, prixAchat/(selIndice.size()-1))) );
-                        actualPriceField.setEditable(true);
-
-                        //System.out.println("pA "+prixAchat);
-
-                    }
-
-                }
-                );
-                
-                stockValidBtn.setOnAction( event -> {
-                    if(!benRechFieldStock.getText().equalsIgnoreCase("")){
-                            int ben = Integer.parseInt(benRechFieldStock.getText());
-                            /*Produit prod = new Produit();
-                            prod.setIdProd(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get());
-                            Produit produitModif = MainViewController.produitService.findById(prod);*/
-                            int qte = 0;
-                             for(int z =0;z < selIndice.size();z++){
-                                qte  = stockList.get(z).getQteActuStock().get() + qte;
-                                 System.out.println("qte"+qte);
-                             }
-
-                            previsionnelPrice.setText(""+Math.round(prixUniPrevisionnel(ben, qte, s.getCoutAchatStock().get())) );
-                            actualPriceField.setEditable(true);
-                    }
-                            int ben = Integer.parseInt(benRechFieldProd.getText());
-                            Produit prod = new Produit();
-                            prod.setIdProd(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get());
-                            Produit produitModif = MainViewController.produitService.findById(prod);
-                            int qte =  produitModif.getQteIniProd();
-
-                            //previsionnelPrice.setText(""+Math.round(prixUniPrevisionnel(ben, ben, ben)) );
-                            actualPriceField.setEditable(true);
-
-                        }
-                    );
-                
                 smeQte = s.getQteActuStock().get()+smeQte;
                 
             }
         }
+        
+        benRechFieldProd.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    benRechFieldProd.setText(newValue.replaceAll("[^\\d]", ""));
+                    
+                }
+            }
+        });
+        
+        prodValidBtn.setOnAction( event -> {
+            
+            if(!benRechFieldProd.getText().equalsIgnoreCase("") ){
+//                verifTextFieldFormat(actualPriceField, benRechFieldProd.getText());
+                int ben = Integer.parseInt(benRechFieldProd.getText());
+                Produit prod = new Produit();
+                prod.setIdProd(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get());
+                Produit produitModif = MainViewController.produitService.findById(prod);
+                int qte =  produitModif.getQteIniProd();
+                int prixAchat =0;
+                
+                for(StockR stck : stockList){
+                    prixAchat+= stck.getCoutAchatStock().get();
+                }
+                previsionnelPrice.setText(""+Math.round(prixUniPrevisionnel(ben, qte, prixAchat/(stockList.size()))) );
+                actualPriceField.setEditable(true);
+
+            }
+
+        });
+        
+        benRechFieldStock.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable1, String oldValue1, 
+                String newValue1) {
+                if (!newValue1.matches("\\d*")) {
+                    benRechFieldProd.setText(newValue1.replaceAll("[^\\d]", ""));
+                }else{
+                    System.out.println("non non non ");
+                }
+            }
+        });
+        
+        stockValidBtn.setOnAction( event -> {
+            
+            if(!benRechFieldStock.getText().equalsIgnoreCase("")){
+                int ben = Integer.parseInt(benRechFieldStock.getText());
+                int qte = 0;
+                int previP = 0;
+                for(CheckBox cbx: selectedBoxes){
+                    qte += stockList.get(Integer.parseInt(cbx.getId())).getQteActuStock().get() ;
+                    previP += Math.round(prixUniPrevisionnel(ben, qte, stockList.get(Integer.parseInt(cbx.getId())).getCoutAchatStock().get()));
+                    System.out.println(previP+" previ "+Integer.parseInt(cbx.getId())+" qte "+qte);
+                    
+                }
+
+                previsionnelPrice.setText(""+previP );
+                actualPriceField.setEditable(true);
+            }
+                    
+        });
+                
          productPane.setText(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getLibProd().get()+" ("
                 + smeQte+" - "+stockList.size()+" stocks)"
         );
          
-          prodModifPrix.setOnAction( event -> {
-               modifPrix(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get(), Integer.parseInt(actualPriceField.getText()) );
-               switchPane(Constants.RechercheProd);
+        prodModifPrix.setOnAction( event -> {
+            modifPrix(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getIdProd().get(), Integer.parseInt(actualPriceField.getText()) );
+            Stage st = (Stage) newStockBtn.getScene().getWindow();
+            st.close();
+            switchPane(Constants.RechercheProd);
           }
-          );
+        );
+        
+        actionCombo.setOnAction(eveent -> {
+                if(  actionCombo.getSelectionModel().getSelectedItem().contains(" actuel ")  ){
+                ObservableList<ResultatsReq> stList = FXCollections.observableArrayList();
+                int benTot = 0;
+                for(StockR stk : stockList){
+                    int ben = beneficeActu(stk.getCoutAchatStock().get(),
+                            Integer.parseInt(RechercheProduitPaneController.recTableProd.getSelectionModel().getSelectedItem().getPrixUniProd().get()), 
+                            stk.getQteIniSTock().get() - stk.getQteActuStock().get());
+
+                    benTot += ben;
+
+                    SimpleStringProperty sp = new SimpleStringProperty(ben+"");
+
+                    stList.add(new ResultatsReq(stk.getCodeStock(),sp));
+
+                }
+
+                stockColumn.setCellValueFactory(cellData -> cellData.getValue().getResultString());
+                resultColumn.setCellValueFactory(cellData -> cellData.getValue().getResultInt());
+                resultTable.setItems(stList);
+
+                totLabel.setText( "TOTAL: "+ benTot);
+                totLabel.setStyle("-fx-background-color: lightgreen;");
+
+            }
+        });
+        
+        System.out.println("selected: "+actionCombo.getSelectionModel().getSelectedIndex());
         
         
-//        loadInventairegrid(selectedVteId);
-        pane = productPane;
-       
+        
+//        scPane.vvalueProperty().bind(stockVBox.heightProperty().add(tps[j-1].getHeight()+50));
+        //scPane.hvalueProperty().bind(stockVBox.widthProperty());
+    };
+    
+    private int beneficeActu(int prixAchat, int prixVte, int qteVendue){
+        return (prixVte - prixAchat) * qteVendue;
     }
     
-    private double prixUniPrevisionnel(int benefice, int qteActu, Integer prixAchatUni){
+    
+    
+    public static double prixUniPrevisionnel(int benefice, int qteActu, Integer prixAchatUni){
         
         return (prixAchatUni * qteActu + benefice)/qteActu;
     }
@@ -499,6 +493,7 @@ public class StockInfosController implements Initializable {
         notification.showAndDismiss(Duration.seconds(1));
         switchPane(Constants.RechercheProd);
     }
+   
    
  
     @FXML
@@ -534,9 +529,7 @@ public class StockInfosController implements Initializable {
         }
     }
  
- 
-    
-     private void switchPane(String pane) {
+    private void switchPane(String pane) {
         try {
             MainViewController.temporaryPane.getChildren().clear();
             StackPane stackPane = FXMLLoader.load(getClass().getResource(pane));

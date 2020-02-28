@@ -149,6 +149,15 @@ public class StockJpaController implements Serializable {
         query.setParameter("codeStock", c.getCodeStock());
         return query.getSingleResult();
     }
+    
+    public Stock findStockByIdProd(Stock c) {
+        EntityManager em = this.getEntityManager();
+        TypedQuery<Stock> query = (TypedQuery<Stock>) em.createNamedQuery("Stock.findByIdProdMme");
+        query.setParameter("idProd", c.getCodeStock());
+        return query.getSingleResult();
+    }
+    
+    
 
     public List<Object[]> findAll(int idProd) {
         EntityManager em = this.getEntityManager();
